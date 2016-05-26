@@ -23,7 +23,7 @@ public class HelloWorldActivity extends AppCompatActivity {
         initView();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Intent intent=new Intent(this,PatientSignUpActivity.class);
+        Intent intent = new Intent(this, PatientSignUpActivity.class);
         startActivity(intent);
     }
 
@@ -34,7 +34,7 @@ public class HelloWorldActivity extends AppCompatActivity {
         // name for example
         String name = "My name is HelloWorld";
         helloWorld = HelloWorldController.getHelloWorldEntityByName(name);
-        TextView textView = (TextView)findViewById(R.id.txt_helloWorld);
+        TextView textView = (TextView) findViewById(R.id.txt_helloWorld);
         textView.setText(helloWorld.getName());
     }
 

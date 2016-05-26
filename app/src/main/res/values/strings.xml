@@ -8,4 +8,5 @@
     <string name="Email">E-Mail Address*"</string>
     <string name="Password">Password(6-16 characters)*</string>
     <string name="ReenterPassword">Re-enter Password*</string>
+    <string name="CreatePatientAccount">Creat Patient Account</string>
 </resources>
