@@ -15,7 +15,7 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Account Type"
+        android:text="@string/type_selection"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
@@ -31,29 +31,64 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:layout_marginTop="20sp"
-        android:layout_marginLeft="30sp"
-        android:layout_marginRight="30sp"
-        android:layout_marginBottom="30sp">
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:layout_marginBottom="30sp"
+        android:id="@+id/btnSelectPat">
 
-        <ImageButton
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:orientation="horizontal"
             android:layout_weight="1"
-            android:src="@drawable/selectPat"
-            android:scaleType="fitCenter"
-            android:background="@color/white"
-            android:id="@+id/btnSelectPat"/>
-
-        <ImageButton
-            android:layout_width="wrap_content"
+            android:background="@drawable/buttonSelect">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:src="@drawable/selectPat"
+                android:scaleType="fitCenter"
+                android:background="@color/white"
+                android:layout_margin="10sp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/patient"
+                android:textAllCaps="true"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginRight="30sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:orientation="horizontal"
             android:layout_weight="1"
-            android:src="@drawable/selectDoc"
-            android:scaleType="fitCenter"
-            android:background="@color/white"
-            android:id="@+id/btnSelectDoc"/>
+            android:background="@drawable/buttonSelect"
+            android:id="@+id/btnSelectDoc">
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:src="@drawable/selectDoc"
+                android:scaleType="fitCenter"
+                android:background="@color/white"
+                android:layout_margin="10sp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="@string/doctor"
+                android:textAllCaps="true"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginRight="30sp"/>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
