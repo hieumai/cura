@@ -1,5 +1,6 @@
 package com.kms.cura.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,8 @@ public class HelloWorldActivity extends AppCompatActivity {
         initView();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        Intent intent=new Intent(this,PatientSignUpActivity.class);
+        startActivity(intent);
     }
 
     /**

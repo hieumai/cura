@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Cura</string>
     <string name="action_settings">Settings</string>
+    <string name="FirstNameError">This field cannot be left blank</string>
+    <string name="EmailError">Please enter a valid e-mail</string>
+    <string name="PasswordError">Passwords do not match</string>
+    <string name="FirstName">Firstname*</string>
+    <string name="Email">E-Mail Address*"</string>
+    <string name="Password">Password(6-16 characters)*</string>
+    <string name="ReenterPassword">Re-enter Password*</string>
 </resources>
