@@ -8,4 +8,12 @@
     <string name="no_account">Don\'t Have an Account?</string>
     <string name="create_account">Create an Account</string>
     <string name="forgot_password">I forgot my password</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="type_selection">Account Type</string>
+    <string name="doctor">Doctor</string>
+    <string name="patient">Patient</string>
+    <string name="create_doc">Create Doctor Account</string>
+    <string name="required_field">Field can\'t be left empty</string>
+    <string name="sex">Sex*:</string>
+    <string name="birthday">Birth Date*:</string>
 </resources>

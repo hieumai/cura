@@ -1,5 +1,6 @@
 package com.kms.cura.view;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Paint;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -15,7 +17,7 @@ import com.kms.cura.R;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity implements TextWatcher {
+public class LoginActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener {
 
     private EditText email, password;
     private Button forgotPasswordButton, loginButton, createAccountButton;
@@ -58,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
     private void initAccountButton() {
         createAccountButton = initButton(R.id.button_LoginUI_CreateAccount);
+        createAccountButton.setOnClickListener(this);
     }
 
     private void initPasswordButton() {
@@ -125,5 +128,15 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher {
 
     private boolean isPasswordValid(String password) {
         return password.length() >= 6 && password.length() <= 16;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.button_LoginUI_CreateAccount)
+        {
+            Intent intent = new Intent(LoginActivity.this, AccountTypeSelectionActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
