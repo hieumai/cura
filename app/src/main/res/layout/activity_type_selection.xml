@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.kms.cura.view.TypeSelection"
+    tools:context=".view.AccountTypeSelectionActivity"
     android:orientation="vertical">
 
     <TextView
@@ -41,16 +41,16 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:background="@drawable/buttonSelect">
+            android:background="@drawable/button_select">
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:src="@drawable/selectPat"
+                android:src="@drawable/select_pat"
                 android:scaleType="fitCenter"
                 android:background="@color/white"
-                android:layout_margin="10sp"/>
+                android:layout_margin="15sp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -67,17 +67,17 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:background="@drawable/buttonSelect"
+            android:background="@drawable/button_select"
             android:id="@+id/btnSelectDoc">
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="2"
-                android:src="@drawable/selectDoc"
+                android:src="@drawable/select_doc"
                 android:scaleType="fitCenter"
                 android:background="@color/white"
-                android:layout_margin="10sp"/>
+                android:layout_margin="15sp"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -96,12 +96,12 @@
         android:layout_height="match_parent"
         android:layout_weight="3"
         android:gravity="right"
-        android:layout_marginRight="30sp">
+        android:layout_marginRight="10sp">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:src="@drawable/logoHeartbeat"
+            android:src="@drawable/logo_heartbeat"
             android:scaleType="fitEnd">
         </ImageView>
     </LinearLayout>

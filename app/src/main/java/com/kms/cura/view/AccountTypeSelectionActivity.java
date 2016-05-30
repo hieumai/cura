@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.kms.cura.R;
 
-public class TypeSelection extends AppCompatActivity implements View.OnClickListener {
+public class AccountTypeSelectionActivity extends AppCompatActivity implements View.OnClickListener {
 
     LinearLayout btnSelectPat, btnSelectDoc;
 
@@ -28,7 +26,7 @@ public class TypeSelection extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         if (v.getId() == R.id.btnSelectDoc) {
             // navigate to Doc Register
-            Intent intent = new Intent(this, TypeSelection.class);
+            Intent intent = new Intent(this, AccountTypeSelectionActivity.class);
             startActivity(intent);
             finish();
         } else if (v.getId() == R.id.btnSelectPat) {
