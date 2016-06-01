@@ -71,7 +71,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="@string/healthConcerns"
+        android:text="@string/healthConcerns"
         android:textSize="@dimen/textSizeTitle"
         android:gravity="center_horizontal"/>
 </LinearLayout>

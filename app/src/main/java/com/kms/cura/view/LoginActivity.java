@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.button_LoginUI_Login) {
-            Intent toProfileView = new Intent(LoginActivity.this, PatientProfileViewActivity.class);
+            Intent toProfileView = new Intent(this, PatientProfileViewActivity.class);
             startActivity(toProfileView);
         }
 		else if (v.getId() == R.id.button_LoginUI_CreateAccount) {
