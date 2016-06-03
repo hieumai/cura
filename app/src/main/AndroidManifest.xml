@@ -7,9 +7,9 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_icon"
         android:label="@string/app_name"
-        android:supportsRtl="true"
+        android:supportsRtl="true"      
         android:theme="@style/AppTheme">
-        <activity android:name=".view.activity.LoginActivity">
+	<activity android:name=".view.LoginActivity">
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.AccountTypeSelectionActivity"
+            android:name=".view.AccountTypeSelectionActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation">
         </activity>
@@ -32,6 +33,10 @@
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|screenSize">
         </activity>
+        <activity android:name=".view.DoctorProfileViewActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
