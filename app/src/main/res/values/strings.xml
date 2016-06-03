@@ -32,6 +32,7 @@
     <string name="CreatePatientAccount">Create Patient Account</string>
     <string name="speciality">Speciality(ies)</string>
     <string name="facility">Facility(ies)</string>
+    <string name="DoctorFacility">FACILITIES :</string>
     <string name="phone">Phone number*</string>
     <string name="re_pwd">Re-enter Password*</string>
     <string name="register">Register</string>
@@ -41,6 +42,11 @@
     <string name="Name">Name :</string>
     <string name="Location">Location :</string>
     <string name="current">Current</string>
+    <string name="WorkingTime">WORKING TIME</string>
+    <string name="Gender">GENDER</string>
+    <string name="SpecialityU">SPECIALITY</string>
+    <string name="Experience">YEARS EXPERIENCE</string>
+    <string name="PriceRange">PRICE RANGES</string>
     <string name="past">Past</string>
     <string name="add_health_tracker">Add Condition/Symptom</string>
     <string name="health_tracker">Health tracker</string>

@@ -102,6 +102,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="10sp"
         android:text="@string/create_account"
         android:id="@+id/button_LoginUI_CreateAccount"
         android:layout_below="@+id/textView_LoginUI_NoAccount"

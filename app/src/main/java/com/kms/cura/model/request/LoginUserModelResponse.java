@@ -1,8 +1,10 @@
 package com.kms.cura.model.request;
 
+import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.kms.cura.constant.EventConstant;
 import com.kms.cura.entity.json.JsonToEntityConverter;
+import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.event.EventBroker;
@@ -29,9 +31,10 @@ public class LoginUserModelResponse implements EntityModelResponse {
                     EventBroker.getInstance().pusblish(EventConstant.LOGIN_SUCCESS,EventConstant.TYPE_PATIENT);
                 }
                 else{
-                    //Save into Doctor class
+                    DoctorUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(response, DoctorUserEntity.getDoctorEntityType());
+                    CurrentUserProfile.getInstance().setData(entity);
+                    EventBroker.getInstance().pusblish(EventConstant.LOGIN_SUCCESS, EventConstant.TYPE_DOCTOR);
                 }
-                EventBroker.getInstance().pusblish(EventConstant.LOGIN_SUCCESS, "");
             } else {
                 String message = jsonObject.getString(UserEntity.MESSAGE);
                 EventBroker.getInstance().pusblish(EventConstant.LOGIN_FAILED, message);
