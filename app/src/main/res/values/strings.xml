@@ -21,4 +21,6 @@
     <string name="Password">Password (6-16 characters)*</string>
     <string name="ReenterPassword">Re-enter Password*</string>
     <string name="CreatePatientAccount">Create Patient Account</string>
+    <string name="DoctorFacility">Facilities :</string>
+    <string name="profile">Profile</string>
 </resources>
