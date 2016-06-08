@@ -18,12 +18,12 @@ public class FacilityAPI {
     @GET
     @Path("/getAll")
     public String getAllFacility() {
-	try {
-	    List<Entity> facilities = FacilityDAL.getInstance().getAll(new FacilityDatabaseHelper());
-	    JsonElement element = EntityToJsonConverter.convertEntityListToJson(facilities);
-	    return element.toString();
-	} catch (ClassNotFoundException | SQLException e) {
-	    return Strings.error_internal + e.getMessage();
-	}
+        try {
+            List<Entity> facilities = FacilityDAL.getInstance().getAll(new FacilityDatabaseHelper());
+            JsonElement element = EntityToJsonConverter.convertEntityListToJson(facilities);
+            return element.toString();
+        } catch (ClassNotFoundException | SQLException e) {
+            return Strings.error_internal + e.getMessage();
+        }
     }
 }

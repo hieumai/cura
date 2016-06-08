@@ -8,6 +8,7 @@ import com.kms.cura.dal.mapping.DegreeColumn;
 import com.kms.cura.entity.Entity;
 
 public class DegreeDAL extends EntityDAL {
+	private static final String DEGREE_TABLE_NAME = "degree";
 	private static DegreeDAL _instance;
 
 	private DegreeDAL() {
