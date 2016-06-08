@@ -58,5 +58,25 @@ public class PatientUserDAL extends UserDAL {
 	}
 	return null;
     }
+    
+    public PatientUserEntity searchPatientbyID(int id) throws ClassNotFoundException, SQLException{
+    	DatabaseHelper dbh = null;
+		try {
+			dbh = new DatabaseHelper();
+			ResultSet rs = super.searchUserbyID(PATIENT_TABLE_NAME, id, PatientColumn.USER_ID.getColumnName(),dbh);
+	    	if(rs != null && rs.next()){
+	    		return (PatientUserEntity) getEntityFromResultSet(rs, dbh);
+	    	}
+	    	return null;
+		} 
+		finally{
+			if(dbh != null){
+				dbh.closeConnection();
+			}
+		}
+    }
+	
+    
+    
 
 }

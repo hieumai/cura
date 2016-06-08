@@ -12,11 +12,13 @@ import com.kms.cura.dal.database.DatabaseHelper;
 import com.kms.cura.dal.database.UserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
 import com.kms.cura.dal.mapping.DoctorColumn;
+import com.kms.cura.dal.mapping.PatientColumn;
 import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 
 public class DoctorUserDAL extends UserDAL {
@@ -54,7 +56,7 @@ public class DoctorUserDAL extends UserDAL {
 	@Override
 	protected Entity getEntityFromResultSet(ResultSet resultSet, DatabaseHelper dbh)
 			throws SQLException, ClassNotFoundException {
-		ResultSet userTableRS = dbh.queryByID("Users", resultSet.getInt("user_id"));
+		ResultSet userTableRS = dbh.queryByID("Users", resultSet.getInt("user_id"),"id");
 		ResultSet doctorSpecialityRS = dbh.queryByReferenceID("Doctor_Specialties", "doctor_id",
 				resultSet.getInt("user_id"));
 
@@ -90,4 +92,22 @@ public class DoctorUserDAL extends UserDAL {
 		return null;
 	}
 
+	public DoctorUserEntity searchDoctorbyID(int id) throws ClassNotFoundException, SQLException{
+		DatabaseHelper dbh = null;
+		try {
+			dbh = new DatabaseHelper();
+			ResultSet rs = super.searchUserbyID(DOCTOR_TABLE_NAME, id, DoctorColumn.USER_ID.getColumnName(),dbh);
+	    	if(rs != null && rs.next()){
+	    		return (DoctorUserEntity) getEntityFromResultSet(rs, dbh);
+	    	}
+	    	return null;
+		} 
+		finally{
+			if(dbh != null){
+				dbh.closeConnection();
+			}
+		}
+    }
+	
+	
 }

@@ -42,7 +42,14 @@ public class DatabaseHelper {
 		rs = stmt.executeQuery();
 		return rs;
 	}
-
+	
+	public ResultSet queryByID(String tableName, int id, String id_column) throws SQLException {
+		ResultSet rs = null;
+		stmt = con.prepareStatement("SELECT * FROM " + tableName + " WHERE "+id_column+" = ?");
+		stmt.setInt(1, id);
+		rs = stmt.executeQuery();
+		return rs;
+	}
 	public ResultSet queryByName(String tableName, String name) throws SQLException {
 		ResultSet rs = null;
 		stmt = con.prepareStatement("SELECT * FROM " + tableName + " WHERE name = ?");
@@ -58,7 +65,16 @@ public class DatabaseHelper {
 		rs = stmt.executeQuery();
 		return rs;
 	}
-
+	public ResultSet queryByEmailPassword(String tableName, String email, String password) throws SQLException {
+		ResultSet rs = null;
+		stmt = con.prepareStatement("SELECT * FROM " + tableName + " WHERE email = ? AND password = ?");
+		stmt.setString(1, email);
+		stmt.setString(2, password);
+		rs = stmt.executeQuery();
+		return rs;
+	}
+	
+	
 	public ResultSet insert(String tableName, Entity entity) throws SQLException {
 		ResultSet rs = null;
 		stmt = con.prepareStatement("INSERT INTO " + tableName + " (name) VALUES (" + entity.getName() + ")");
