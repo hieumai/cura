@@ -76,7 +76,4 @@ public class RequestUtils {
         };
     }
 
-    private void saveUserData(JSONObject user){
-        if(user.getInt())
-    }
 }
