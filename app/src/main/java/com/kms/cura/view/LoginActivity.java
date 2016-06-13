@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,7 +29,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initView();
-        createAccountButton.setOnClickListener(this);
+
     }
 
     /**
@@ -58,6 +59,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     private void initLoginButton() {
         loginButton = initButton(R.id.button_LoginUI_Login);
         loginButton.setEnabled(false);
+        loginButton.setOnClickListener(this);
     }
 
     private void initAccountButton() {
@@ -121,7 +123,12 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.button_LoginUI_CreateAccount) {
+        int id = v.getId();
+        if (id == R.id.button_LoginUI_Login) {
+            Intent toProfileView = new Intent(this, PatientProfileViewActivity.class);
+            startActivity(toProfileView);
+        }
+		else if (v.getId() == R.id.button_LoginUI_CreateAccount) {
             Intent intent = new Intent(this, AccountTypeSelectionActivity.class);
             startActivity(intent);
         }
