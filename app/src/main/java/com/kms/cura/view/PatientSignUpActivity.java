@@ -9,10 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.UserController;
+import com.kms.cura.entity.user.UserEntity;
+import com.kms.cura.model.UserModel;
 import com.kms.cura.utils.InputUtils;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PatientSignUpActivity extends AppCompatActivity implements TextWatcher {
     private EditText edtFirstName, edtEmail, edtPassword, edtPasswordReenter;
@@ -28,7 +28,7 @@ public class PatientSignUpActivity extends AppCompatActivity implements TextWatc
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Patient Register Function
+                UserController.registerPatient(PatientSignUpActivity.this, getEditTextText(edtFirstName), getEditTextText(edtEmail), getEditTextText(edtPassword));
             }
         });
 

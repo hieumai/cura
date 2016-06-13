@@ -1,15 +1,13 @@
 package com.kms.cura.dal;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 import com.kms.cura.dal.database.DatabaseHelper;
+import com.kms.cura.dal.mapping.SpecialityColumn;
 import com.kms.cura.entity.Entity;
-import com.kms.cura.entity.SpecialityEntity;
 
 public class SpecialityDAL extends EntityDAL {
-	private static final String SPECIALITY_TABLE_NAME = "specialties";
 	private static SpecialityDAL _instance;
 
 	private SpecialityDAL() {
@@ -23,20 +21,16 @@ public class SpecialityDAL extends EntityDAL {
 		return _instance;
 	}
 
-	public List<Entity> getAll() throws ClassNotFoundException, SQLException {
-		return super.getAll(SPECIALITY_TABLE_NAME);
+	public List<Entity> getAll(DatabaseHelper dbh) throws ClassNotFoundException, SQLException {
+		return super.getAll(SpecialityColumn.TABLE_NAME, dbh);
 	}
 
-	public Entity getByName(String name) throws SQLException, ClassNotFoundException {
-		return super.getByName(SPECIALITY_TABLE_NAME, name);
+	public Entity getByName(String name, DatabaseHelper dbh) throws SQLException, ClassNotFoundException {
+		return super.getByName(SpecialityColumn.TABLE_NAME, name, dbh);
 	}
 
-	public Entity getByID(int id) throws SQLException, ClassNotFoundException {
-		return super.getByID(SPECIALITY_TABLE_NAME, id);
+	public Entity getByID(int id, DatabaseHelper dbh) throws SQLException, ClassNotFoundException {
+		return super.getByID(SpecialityColumn.TABLE_NAME, id, dbh);
 	}
 
-	@Override
-	protected Entity getEntityFromResultSet(ResultSet resultSet, DatabaseHelper dbh) throws SQLException {
-		return new SpecialityEntity(resultSet.getString("id"), resultSet.getString("name"));
-	}
 }

@@ -3,6 +3,8 @@ package com.kms.cura.entity.user;
 import com.kms.cura.entity.Entity;
 
 public class UserEntity extends Entity {
+	public static final String STATUS_KEY = "statuskey";
+	public static final String MESSAGE= "message";
 	private String email;
 	private String password;
 

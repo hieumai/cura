@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 
 import com.google.gson.JsonElement;
 import com.kms.cura.dal.SpecialityDAL;
+import com.kms.cura.dal.database.SpecialityDatabaseHelper;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura_server.resources.Strings;
@@ -18,7 +19,7 @@ public class SpecialityAPI {
     @Path("/getAll")
     public String getAllDegree() {
 	try {
-	    List<Entity> speciality = SpecialityDAL.getInstance().getAll();
+	    List<Entity> speciality = SpecialityDAL.getInstance().getAll(new SpecialityDatabaseHelper());
 	    JsonElement element = EntityToJsonConverter.convertEntityListToJson(speciality);
 	    return element.toString();
 	} catch (ClassNotFoundException | SQLException e) {

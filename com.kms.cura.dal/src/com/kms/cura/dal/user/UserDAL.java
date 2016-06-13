@@ -1,6 +1,5 @@
 package com.kms.cura.dal.user;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,26 +25,16 @@ public class UserDAL extends EntityDAL {
 		return _instance;
 	}
 
-	public List<Entity> getAll() throws ClassNotFoundException, SQLException {
-		return super.getAll(USER_TABLE_NAME);
+	public List<Entity> getAll(DatabaseHelper dbh) throws ClassNotFoundException, SQLException {
+		return super.getAll(USER_TABLE_NAME, dbh);
 	}
-	
-	@Override
-	protected Entity getEntityFromResultSet(ResultSet resultSet, DatabaseHelper dbh) throws SQLException, ClassNotFoundException {
-		return new UserEntity(resultSet.getString("id"), "", resultSet.getString("email"),
-				resultSet.getString("password"));
-	}
-	
+
 	public Entity createUser(UserEntity entity) throws ClassNotFoundException, SQLException, DALException {
 		UserDatabaseHelper dbh = null;
 		try {
 			dbh = new UserDatabaseHelper();
-			ResultSet rs = null;
 			Entity result = null;
-			rs = insertUser(entity, dbh);
-			if (rs != null && rs.next()) {
-				result = getEntityFromResultSet(rs, dbh);
-			}
+			result = insertUser(entity);
 			return result;
 		} finally {
 			if (dbh != null) {
@@ -54,10 +43,11 @@ public class UserDAL extends EntityDAL {
 		}
 	}
 
-	protected ResultSet insertUser(UserEntity entity, UserDatabaseHelper dbh) throws SQLException, DALException {
-		ResultSet rs;
-		rs = dbh.insertUser(entity);
-		return rs;
+	protected UserEntity insertUser(UserEntity Userentity) throws SQLException, DALException, ClassNotFoundException {
+		UserEntity entity;
+		UserDatabaseHelper dbh = new UserDatabaseHelper();
+		entity = dbh.insertUser(Userentity);
+		return entity;
 	}
 
 }
