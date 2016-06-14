@@ -6,5 +6,5 @@ package com.kms.cura.model;
 public class Settings {
     public static final String SERVER_URL="http://10.0.3.2:8080/com.kms.cura_server-0.1/cura_server";
     public static final String CREATE_PATIENT_API = "/user/createPatient";
-
+    public static final int MY_PERMISSION_LOCATION = 100;
 }

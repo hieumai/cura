@@ -2,17 +2,11 @@
 <resources>
     <string name="email_error">"Please enter a valid e-mail</string>
     <string name="pwd_error">Password must be 6-16 characters</string>
-    <string name="age_error">Inapproriate DOB input (age must be larger or equal 24)</string>
-    <string name="required_field">Field can\'t be left empty</string>
-    <string name="repwd_error">Passwords don\'t match</string>
     <string name="FirstNameError">This field cannot be left blank</string>
     <string name="EmailError">Please enter a valid e-mail</string>
     <string name="PasswordError">Passwords must be 6-16 characters in length</string>
     <string name="PasswordReenterError">The Re-enter Password does not match</string>
     <string name="InternalError">Internal Error</string>
-    <string name="name_error">Please input valid name</string>
-    <string name="first_name_error">Please input valid name</string>
-    <string name="required_degree">Degree Types can\'t be left empty</string>
-    <string name="required_spec">Areas of Speciality can\'t be left empty</string>
-    <string name="required_fac">Facilities can\'t be left empty</string>
+    <string name="LocationError">Can not get the current location. Please check your GPS and network connection</string>
+    <string name="AddressError">Internal Error. Can not get the address</string>
 </resources>

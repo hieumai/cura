@@ -5,6 +5,8 @@ import com.kms.cura.entity.Entity;
 public class UserEntity extends Entity {
 	public static final String STATUS_KEY = "statuskey";
 	public static final String MESSAGE= "message";
+	public static final String TYPE= "type";
+	public static final int USER_TYPE = 0;
 	private String email;
 	private String password;
 
@@ -29,5 +31,6 @@ public class UserEntity extends Entity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 
 }

@@ -2,8 +2,8 @@
     <string name="app_name">Cura</string>
     <string name="action_settings">Settings</string>
     <string name="app_name_capitalized">CURA</string>
-    <string name="email">Email Address*</string>
-    <string name="pwd">Password*</string>
+    <string name="email">Email Address</string>
+    <string name="pwd">Password</string>
     <string name="login">Login</string>
     <string name="no_account">Don\'t Have an Account?</string>
     <string name="create_account">Create an Account</string>
@@ -13,25 +13,19 @@
     <string name="doctor">Doctor</string>
     <string name="patient">Patient</string>
     <string name="create_doc">Create Doctor Account</string>
-    <string name="sex">Sex*: </string>
+    <string name="required_field">Field can\'t be left empty</string>
+    <string name="sex">Sex*:</string>
     <string name="birthday">Birth Date*:</string>
-    <string-array name="sex">
-        <item>Male</item>
-        <item>Female</item>
-    </string-array>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
-    <string name="degree">Degree(s)</string>
     <string name="FirstName">First Name*</string>
-    <string name="LastName">Last Name*</string>
     <string name="Email">E-Mail Address*"</string>
     <string name="Password">Password (6-16 characters)*</string>
     <string name="ReenterPassword">Re-enter Password*</string>
     <string name="CreatePatientAccount">Create Patient Account</string>
-    <string name="speciality">Speciality(ies)</string>
-    <string name="facility">Facility(ies)</string>
-    <string name="phone">Phone number*</string>
-    <string name="re_pwd">Re-enter Password*</string>
-    <string name="register">Register</string>
-    <string name="name">Name*</string>
+    <string name="DoctorSearch">Doctor Search</string>
+    <string name="Name">Name :</string>
+    <string name="Location">Location :</string>
+    <string name="Speciality">Speciality :</string>
+    <string name="Search">Search</string>
+    <string name="CurrentLocation">Current Location</string>
+    <string name="ManuallyEnter">Manually Enter</string>
 </resources>

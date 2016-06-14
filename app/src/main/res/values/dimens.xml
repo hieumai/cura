@@ -6,18 +6,4 @@
     <dimen name="textSizeTitle">30sp</dimen>
     <dimen name="button_width">120sp</dimen>
     <dimen name="textSizeButton">20sp</dimen>
-    <dimen name="docText_14">14sp</dimen>
-    <dimen name="docText_16">16sp</dimen>
-    <dimen name="docText_18">18sp</dimen>
-    <dimen name="docText_20">20sp</dimen>
-    <dimen name="spinner_prof">26sp</dimen>
-    <dimen name="spinner_40">40sp</dimen>
-    <dimen name="spinner_50">50sp</dimen>
-    <dimen name="spinner_60">60sp</dimen>
-    <dimen name="spinner_150">150sp</dimen>
-    <dimen name="arrow_70">70sp</dimen>
-    <dimen name="margin_20">20sp</dimen>
-    <dimen name="padding_5">5sp</dimen>
-    <dimen name="padding_8">8sp</dimen>
-    <dimen name="padding_16">16sp</dimen>
 </resources>

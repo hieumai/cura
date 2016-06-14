@@ -16,20 +16,11 @@ public class InputUtils {
 
         return (email.contains("@") && matcher.matches());
     }
-
-    public static boolean isPasswordValid(String password) {
+    public  static boolean isPasswordValid(String password) {
         return password.length() >= 6 && password.length() <= 16;
     }
-
-    public static boolean isNotEmpty(String text) {
-        String regex = "[a-zA-Z]+";
+    public static boolean isNotEmpty(String text){
+        String regex="[a-zA-Z]+";
         return (Pattern.compile(regex).matcher(text).matches());
-    }
-
-    public static boolean isNameValid(String text) {
-        String VIETNAMESE_DIACRITIC_CHARACTERS = "ẮẰẲẴẶĂẤẦẨẪẬÂÁÀÃẢẠĐẾỀỂỄỆÊÉÈẺẼẸÍÌỈĨỊỐỒỔỖỘÔỚỜỞỠỢƠÓÒÕỎỌỨỪỬỮỰƯÚÙỦŨỤÝỲỶỸỴ";
-        String oneWord = "(?:[" + VIETNAMESE_DIACRITIC_CHARACTERS + "]|[A-Z])++";
-        String regex = "(" + oneWord + ")+( " + oneWord + ")*";
-        return (Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(text).matches());
     }
 }

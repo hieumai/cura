@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edtFirstName"
-            android:hint="@string/name"
+            android:hint="@string/FirstName"
             android:singleLine="true" />
 
         <EditText
