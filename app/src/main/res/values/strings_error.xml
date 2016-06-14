@@ -16,4 +16,7 @@
     <string name="required_degree">Degree Types can\'t be left empty</string>
     <string name="required_spec">Areas of Speciality can\'t be left empty</string>
     <string name="required_fac">Facilities can\'t be left empty</string>
+    <string name="LocationError">Can not get the current location. Please check your GPS and network connection</string>
+    <string name="AddressError">Internal Error. Can not get the address</string>
+
 </resources>

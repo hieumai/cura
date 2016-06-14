@@ -34,4 +34,13 @@
     <string name="re_pwd">Re-enter Password*</string>
     <string name="register">Register</string>
     <string name="name">Name*</string>
+
+
+    <string name="DoctorSearch">Doctor Search</string>
+    <string name="Name">Name :</string>
+    <string name="Location">Location :</string>
+    <string name="Speciality">Speciality :</string>
+    <string name="Search">Search</string>
+    <string name="CurrentLocation">Current Location</string>
+    <string name="ManuallyEnter">Manually Enter</string>
 </resources>

@@ -20,6 +20,7 @@ import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.InputUtils;
 import com.kms.cura.view.activity.AccountTypeSelectionActivity;
+import com.kms.cura.view.PatientHomeActivity;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,6 +38,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
         broker = EventBroker.getInstance();
         initView();
         registerEvent();
+        createAccountButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
     }
 
     /**
@@ -80,7 +83,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     private void initLoginButton() {
         loginButton = initButton(R.id.button_LoginUI_Login);
         loginButton.setEnabled(false);
-        loginButton.setOnClickListener(this);
     }
 
     private void initAccountButton() {
@@ -146,6 +148,10 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     public void onClick(View v) {
         if (v.getId() == R.id.button_LoginUI_CreateAccount) {
             Intent intent = new Intent(this, AccountTypeSelectionActivity.class);
+            startActivity(intent);
+        }
+        else{
+            Intent intent = new Intent(this, PatientHomeActivity.class);
             startActivity(intent);
         } else if (v.getId() == R.id.button_LoginUI_Login) {
             UserController.userLogin(email.getText().toString(), password.getText().toString());
