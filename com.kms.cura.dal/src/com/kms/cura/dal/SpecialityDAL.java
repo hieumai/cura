@@ -32,4 +32,5 @@ public class SpecialityDAL extends EntityDAL {
 	public Entity getByID(int id, DatabaseHelper dbh) throws SQLException, ClassNotFoundException {
 		return super.getByID(SpecialityColumn.TABLE_NAME, id, dbh);
 	}
+
 }

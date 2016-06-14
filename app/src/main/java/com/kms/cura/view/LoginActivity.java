@@ -1,4 +1,4 @@
-package com.kms.cura.view.activity;
+package com.kms.cura.view;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -15,6 +15,9 @@ import android.widget.EditText;
 import com.kms.cura.R;
 import com.kms.cura.utils.InputUtils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LoginActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener {
 
     private EditText email, password;
@@ -26,6 +29,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
         setContentView(R.layout.activity_login);
         initView();
         createAccountButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
     }
 
     /**
@@ -120,6 +124,10 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     public void onClick(View v) {
         if (v.getId() == R.id.button_LoginUI_CreateAccount) {
             Intent intent = new Intent(this, AccountTypeSelectionActivity.class);
+            startActivity(intent);
+        }
+        else{
+            Intent intent=new Intent(this, PatientHomeActivity.class);
             startActivity(intent);
         }
     }

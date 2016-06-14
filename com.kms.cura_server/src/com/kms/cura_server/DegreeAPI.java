@@ -15,15 +15,15 @@ import com.kms.cura_server.resources.Strings;
 
 @Path("/degree")
 public class DegreeAPI {
-	@GET
-	@Path("/getAll")
-	public String getAllDegree() {
-		try {
-			List<Entity> degree = DegreeDAL.getInstance().getAll(new DegreeDatabaseHelper());
-			JsonElement element = EntityToJsonConverter.convertEntityListToJson(degree);
-			return element.toString();
-		} catch (ClassNotFoundException | SQLException e) {
-			return Strings.error_internal;
-		}
+    @GET
+    @Path("/getAll")
+    public String getAllDegree() {
+	try {
+	    List<Entity> degree = DegreeDAL.getInstance().getAll(new DegreeDatabaseHelper());
+	    JsonElement element = EntityToJsonConverter.convertEntityListToJson(degree);
+	    return element.toString();
+	} catch (ClassNotFoundException | SQLException e) {
+	    return Strings.error_internal;
 	}
+    }
 }
