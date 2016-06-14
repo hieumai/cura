@@ -9,12 +9,13 @@ import com.kms.cura.entity.Entity;
 
 public class DegreeDatabaseHelper extends DatabaseHelper {
 
-	public DegreeDatabaseHelper() throws ClassNotFoundException, SQLException {
-		super();
-	}
+    public DegreeDatabaseHelper() throws ClassNotFoundException, SQLException {
+        super();
+    }
 
-	@Override
-	protected Entity getEntityFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException {
-		return new DegreeEntity(resultSet.getString(DegreeColumn.ID.getColumnName()), resultSet.getString(DegreeColumn.NAME.getColumnName()));	}
+    @Override
+    protected Entity getEntityFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException {
+        return new DegreeEntity(resultSet.getString(DegreeColumn.ID.getColumnName()), resultSet.getString(DegreeColumn.NAME.getColumnName()));
+    }
 
 }

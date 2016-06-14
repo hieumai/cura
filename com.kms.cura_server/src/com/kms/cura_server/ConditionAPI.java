@@ -7,20 +7,20 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
 import com.google.gson.JsonElement;
-import com.kms.cura.dal.DegreeDAL;
-import com.kms.cura.dal.database.DegreeDatabaseHelper;
+import com.kms.cura.dal.ConditionDAL;
+import com.kms.cura.dal.database.ConditionDatabaseHelper;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura_server.resources.Strings;
 
-@Path("/degree")
-public class DegreeAPI {
+@Path("/condition")
+public class ConditionAPI {
 	@GET
 	@Path("/getAll")
-	public String getAllDegree() {
+	public String getAllCondition() {
 		try {
-			List<Entity> degree = DegreeDAL.getInstance().getAll(new DegreeDatabaseHelper());
-			JsonElement element = EntityToJsonConverter.convertEntityListToJson(degree);
+			List<Entity> condition = ConditionDAL.getInstance().getAll(new ConditionDatabaseHelper());
+			JsonElement element = EntityToJsonConverter.convertEntityListToJson(condition);
 			return element.toString();
 		} catch (ClassNotFoundException | SQLException e) {
 			return Strings.error_internal;
