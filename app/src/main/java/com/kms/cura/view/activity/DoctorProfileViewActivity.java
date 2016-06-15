@@ -6,11 +6,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kms.cura.R;
+import com.kms.cura.entity.DayOfTheWeek;
 import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.SpecialityEntity;
+
+import java.util.List;
 
 public class DoctorProfileViewActivity extends AppCompatActivity {
     private Toolbar tbDoctorProfileView;
@@ -36,30 +41,48 @@ public class DoctorProfileViewActivity extends AppCompatActivity {
 
     }
 
-    public TextView loadText(String src, int id) {
-        TextView textView = (TextView) findViewById(id);
-        if (src == null) {
-            textView.setHeight(0);
-        } else {
-            textView.setText(src);
-        }
-        return textView;
-    }
 
     public View createFacilityView(FacilityEntity entity) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        View newView = inflater.inflate(R.layout.facility_layout,null);
+        View newView = inflater.inflate(R.layout.facility_layout, null);
         ViewHolder holder = new ViewHolder(newView);
 
     }
 
-    class ViewHolder{
-        public TextView txtFacilityName, txtFacilityAddress, txtFacilityPhoneNumber, txtFAcilityTime;
-        public ViewHolder(View root , FacilityEntity entity){
-            txtFacilityName = loadText(entity.getName(),R.id.txtDoctorFacilityName);
-            txtFacilityAddress = loadText(entity.getAddress(),R.id.txtDoctorFacilityAddress);
-            txtFacilityPhoneNumber = loadText(entity.getPhone(),R.id.txtDoctorFacilityPhoneNumber);
-            txtFAcilityTime = (TextView) root.findViewById(R.id.txtDoctorFacilityTime);
+    class ViewHolder {
+        public TextView txtFacilityName, txtFacilityAddress, txtFacilityPhoneNumber;
+        public LinearLayout layoutDoctorFacilityTime;
+
+        public ViewHolder(View root, FacilityEntity entity) {
+            txtFacilityName = loadText(entity.getName(), R.id.txtDoctorFacilityName);
+            txtFacilityAddress = loadText(entity.getAddress(), R.id.txtDoctorFacilityAddress);
+            txtFacilityPhoneNumber = loadText(entity.getPhone(), R.id.txtDoctorFacilityPhoneNumber);
+
         }
+
+        public TextView loadText(String src, int id) {
+            TextView textView = (TextView) findViewById(id);
+            if (src == null) {
+                textView.setHeight(0);
+            } else {
+                textView.setText(src);
+            }
+            return textView;
+        }
+
+        public void loadFacilityTime(List<OpeningHour> times) {
+            for (int i = 0; i < times.size(); ++i) {
+                StringBuilder builder = new StringBuilder();
+                OpeningHour openingHour = times.get(i);
+                builder.append(openingHour.getDayOfTheWeek().toString());
+                builder.append("-");
+                builder.append(openingHour.getOpenTime().toString());
+                builder.append("-");
+                builder.append(openingHour.getCloseTime().toString());
+
+            }
+        }
+
     }
+
 }
