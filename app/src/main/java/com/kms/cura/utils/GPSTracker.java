@@ -21,12 +21,6 @@ public class GPSTracker extends Service implements LocationListener {
     private boolean isNetworkEnabled = false;
     private boolean canGetLocation = false;
 
-
-    private Location location;
-
-    private double latitude;
-    private double longitude;
-
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10;
     private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1;
 
@@ -42,7 +36,7 @@ public class GPSTracker extends Service implements LocationListener {
         isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         if (isNetworkEnabled || isGPSEnabled) {
-            canGetLocation = true;
+            canGetLocation = isNetworkEnabled || isGPSEnabled;
         }
     }
 
@@ -52,8 +46,7 @@ public class GPSTracker extends Service implements LocationListener {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                     MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
             if (locationManager != null) {
-                location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                return location;
+                return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
         }
         if (isNetworkEnabled) {
@@ -62,10 +55,10 @@ public class GPSTracker extends Service implements LocationListener {
                     LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES,
                     MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
             if (locationManager != null) {
-                location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             }
         }
-        return location;
+        return null;
     }
 
 
