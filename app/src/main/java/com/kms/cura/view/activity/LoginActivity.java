@@ -153,10 +153,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
         else{
             Intent intent = new Intent(this, PatientHomeActivity.class);
             startActivity(intent);
-        } else if (v.getId() == R.id.button_LoginUI_Login) {
-            UserController.userLogin(email.getText().toString(), password.getText().toString());
-
-
         }
     }
 
