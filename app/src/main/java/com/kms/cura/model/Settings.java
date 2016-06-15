@@ -8,4 +8,6 @@ public class Settings {
     public static final String CREATE_PATIENT_API = "/user/createPatient";
     public static final String USER_LOGIN = "/user/userLogin";
 
+
+
 }

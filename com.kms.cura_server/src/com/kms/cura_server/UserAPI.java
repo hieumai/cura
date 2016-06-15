@@ -92,7 +92,7 @@ public final class UserAPI {
 	@Path("/createDoctor")
 	public String createDoctor(String jsonData) throws ClassNotFoundException, SQLException {
 		try {
-			DoctorUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, getDoctorEntityType());
+			DoctorUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, DoctorUserEntity.getDoctorEntityType());
 			DoctorUserEntity user = DoctorUserDAL.getInstance().createUser(entity);
 			return SuccessResponse(user);
 		} catch (ClassNotFoundException | SQLException | DALException e) {
@@ -120,10 +120,7 @@ public final class UserAPI {
 		}
 
 	}
-	private static Type getDoctorEntityType() {
-		return new TypeToken<DoctorUserEntity>() {
-		}.getType();
-	}
+
 
 	private Type getPatientUserType() {
 		Type type = new TypeToken<PatientUserEntity>() {

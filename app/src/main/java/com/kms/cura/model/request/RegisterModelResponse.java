@@ -2,9 +2,12 @@ package com.kms.cura.model.request;
 
 import com.android.volley.VolleyError;
 import com.kms.cura.constant.EventConstant;
+import com.kms.cura.entity.json.JsonToEntityConverter;
+import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.event.EventBroker;
+import com.kms.cura.utils.DoctorProfileUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +28,8 @@ public class RegisterModelResponse implements EntityModelResponse {
                     //Save into Patient class
                 }
                 else{
-                    //Save into Doctor class
+                    DoctorUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(response, DoctorUserEntity.getDoctorEntityType());
+                    DoctorProfileUtils.getInstance().setData(entity);
                 }
                 EventBroker.getInstance().pusblish(EventConstant.REGISTER_SUCCESS, "");
             } else {

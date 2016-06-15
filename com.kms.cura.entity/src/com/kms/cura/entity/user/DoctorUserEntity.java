@@ -1,8 +1,10 @@
 package com.kms.cura.entity.user;
 
+import java.lang.reflect.Type;
 import java.sql.Date;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
 import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.SpecialityEntity;
@@ -105,7 +107,10 @@ public class DoctorUserEntity extends UserEntity {
 	}
 
 	public String getGender() {
-		return gender;
+		if("M".equals(gender)){
+			return "Male";
+		}
+		return "Female";
 	}
 
 	public void setGender(String gender) {
@@ -139,5 +144,9 @@ public class DoctorUserEntity extends UserEntity {
 	@Override
 	public int getType() {
 		return DOCTOR_TYPE;
+	}
+	public static Type getDoctorEntityType() {
+		return new TypeToken<DoctorUserEntity>() {
+		}.getType();
 	}
 }

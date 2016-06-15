@@ -40,12 +40,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    tools:text="Name,"
+                    tools:text="Name"
                     android:id="@+id/txtDoctorName"
                     android:textSize="@dimen/textSizeTitle"/>
                 <TextView
@@ -125,19 +125,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="40sp"
-                android:id="@+id/txtDoctorAddress"
+                android:id="@+id/txtDoctorFacilityAddress"
                 tools:text="Address"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="40sp"
-                android:id="@+id/txtDoctorPhoneNumber"
+                android:id="@+id/txtDoctorFacilityPhoneNumber"
                 tools:text="Phone Number"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="40sp"
-                android:id="@+id/txtDoctorTime"
+                android:id="@+id/txtDoctorFacilityTime"
                 tools:text="Days/Hours"/>
         </LinearLayout>
     </LinearLayout>
