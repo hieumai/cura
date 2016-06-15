@@ -35,9 +35,7 @@ public class GPSTracker extends Service implements LocationListener {
         locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
         isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        if (isNetworkEnabled || isGPSEnabled) {
-            canGetLocation = isNetworkEnabled || isGPSEnabled;
-        }
+        canGetLocation = isNetworkEnabled || isGPSEnabled;
     }
 
     public Location getLocation() {
@@ -67,7 +65,6 @@ public class GPSTracker extends Service implements LocationListener {
             locationManager.removeUpdates(GPSTracker.this);
         }
     }
-
 
 
     public boolean canGetLocation() {
