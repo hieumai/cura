@@ -1,4 +1,4 @@
-package com.kms.cura.view;
+package com.kms.cura.view.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +20,7 @@ public class DoctorProfileViewActivity extends AppCompatActivity {
         tbDoctorProfileView = (Toolbar) findViewById(R.id.tbDoctorProfileView);
         setSupportActionBar(tbDoctorProfileView);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-        View content_toolbar = getLayoutInflater().inflate(R.layout.content_toolbar_patient_profile_view, null);
+        View content_toolbar = getLayoutInflater().inflate(R.layout.content_toolbar_doctor_profile_view, null);
         Toolbar.LayoutParams layoutParams = new Toolbar.LayoutParams(Gravity.CENTER_HORIZONTAL);
         tbDoctorProfileView.addView(content_toolbar, layoutParams);
     }

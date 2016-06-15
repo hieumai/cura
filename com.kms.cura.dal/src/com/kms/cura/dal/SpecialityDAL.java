@@ -4,8 +4,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.kms.cura.dal.database.DatabaseHelper;
+import com.kms.cura.dal.database.SpecialityDatabaseHelper;
 import com.kms.cura.dal.mapping.SpecialityColumn;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.SpecialityEntity;
 
 public class SpecialityDAL extends EntityDAL {
 	private static SpecialityDAL _instance;
@@ -31,5 +33,10 @@ public class SpecialityDAL extends EntityDAL {
 
 	public Entity getByID(int id, DatabaseHelper dbh) throws SQLException, ClassNotFoundException {
 		return super.getByID(SpecialityColumn.TABLE_NAME, id, dbh);
+	}
+	
+	public List<Entity> getbyDoctorID(int id) throws ClassNotFoundException, SQLException {
+		SpecialityDatabaseHelper databaseHelper = new SpecialityDatabaseHelper();
+		return databaseHelper.getSpecialitiesFromDoctorID(id);
 	}
 }
