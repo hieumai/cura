@@ -45,23 +45,23 @@ public class DoctorProfileViewActivity extends AppCompatActivity {
     public View createFacilityView(FacilityEntity entity) {
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
         View newView = inflater.inflate(R.layout.facility_layout, null);
-        ViewHolder holder = new ViewHolder(newView);
-
+        ViewHolder holder = new ViewHolder(newView, entity);
+        return newView;
     }
 
     class ViewHolder {
-        public TextView txtFacilityName, txtFacilityAddress, txtFacilityPhoneNumber;
+        public TextView txtFacilityName, txtFacilityAddress, txtFacilityPhoneNumber, txtFacilityTime;
         public LinearLayout layoutDoctorFacilityTime;
 
         public ViewHolder(View root, FacilityEntity entity) {
-            txtFacilityName = loadText(entity.getName(), R.id.txtDoctorFacilityName);
-            txtFacilityAddress = loadText(entity.getAddress(), R.id.txtDoctorFacilityAddress);
-            txtFacilityPhoneNumber = loadText(entity.getPhone(), R.id.txtDoctorFacilityPhoneNumber);
-
+            txtFacilityName = loadText(root,entity.getName(), R.id.txtDoctorFacilityName);
+            txtFacilityAddress = loadText(root,entity.getAddress(), R.id.txtDoctorFacilityAddress);
+            txtFacilityPhoneNumber = loadText(root,entity.getPhone(), R.id.txtDoctorFacilityPhoneNumber);
+            txtFacilityTime = loadFacilityTime(entity.getOpeningHours(),R.id.txtDoctorFacilityName, root);
         }
 
-        public TextView loadText(String src, int id) {
-            TextView textView = (TextView) findViewById(id);
+        public TextView loadText(View root, String src, int id) {
+            TextView textView = (TextView) root.findViewById(id);
             if (src == null) {
                 textView.setHeight(0);
             } else {
@@ -70,17 +70,20 @@ public class DoctorProfileViewActivity extends AppCompatActivity {
             return textView;
         }
 
-        public void loadFacilityTime(List<OpeningHour> times) {
+        public TextView loadFacilityTime(List<OpeningHour> times, int id, View root) {
+            StringBuilder builder = new StringBuilder();
             for (int i = 0; i < times.size(); ++i) {
-                StringBuilder builder = new StringBuilder();
                 OpeningHour openingHour = times.get(i);
                 builder.append(openingHour.getDayOfTheWeek().toString());
                 builder.append("-");
                 builder.append(openingHour.getOpenTime().toString());
                 builder.append("-");
                 builder.append(openingHour.getCloseTime().toString());
-
+                builder.append("\n");
             }
+            TextView textView = (TextView) root.findViewById(id);
+            textView.setText(builder.toString());
+            return textView;
         }
 
     }
