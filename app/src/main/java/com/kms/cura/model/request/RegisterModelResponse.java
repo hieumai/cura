@@ -7,7 +7,7 @@ import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.event.EventBroker;
-import com.kms.cura.utils.DoctorProfileUtils;
+import com.kms.cura.utils.CurrentDoctorProfile;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +29,7 @@ public class RegisterModelResponse implements EntityModelResponse {
                 }
                 else{
                     DoctorUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(response, DoctorUserEntity.getDoctorEntityType());
-                    DoctorProfileUtils.getInstance().setData(entity);
+                    CurrentDoctorProfile.getInstance().setData(entity);
                 }
                 EventBroker.getInstance().pusblish(EventConstant.REGISTER_SUCCESS, "");
             } else {

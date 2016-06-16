@@ -149,8 +149,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
             startActivity(intent);
         } else if (v.getId() == R.id.button_LoginUI_Login) {
             UserController.userLogin(email.getText().toString(), password.getText().toString());
-
-
         }
     }
 
@@ -159,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
         switch (event) {
             case EventConstant.LOGIN_SUCCESS:
                 switch (data) {
-                    case EventConstant.TYPE_PATIENT:
+                    case EventConstant.TYPE_DOCTOR:
                         Intent toProfileDoctor = new Intent(this, DoctorProfileViewActivity.class);
                         startActivity(toProfileDoctor);
                         break;
