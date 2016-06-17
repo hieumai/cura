@@ -23,7 +23,7 @@ public class DoctorUserEntity extends UserEntity {
 	private Date birth;
 	private String location;
 	private String insurance;
-
+	public static String MALE = "M";
 	public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
 			List<SpecialityEntity> speciality, double rating, int experience, double minPrice, double maxPrice,
 			List<FacilityEntity> facility, String gender, Date birth, String location, String insurance) {
@@ -107,10 +107,7 @@ public class DoctorUserEntity extends UserEntity {
 	}
 
 	public String getGender() {
-		if("M".equals(gender)){
-			return "Male";
-		}
-		return "Female";
+		return gender;
 	}
 
 	public void setGender(String gender) {

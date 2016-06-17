@@ -10,12 +10,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/DoctorFacility"
-        android:textSize="@dimen/textSizeButton"/>
+        android:textColor="@color/colorPrimaryDark"
+        />
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20sp"
         tools:text="Facility Name"
+        android:textStyle="bold"
         android:id="@+id/txtDoctorFacilityName"/>
     <TextView
         android:layout_width="wrap_content"
@@ -30,8 +32,15 @@
         android:id="@+id/txtDoctorFacilityPhoneNumber"
         tools:text="Phone Number"/>
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/layoutDoctorFacilityTime"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical"
+        android:layout_marginLeft="40sp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/OpeningTime"
+            />
+    </LinearLayout>
 </LinearLayout>

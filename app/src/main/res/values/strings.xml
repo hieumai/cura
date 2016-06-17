@@ -30,10 +30,15 @@
     <string name="CreatePatientAccount">Create Patient Account</string>
     <string name="speciality">Speciality(ies)</string>
     <string name="facility">Facility(ies)</string>
-    <string name="DoctorFacility">Facilities :</string>
+    <string name="DoctorFacility">FACILITIES :</string>
     <string name="profile">Profile</string>
     <string name="phone">Phone number*</string>
     <string name="re_pwd">Re-enter Password*</string>
     <string name="register">Register</string>
     <string name="name">Name*</string>
+    <string name="OpeningTime">Opening Time</string>
+    <string name="Gender">GENDER</string>
+    <string name="SpecialityU">SPECIALITY</string>
+    <string name="Experience">YEARS EXPERIENCE</string>
+    <string name="PriceRange">PRICE RANGES</string>
 </resources>
