@@ -216,28 +216,5 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 				entity.getEmail(), entity.getPassword(), DoctorColumn.USER_ID.getColumnName(),
 				UserColumn.ID.getColumnName());
 	}
-	public DoctorUserEntity searchDoctorFunction(String name, String location, String speciality) throws SQLException{
-		PreparedStatement stmt = null;
-		PreparedStatement stmt2 = null;
-		ResultSet rs = null;
-		StringBuilder sb = new StringBuilder();
-		sb.append("SELECT * FROM ");
-		sb.append(DoctorColumn.TABLE_NAME);
-		sb.append(" WHERE ");
-		sb.append(DoctorColumn.NAME);
-		sb.append(" LIKE '%?%' OR ");
-		sb.append(DoctorColumn.USER_ID);
-		sb.append(" = (SELECT ");
-		sb.append(Doctor_SpecialityColumn.DOCTOR_ID);
-		sb.append(" FROM ");
-		sb.append(Doctor_SpecialityColumn.TABLE_NAME);
-		sb.append(" WHERE ");
-		sb.append(Doctor_SpecialityColumn.SPECIALITY_ID);
-		sb.append(" = ?) OR ");
-		sb.append(DoctorColumn.LOCATION);
-		sb.append(" LIKE '?%?'");
-		
-		stmt = con.prepareStatement(sb.toString());
-		
-	}
+
 }
