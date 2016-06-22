@@ -26,7 +26,7 @@ public class UserAPIResponse extends APIResponse {
 	public String successResponse(List<? extends Entity> entity) {
 		return null;
 	}
-
+	
 	public String successResponsewithType(UserEntity entity) {
 		JsonElement jsonUser = EntityToJsonConverter.convertEntityToJson(entity);
 		JsonObject jsonUserConvert = (JsonObject) jsonUser;
@@ -39,6 +39,12 @@ public class UserAPIResponse extends APIResponse {
 		JsonObject jsonObject = new JsonObject();
 		JsonElement jsonElement = EntityToJsonConverter.convertOpeningHourListToJson(list);
 		jsonObject.add(OpeningHour.HOURS_LIST, jsonElement);
+		jsonObject.addProperty(Entity.STATUS_KEY, true);
+		return jsonObject.toString();
+	}
+	
+	public String successEdit() {
+		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty(Entity.STATUS_KEY, true);
 		return jsonObject.toString();
 	}

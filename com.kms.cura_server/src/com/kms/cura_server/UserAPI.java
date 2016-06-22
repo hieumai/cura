@@ -2,14 +2,17 @@ package com.kms.cura_server;
 
 import java.lang.reflect.Type;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -127,7 +130,7 @@ public final class UserAPI {
 		}
 
 	}
-	
+
 	@POST
 	@Path("/getDoctorWorkingHour")
 	public String getDoctorWorkingHour(String jsonData){
@@ -142,4 +145,25 @@ public final class UserAPI {
 		}
 	}
 
+	@POST
+	@Path("/editDoctorWorkingHour")
+	public String editDoctorWorkingHour(String jsonData){
+		JSONObject jsonObject = new JSONObject(jsonData);
+		Gson gson = new Gson();
+		int doctorID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.DOCTOR_ID.getColumnName()));
+		int facilityID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.FACILITY_ID.getColumnName()));
+		List<OpeningHour> hours = new ArrayList<>();
+		JSONArray list = jsonObject.getJSONArray(OpeningHour.HOURS_LIST);
+		for (int i = 0; i < list.length(); i++) {
+			OpeningHour entity = gson.fromJson(
+					list.getJSONObject(i).toString(), OpeningHour.class);
+			hours.add(entity);
+		}
+		try {
+			DoctorUserDAL.getInstance().editDoctorWorkingHour(hours, doctorID, facilityID);
+			return new UserAPIResponse().successEdit();
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
 }

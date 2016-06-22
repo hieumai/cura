@@ -53,4 +53,9 @@ public class DoctorUserDAL extends UserDAL {
 		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
 		return dbh.getWorkingHour(doctorID, facilityID);
 	}
+	
+	public void editDoctorWorkingHour(List<OpeningHour> workingHours, int doctorID, int facilityID) throws SQLException, ClassNotFoundException, Exception{
+		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
+		dbh.editDoctorWorkingHour(workingHours, doctorID, facilityID);
+	}
 }

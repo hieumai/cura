@@ -266,7 +266,7 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		return null;
 
 	}
-	
+
 	private List<OpeningHour> getListfromResultSet(ResultSet rs) throws SQLException{
 		List<OpeningHour> hours = new ArrayList<>();
 		while(rs.next()){
@@ -276,5 +276,40 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 			hours.add(hour);
 		}
 		return hours;
+	}
+
+
+	public void editDoctorWorkingHour(List<OpeningHour> workingHours, int doctorID, int facilityID) throws Exception{
+		PreparedStatement stmt = null;
+		StringBuilder builder = new StringBuilder();
+		builder.append("UPDATE ");
+		builder.append(Doctor_FacilityColumn.TABLE_NAME);
+		builder.append(" SET ");
+		builder.append(Doctor_FacilityColumn.WORKING_DAY.getColumnName());
+		builder.append("= ?, ");
+		builder.append(Doctor_FacilityColumn.START_WORKING_TIME.getColumnName());
+		builder.append("= ?, ");
+		builder.append(Doctor_FacilityColumn.END_WORKING_TIME.getColumnName());
+		builder.append("= ? WHERE ");
+		builder.append(Doctor_FacilityColumn.DOCTOR_ID.getColumnName());
+		builder.append(" = ? AND ");
+		builder.append(Doctor_FacilityColumn.FACILITY_ID.getColumnName());
+		builder.append(" = ?");
+		try{
+			for (int i = 0; i<workingHours.size();++i){
+				stmt = con.prepareStatement(builder.toString());
+				stmt.setInt(1, workingHours.get(i).getDayOfTheWeek().getCode());
+				stmt.setTime(2, workingHours.get(i).getOpenTime());
+				stmt.setTime(3, workingHours.get(i).getCloseTime());
+				stmt.setInt(4, doctorID);
+				stmt.setInt(5, facilityID);
+				if(stmt.executeUpdate() == 0){
+					throw new Exception("Edit Working Hours failed");
+				}
+			}
+		}
+		finally{
+			stmt.close();
+		}
 	}
 }
