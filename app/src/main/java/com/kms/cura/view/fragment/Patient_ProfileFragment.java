@@ -1,4 +1,4 @@
-package com.kms.cura.view.activity;
+package com.kms.cura.view.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
