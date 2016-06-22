@@ -12,18 +12,19 @@ import com.kms.cura.dal.database.SpecialityDatabaseHelper;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura_server.resources.Strings;
+import com.kms.cura_server.response.APIResponse;
+import com.kms.cura_server.response.SpecialityAPIResponse;
 
 @Path("/speciality")
 public class SpecialityAPI {
-    @GET
-    @Path("/getAll")
-    public String getAllDegree() {
-	try {
-	    List<Entity> speciality = SpecialityDAL.getInstance().getAll(new SpecialityDatabaseHelper());
-	    JsonElement element = EntityToJsonConverter.convertEntityListToJson(speciality);
-	    return element.toString();
-	} catch (ClassNotFoundException | SQLException e) {
-	    return Strings.error_internal;
+	@GET
+	@Path("/getAll")
+	public String getAllDegree() {
+		try {
+			List<Entity> speciality = SpecialityDAL.getInstance().getAll(new SpecialityDatabaseHelper());
+			return new SpecialityAPIResponse().successResponse(speciality);
+		} catch (ClassNotFoundException | SQLException e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
 	}
-    }
 }

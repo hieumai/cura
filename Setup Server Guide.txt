@@ -5,7 +5,10 @@
 	JRE and JDK 1.7 http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html 
 	Apache Maven 3.3 https://maven.apache.org/download.cgi
 2/ Open MySQL workbench and create a new connection. Set everything as default. The connection's username and password should both be "root".
-3/ In MySQL workbench, open the script file locates in com.kms.cura.dal\resources\SQL Script. Make sure connect to the connection that you've just created in step 2 first then File -> Run SQL Script and navigate to the SQL script ("InitDatabase")
+3/ In MySQL workbench, open the script file locates in com.kms.cura.dal\resources\SQL Script. Make sure connect to the connection that you've just created in step 2 first then File -> Run SQL Script and navigate to the SQL scripts ("InitDatabase" should be the first one).
+
+NOTE: Make sure you set character set to UTF8 before hitting run.
+
 4/ Go to cura main folder and open a command windows there
 5/ Type in "mvn package" or "mvn clean install" and wait for the web app to be compiled
 6/ After the compiling process is done, go to com.kms.cura_server\target . There should be a newly generated file calls "com.kms.cura_server-0.1.war" there. Copy it to your Apache Tomcat's "webapps" folder. You can change the file's name so the path will be easier to remeber.

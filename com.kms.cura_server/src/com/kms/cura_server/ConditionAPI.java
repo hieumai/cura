@@ -12,6 +12,8 @@ import com.kms.cura.dal.database.ConditionDatabaseHelper;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura_server.resources.Strings;
+import com.kms.cura_server.response.APIResponse;
+import com.kms.cura_server.response.ConditionAPIResponse;
 
 @Path("/condition")
 public class ConditionAPI {
@@ -20,10 +22,9 @@ public class ConditionAPI {
 	public String getAllCondition() {
 		try {
 			List<Entity> condition = ConditionDAL.getInstance().getAll(new ConditionDatabaseHelper());
-			JsonElement element = EntityToJsonConverter.convertEntityListToJson(condition);
-			return element.toString();
+			return new ConditionAPIResponse().successResponse(condition);
 		} catch (ClassNotFoundException | SQLException e) {
-			return Strings.error_internal;
+			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
 }

@@ -92,9 +92,6 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 			case INSURANCE:
 				columnValueMap.put(columnName, entity.getInsurance());
 				break;
-			case LOCATION:
-				columnValueMap.put(columnName, entity.getLocation());
-				break;
 			case NAME:
 				columnValueMap.put(columnName, entity.getName());
 				break;
@@ -197,7 +194,6 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 						resultSet.getDouble(DoctorColumn.MAX_PRICE.getColumnName()), facilities,
 						resultSet.getString(DoctorColumn.GENDER.getColumnName()),
 						resultSet.getDate(DoctorColumn.BIRTH.getColumnName()),
-						resultSet.getString(DoctorColumn.LOCATION.getColumnName()),
 						resultSet.getString(DoctorColumn.INSURANCE.getColumnName()));
 				return doctor;
 			}

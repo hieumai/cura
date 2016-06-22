@@ -1,6 +1,9 @@
 package com.kms.cura.entity.user;
 
+import java.lang.reflect.Type;
 import java.sql.Date;
+
+import com.google.gson.reflect.TypeToken;
 
 public class PatientUserEntity extends UserEntity {
 	public static int PATIENT_TYPE = 2;
@@ -63,6 +66,12 @@ public class PatientUserEntity extends UserEntity {
 	@Override
 	public int getType() {
 		return PATIENT_TYPE;
+	}
+	
+	public static Type getPatientUserType() {
+		Type type = new TypeToken<PatientUserEntity>() {
+		}.getType();
+		return type;
 	}
 
 

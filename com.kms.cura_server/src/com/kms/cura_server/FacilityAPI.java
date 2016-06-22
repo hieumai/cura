@@ -12,6 +12,8 @@ import com.kms.cura.dal.database.FacilityDatabaseHelper;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura_server.resources.Strings;
+import com.kms.cura_server.response.APIResponse;
+import com.kms.cura_server.response.FacilityAPIResponse;
 
 @Path("/facility")
 public class FacilityAPI {
@@ -20,10 +22,9 @@ public class FacilityAPI {
     public String getAllFacility() {
         try {
             List<Entity> facilities = FacilityDAL.getInstance().getAll(new FacilityDatabaseHelper());
-            JsonElement element = EntityToJsonConverter.convertEntityListToJson(facilities);
-            return element.toString();
+            return new FacilityAPIResponse().successResponse(facilities);
         } catch (ClassNotFoundException | SQLException e) {
-            return Strings.error_internal + e.getMessage();
+            return APIResponse.unsuccessResponse(e.getMessage());
         }
     }
 }

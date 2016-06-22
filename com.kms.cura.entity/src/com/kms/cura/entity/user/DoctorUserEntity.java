@@ -1,8 +1,10 @@
 package com.kms.cura.entity.user;
 
+import java.lang.reflect.Type;
 import java.sql.Date;
 import java.util.List;
 
+import com.google.gson.reflect.TypeToken;
 import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.SpecialityEntity;
@@ -19,12 +21,11 @@ public class DoctorUserEntity extends UserEntity {
 	private List<FacilityEntity> facility;
 	private String gender;
 	private Date birth;
-	private String location;
 	private String insurance;
 
 	public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
 			List<SpecialityEntity> speciality, double rating, int experience, double minPrice, double maxPrice,
-			List<FacilityEntity> facility, String gender, Date birth, String location, String insurance) {
+			List<FacilityEntity> facility, String gender, Date birth, String insurance) {
 		super(id, name, email, password);
 		this.phone = phone;
 		this.degree = degree;
@@ -36,7 +37,6 @@ public class DoctorUserEntity extends UserEntity {
 		this.facility = facility;
 		this.gender = gender;
 		this.birth = birth;
-		this.location = location;
 		this.insurance = insurance;
 	}
 
@@ -120,14 +120,6 @@ public class DoctorUserEntity extends UserEntity {
 		this.birth = birth;
 	}
 
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
 	public String getInsurance() {
 		return insurance;
 	}
@@ -139,5 +131,11 @@ public class DoctorUserEntity extends UserEntity {
 	@Override
 	public int getType() {
 		return DOCTOR_TYPE;
+	}
+	
+	public static Type getDoctorUserType() {
+		Type type = new TypeToken<DoctorUserEntity>() {
+		}.getType();
+		return type;
 	}
 }

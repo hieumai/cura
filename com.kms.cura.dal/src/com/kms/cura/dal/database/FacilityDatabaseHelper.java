@@ -35,6 +35,7 @@ public class FacilityDatabaseHelper extends DatabaseHelper {
 			FacilityEntity facility = new FacilityEntity(resultSet.getString(FacilityColumn.ID.getColumnName()),
 					resultSet.getString(FacilityColumn.NAME.getColumnName()),
 					resultSet.getString(FacilityColumn.ADDRESS.getColumnName()),
+					resultSet.getString(FacilityColumn.CITY.getColumnName()),
 					resultSet.getString(FacilityColumn.PHONE.getColumnName()), openingHours);
 			return facility;
 		} finally {

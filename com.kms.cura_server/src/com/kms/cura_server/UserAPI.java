@@ -25,6 +25,8 @@ import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura_server.resources.Strings;
+import com.kms.cura_server.response.APIResponse;
+import com.kms.cura_server.response.UserAPIResponse;
 
 @Path("/user")
 public final class UserAPI {
@@ -82,9 +84,9 @@ public final class UserAPI {
 		try {
 			PatientUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, getPatientUserType());
 			PatientUserEntity user = PatientUserDAL.getInstance().createUser(entity);
-			return SuccessResponse(user);
+			return new UserAPIResponse().successResponse(entity);
 		} catch (ClassNotFoundException | SQLException | DALException e) {
-			return UnsuccessResponse(e.getMessage());
+			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
 
@@ -94,9 +96,9 @@ public final class UserAPI {
 		try {
 			DoctorUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, getDoctorEntityType());
 			DoctorUserEntity user = DoctorUserDAL.getInstance().createUser(entity);
-			return SuccessResponse(user);
+			return new UserAPIResponse().successResponse(entity);
 		} catch (ClassNotFoundException | SQLException | DALException e) {
-			return UnsuccessResponse(e.getMessage());
+			return APIResponse.unsuccessResponse(e.getMessage());
 
 		}
 	}
@@ -108,15 +110,15 @@ public final class UserAPI {
 		try {
 			PatientUserEntity patientUserEntity=PatientUserDAL.getInstance().searchPatient(entity);
 			if (patientUserEntity != null){
-				return SuccessResponse(patientUserEntity);
+				return new UserAPIResponse().successResponsewithType(patientUserEntity);
 			}
 			DoctorUserEntity doctorUserEntity = DoctorUserDAL.getInstance().searchDoctor(entity);
 			if (doctorUserEntity != null) {
-				return SuccessResponse(doctorUserEntity);
+				return new UserAPIResponse().successResponsewithType(doctorUserEntity);
 			}
-			return UnsuccessResponse("Email and password combination does not exist");
+			return APIResponse.unsuccessResponse("Email and password combination does not exist");
 		} catch (ClassNotFoundException | SQLException e) {
-			return UnsuccessResponse(e.getMessage());
+			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 
 	}
@@ -131,18 +133,4 @@ public final class UserAPI {
 		return type;
 	}
 
-	private String SuccessResponse(UserEntity user){
-		JsonElement JsonUser = EntityToJsonConverter.convertEntityToJson(user);
-		JsonObject JsonUserConvert =(JsonObject) JsonUser;
-		JsonUserConvert.addProperty(UserEntity.STATUS_KEY, true);
-		JsonUserConvert.addProperty(UserEntity.TYPE, user.getType());
-		return JsonUserConvert.toString();
-	}
-
-	private String UnsuccessResponse(String message){
-		JsonObject jsonError=new JsonObject();
-		jsonError.addProperty(UserEntity.STATUS_KEY, false);
-		jsonError.addProperty(UserEntity.MESSAGE, message);
-		return jsonError.toString();
-	}
 }

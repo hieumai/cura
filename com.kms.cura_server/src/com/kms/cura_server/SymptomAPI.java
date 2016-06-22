@@ -12,6 +12,8 @@ import com.kms.cura.dal.database.SymptomDatabaseHelper;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura_server.resources.Strings;
+import com.kms.cura_server.response.APIResponse;
+import com.kms.cura_server.response.SymptonAPIResponse;
 
 @Path("/symptom")
 public class SymptomAPI {
@@ -20,10 +22,9 @@ public class SymptomAPI {
 	public String getAllSymptom() {
 		try {
 			List<Entity> symptom = SymptomDAL.getInstance().getAll(new SymptomDatabaseHelper());
-			JsonElement element = EntityToJsonConverter.convertEntityListToJson(symptom);
-			return element.toString();
+			return new SymptonAPIResponse().successResponse(symptom);
 		} catch (ClassNotFoundException | SQLException e) {
-			return Strings.error_internal;
+			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
 }

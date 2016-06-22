@@ -3,7 +3,8 @@ package com.kms.cura.entity;
 public abstract class Entity {
 	private String id;
 	private String name;
-	
+	public static final String STATUS_KEY = "statuskey";
+	public static final String MESSAGE= "message";
 	public Entity() {
 	}
 	

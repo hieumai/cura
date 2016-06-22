@@ -12,6 +12,8 @@ import com.kms.cura.dal.database.DegreeDatabaseHelper;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura_server.resources.Strings;
+import com.kms.cura_server.response.APIResponse;
+import com.kms.cura_server.response.DegreeAPIResponse;
 
 @Path("/degree")
 public class DegreeAPI {
@@ -20,10 +22,9 @@ public class DegreeAPI {
 	public String getAllDegree() {
 		try {
 			List<Entity> degree = DegreeDAL.getInstance().getAll(new DegreeDatabaseHelper());
-			JsonElement element = EntityToJsonConverter.convertEntityListToJson(degree);
-			return element.toString();
+			return new DegreeAPIResponse().successResponse(degree);
 		} catch (ClassNotFoundException | SQLException e) {
-			return Strings.error_internal;
+			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
 }
