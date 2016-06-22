@@ -1,7 +1,7 @@
 USE cura;
 
-ALTER TABLE doctor_facilities ADD week_day INT NOT NULL;
+ALTER TABLE doctor_facilities ADD working_day INT NOT NULL;
 
-ALTER TABLE doctor_facilities ADD time_open TIME NOT NULL;
+ALTER TABLE doctor_facilities ADD start_working_time TIME NOT NULL;
 
-ALTER TABLE doctor_facilities ADD time_close TIME NOT NULL;
+ALTER TABLE doctor_facilities ADD end_working_time TIME NOT NULL;

@@ -7,6 +7,7 @@ import com.kms.cura.dal.database.DatabaseHelper;
 import com.kms.cura.dal.database.DoctorUserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 
@@ -46,5 +47,10 @@ public class DoctorUserDAL extends UserDAL {
 	public DoctorUserEntity searchDoctor(UserEntity entity) throws ClassNotFoundException, SQLException{
 		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
 		return dbh.searchDoctor(entity);
+	}
+	
+	public List<OpeningHour> getWorkingHours(int doctorID, int facilityID) throws SQLException, ClassNotFoundException {
+		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
+		return dbh.getWorkingHour(doctorID, facilityID);
 	}
 }

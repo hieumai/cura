@@ -8,6 +8,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import org.json.JSONObject;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -15,10 +17,13 @@ import com.kms.cura.dal.database.DoctorUserDatabaseHelper;
 import com.kms.cura.dal.database.PatientUserDatabaseHelper;
 import com.kms.cura.dal.database.UserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
+import com.kms.cura.dal.mapping.DoctorColumn;
+import com.kms.cura.dal.mapping.Doctor_FacilityColumn;
 import com.kms.cura.dal.user.DoctorUserDAL;
 import com.kms.cura.dal.user.PatientUserDAL;
 import com.kms.cura.dal.user.UserDAL;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.json.JsonToEntityConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
@@ -121,6 +126,20 @@ public final class UserAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 
+	}
+	
+	@POST
+	@Path("/getDoctorWorkingHour")
+	public String getDoctorWorkingHour(String jsonData){
+		JSONObject jsonObject = new JSONObject(jsonData);
+		int doctorID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.DOCTOR_ID.getColumnName()));
+		int facilityID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.FACILITY_ID.getColumnName()));
+		try {
+			List<OpeningHour> hours = DoctorUserDAL.getInstance().getWorkingHours(doctorID, facilityID);
+			return new UserAPIResponse().successResponseOpeningHour(hours);
+		} catch (ClassNotFoundException | SQLException e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
 	}
 
 }
