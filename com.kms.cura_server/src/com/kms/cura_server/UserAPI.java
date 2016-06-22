@@ -144,6 +144,19 @@ public final class UserAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
+	
+	@POST
+	@Path("/getDoctorWorkingHourAll")
+	public String getDoctorWorkingHourAll(String jsonData){
+		JSONObject jsonObject = new JSONObject(jsonData);
+		int doctorID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.DOCTOR_ID.getColumnName()));
+		try {
+			List<OpeningHour> hours = DoctorUserDAL.getInstance().getWorkingHours(doctorID);
+			return new UserAPIResponse().successResponseOpeningHour(hours);
+		} catch (ClassNotFoundException | SQLException e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
 
 	@POST
 	@Path("/editDoctorWorkingHour")

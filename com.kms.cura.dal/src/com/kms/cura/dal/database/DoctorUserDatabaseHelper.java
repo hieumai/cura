@@ -264,7 +264,6 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 			stmt.close();
 		}
 		return null;
-
 	}
 
 	private List<OpeningHour> getListfromResultSet(ResultSet rs) throws SQLException{
@@ -311,5 +310,34 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		finally{
 			stmt.close();
 		}
+	}
+
+	public List<OpeningHour> getWorkingHourAll(int doctorID) throws SQLException {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		StringBuilder builder = new StringBuilder();
+		builder.append("SELECT ");
+		builder.append(Doctor_FacilityColumn.WORKING_DAY.getColumnName());
+		builder.append(", ");
+		builder.append(Doctor_FacilityColumn.START_WORKING_TIME.getColumnName());
+		builder.append(", ");
+		builder.append(Doctor_FacilityColumn.END_WORKING_TIME.getColumnName());
+		builder.append(" FROM ");
+		builder.append(Doctor_FacilityColumn.TABLE_NAME);
+		builder.append(" WHERE ");
+		builder.append(Doctor_FacilityColumn.DOCTOR_ID.getColumnName());
+		builder.append(" = ?");
+		try{
+			stmt = con.prepareStatement(builder.toString());
+			stmt.setInt(1, doctorID);
+			rs = stmt.executeQuery();
+			if(rs != null){
+				return getListfromResultSet(rs);
+			}
+		}
+		finally{
+			stmt.close();
+		}
+		return null;
 	}
 }
