@@ -1,9 +1,10 @@
 package com.kms.cura.entity;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
-import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.entity.user.PatientUserEntity;
 
 public class SpecialityEntity extends Entity {
 	public final static String SPECIALITY_LIST = "speciality_list";
@@ -17,5 +18,10 @@ public class SpecialityEntity extends Entity {
 		}.getType();
 		return type;
 	}
-
+	
+	public static Type getSpecialityListType(){
+		Type type = new TypeToken<List<SpecialityEntity>>() {
+		}.getType();
+		return type;
+	}
 }

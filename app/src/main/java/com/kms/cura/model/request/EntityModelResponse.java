@@ -13,4 +13,7 @@ import org.json.JSONObject;
  * Created by linhtnvo on 6/10/2016.
  */
 public interface EntityModelResponse extends Response.Listener<String>, Response.ErrorListener {
+    public final static String ERROR_JSON_EXCEPTION = "ERROR_JSON_EXCEPTION";
+    public final static String ERROR_SERVER = "ERROR_SERVER";
+    public final static String ERROR_RESPONSE = "ERROR_RESPONSE";
 }

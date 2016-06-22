@@ -3,6 +3,8 @@
     <dimen name="textSizeTitle">50sp</dimen>
     <dimen name="button_width">200sp</dimen>
     <dimen name="textSizeButton">30sp</dimen>
+    <dimen name="imageviewSize">256sp</dimen>
+    <dimen name="iconSize">128sp</dimen>
     <dimen name="docText_14">22sp</dimen>
     <dimen name="docText_16">25sp</dimen>
     <dimen name="docText_18">28sp</dimen>

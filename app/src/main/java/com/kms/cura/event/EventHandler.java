@@ -5,4 +5,5 @@ package com.kms.cura.event;
  */
 public interface EventHandler {
     public void handleEvent(String event, String data);
+
 }

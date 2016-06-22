@@ -10,132 +10,144 @@ import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.SpecialityEntity;
 
 public class DoctorUserEntity extends UserEntity {
-	public static int DOCTOR_TYPE = 1;
-	private String phone;
-	private DegreeEntity degree;
-	private List<SpecialityEntity> speciality;
-	private double rating;
-	private int experience;
-	private double minPrice;
-	private double maxPrice;
-	private List<FacilityEntity> facility;
-	private String gender;
-	private Date birth;
-	private String insurance;
+    public static int DOCTOR_TYPE = 1;
+    public final static String GENDER_MALE = "M";
+    private String phone;
+    private DegreeEntity degree;
+    private List<SpecialityEntity> speciality;
+    private double rating;
+    private int experience;
+    private double minPrice;
+    private double maxPrice;
+    private List<FacilityEntity> facility;
+    private String gender;
+    private Date birth;
+    private String insurance;
 
-	public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
-			List<SpecialityEntity> speciality, double rating, int experience, double minPrice, double maxPrice,
-			List<FacilityEntity> facility, String gender, Date birth, String insurance) {
-		super(id, name, email, password);
-		this.phone = phone;
-		this.degree = degree;
-		this.speciality = speciality;
-		this.rating = rating;
-		this.experience = experience;
-		this.minPrice = minPrice;
-		this.maxPrice = maxPrice;
-		this.facility = facility;
-		this.gender = gender;
-		this.birth = birth;
-		this.insurance = insurance;
-	}
+    public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
+                            List<SpecialityEntity> speciality, double rating, int experience, double minPrice, double maxPrice,
+                            List<FacilityEntity> facility, String gender, Date birth, String insurance) {
+        super(id, name, email, password);
+        this.phone = phone;
+        this.degree = degree;
+        this.speciality = speciality;
+        this.rating = rating;
+        this.experience = experience;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+        this.facility = facility;
+        this.gender = gender;
+        this.birth = birth;
+        this.insurance = insurance;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
+                            List<SpecialityEntity> speciality, List<FacilityEntity> facility, String gender, Date birth) {
+        super(id, name, email, password);
+        this.phone = phone;
+        this.degree = degree;
+        this.speciality = speciality;
+        this.facility = facility;
+        this.gender = gender;
+        this.birth = birth;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public String getPhone() {
+        return phone;
+    }
 
-	public DegreeEntity getDegree() {
-		return degree;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public void setDegree(DegreeEntity degree) {
-		this.degree = degree;
-	}
+    public DegreeEntity getDegree() {
+        return degree;
+    }
 
-	public double getRating() {
-		return rating;
-	}
+    public void setDegree(DegreeEntity degree) {
+        this.degree = degree;
+    }
 
-	public void setRating(double rating) {
-		this.rating = rating;
-	}
+    public double getRating() {
+        return rating;
+    }
 
-	public int getExperience() {
-		return experience;
-	}
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
 
-	public void setExperience(int experience) {
-		this.experience = experience;
-	}
+    public int getExperience() {
+        return experience;
+    }
 
-	public double getMinPrice() {
-		return minPrice;
-	}
+    public void setExperience(int experience) {
+        this.experience = experience;
+    }
 
-	public void setMinPrice(double minPrice) {
-		this.minPrice = minPrice;
-	}
+    public double getMinPrice() {
+        return minPrice;
+    }
 
-	public double getMaxPrice() {
-		return maxPrice;
-	}
+    public void setMinPrice(double minPrice) {
+        this.minPrice = minPrice;
+    }
 
-	public void setMaxPrice(double maxPrice) {
-		this.maxPrice = maxPrice;
-	}
+    public double getMaxPrice() {
+        return maxPrice;
+    }
 
-	public List<SpecialityEntity> getSpeciality() {
-		return speciality;
-	}
+    public void setMaxPrice(double maxPrice) {
+        this.maxPrice = maxPrice;
+    }
 
-	public void setSpeciality(List<SpecialityEntity> speciality) {
-		this.speciality = speciality;
-	}
+    public List<SpecialityEntity> getSpeciality() {
+        return speciality;
+    }
 
-	public List<FacilityEntity> getFacility() {
-		return facility;
-	}
+    public void setSpeciality(List<SpecialityEntity> speciality) {
+        this.speciality = speciality;
+    }
 
-	public void setFacility(List<FacilityEntity> facility) {
-		this.facility = facility;
-	}
+    public List<FacilityEntity> getFacility() {
+        return facility;
+    }
 
-	public String getGender() {
-		return gender;
-	}
+    public void setFacility(List<FacilityEntity> facility) {
+        this.facility = facility;
+    }
 
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+    public String getGender() {
+        return gender;
+    }
 
-	public Date getBirth() {
-		return birth;
-	}
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
-	public void setBirth(Date birth) {
-		this.birth = birth;
-	}
+    public Date getBirth() {
+        return birth;
+    }
 
-	public String getInsurance() {
-		return insurance;
-	}
+    public void setBirth(Date birth) {
+        this.birth = birth;
+    }
 
-	public void setInsurance(String insurance) {
-		this.insurance = insurance;
-	}
+    public String getInsurance() {
+        return insurance;
+    }
 
-	@Override
-	public int getType() {
-		return DOCTOR_TYPE;
-	}
-	
-	public static Type getDoctorUserType() {
-		Type type = new TypeToken<DoctorUserEntity>() {
-		}.getType();
-		return type;
-	}
+    public void setInsurance(String insurance) {
+        this.insurance = insurance;
+    }
+
+    @Override
+    public int getType() {
+        return DOCTOR_TYPE;
+    }
+
+    public static Type getDoctorEntityType() {
+        return new TypeToken<DoctorUserEntity>() {
+        }.getType();
+    }
 }
+

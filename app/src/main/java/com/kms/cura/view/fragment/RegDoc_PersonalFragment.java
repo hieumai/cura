@@ -3,6 +3,8 @@ package com.kms.cura.view.fragment;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -16,6 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.DegreeController;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.FacilityController;
+import com.kms.cura.controller.SpecialityController;
+import com.kms.cura.entity.DegreeEntity;
+import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.utils.InputUtils;
 import com.kms.cura.view.activity.RegisterDoctorActivity;
 import com.kms.cura.view.adapter.StringSexListAdapter;
@@ -33,6 +41,8 @@ public class RegDoc_PersonalFragment extends Fragment implements View.OnClickLis
     private TextView tvBirth;
     private ImageButton btnChooseDate, btnNext;
     private Spinner spnSex;
+    private ProgressDialog pDialog;
+
     public RegDoc_PersonalFragment() {
         setCurrentDate();
     }
@@ -76,22 +86,50 @@ public class RegDoc_PersonalFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnChooseDate) {
-            Dialog dateDialog = new DatePickerDialog(getActivity(),  AlertDialog.THEME_HOLO_LIGHT, myDateListener, year, month - 1, day);
+            Dialog dateDialog = new DatePickerDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT, myDateListener, year, month - 1, day);
             dateDialog.show();
         } else if (v.getId() == R.id.btnRegisterNext) {
             // check input
             if (checkInput()) {
                 // process next page
                 Bundle bundle = createBundle();
-                Fragment professional = new RegDoc_ProfessionalFragment();
+                final Fragment professional = new RegDoc_ProfessionalFragment();
                 professional.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_DocReg, professional).commit();
+                pDialog = new ProgressDialog(getActivity());
+                pDialog.setMessage("Loading...");
+                pDialog.setCancelable(false);
+                showProgressDialog();
+                AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+                    private Exception exception = null;
+
+                    @Override
+                    protected Void doInBackground(Object[] params) {
+                        try {
+                            SpecialityController.initData();
+                            FacilityController.initData();
+                            DegreeController.initData();
+                        } catch (Exception e) {
+                            exception = e;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        hideProgressDialog();
+                        if (exception == null) {
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_DocReg, professional).commit();
+                        } else {
+                            ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
+                        }
+                    }
+                };
+                task.execute();
             }
         }
     }
 
-    public void setDateString(int day, int month, int year)
-    {
+    public void setDateString(int day, int month, int year) {
         StringBuilder builder = new StringBuilder();
         builder.append(" ");
         if (month < 10)
@@ -111,8 +149,7 @@ public class RegDoc_PersonalFragment extends Fragment implements View.OnClickLis
         }
     };
 
-    private boolean checkInput()
-    {
+    private boolean checkInput() {
         // check and show error
         boolean flag = checkName(edtFName);
         flag &= checkName(edtLName);
@@ -135,8 +172,8 @@ public class RegDoc_PersonalFragment extends Fragment implements View.OnClickLis
         }
         return true;
     }
-    private Bundle createBundle()
-    {
+
+    private Bundle createBundle() {
         Bundle bundle = getArguments();
         if (bundle == null) {
             bundle = new Bundle();
@@ -179,7 +216,7 @@ public class RegDoc_PersonalFragment extends Fragment implements View.OnClickLis
         calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_MONTH);
         month = calendar.get(Calendar.MONTH) + 1;
-        year = calendar.get(Calendar.YEAR)-24;
+        year = calendar.get(Calendar.YEAR) - 24;
 
     }
 
@@ -188,6 +225,16 @@ public class RegDoc_PersonalFragment extends Fragment implements View.OnClickLis
         this.month = month;
         this.year = year;
         setDateString(day, month, year);
+    }
+
+    private void showProgressDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.hide();
     }
 
 }

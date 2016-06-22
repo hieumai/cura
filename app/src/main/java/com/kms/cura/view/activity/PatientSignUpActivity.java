@@ -1,5 +1,6 @@
 package com.kms.cura.view.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -92,8 +93,12 @@ public class PatientSignUpActivity extends AppCompatActivity implements TextWatc
     }
 
     public boolean validateFirstName() {
-        if (!InputUtils.isNotEmpty(getEditTextText(edtFirstName))) {
+        if ("".equals(getEditTextText(edtFirstName))) {
             edtFirstName.setError(getResources().getString(R.string.FirstNameError));
+            return false;
+        }
+        if (!InputUtils.isNameValid(getEditTextText(edtFirstName))) {
+            edtFirstName.setError(getResources().getString(R.string.first_name_error));
             return false;
         }
         return true;
@@ -127,7 +132,8 @@ public class PatientSignUpActivity extends AppCompatActivity implements TextWatc
     public void handleEvent(String event, String data) {
         switch (event) {
             case EventConstant.REGISTER_SUCCESS:
-                ErrorController.showDialog(this, "Register success");
+                Intent toProfile = new Intent(this, PatientProfileViewActivity.class);
+                startActivity(toProfile);
                 break;
             case EventConstant.REGISTER_FAILED:
                 ErrorController.showDialog(this, "Register failed :" + data);

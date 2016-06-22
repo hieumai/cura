@@ -3,6 +3,7 @@ package com.kms.cura.model;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.kms.cura.entity.json.EntityToJsonConverter;
+import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.request.LoginUserModelResponse;
 import com.kms.cura.model.request.RegisterModelResponse;
@@ -38,6 +39,16 @@ public class UserModel extends EntityModel {
         builder.append(Settings.SERVER_URL);
         builder.append(Settings.CREATE_PATIENT_API);
 
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(),
+                Request.Method.POST, EntityToJsonConverter.convertEntityToJson(entity).toString(),
+                new RegisterModelResponse());
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+    }
+
+    public void registerDoctor(DoctorUserEntity entity){
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.CREATE_DOCTOR_API);
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(),
                 Request.Method.POST, EntityToJsonConverter.convertEntityToJson(entity).toString(),
                 new RegisterModelResponse());

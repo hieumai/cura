@@ -25,6 +25,8 @@
     <string name="FirstName">First Name*</string>
     <string name="LastName">Last Name*</string>
     <string name="Email">E-Mail Address*"</string>
+    <string name="profile">Profile</string>
+    <string name="healthConcerns">Health Concerns</string>
     <string name="Password">Password (6-16 characters)*</string>
     <string name="ReenterPassword">Re-enter Password*</string>
     <string name="CreatePatientAccount">Create Patient Account</string>

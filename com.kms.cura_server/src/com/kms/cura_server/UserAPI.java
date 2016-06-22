@@ -82,9 +82,9 @@ public final class UserAPI {
 	@Path("/createPatient")
 	public String createPatient(String jsonData) throws ClassNotFoundException, SQLException {
 		try {
-			PatientUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, getPatientUserType());
+			PatientUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, PatientUserEntity.getPatientUserType());
 			PatientUserEntity user = PatientUserDAL.getInstance().createUser(entity);
-			return new UserAPIResponse().successResponse(entity);
+			return new UserAPIResponse().successResponsewithType(entity);
 		} catch (ClassNotFoundException | SQLException | DALException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
@@ -94,9 +94,9 @@ public final class UserAPI {
 	@Path("/createDoctor")
 	public String createDoctor(String jsonData) throws ClassNotFoundException, SQLException {
 		try {
-			DoctorUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, getDoctorEntityType());
+			DoctorUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, DoctorUserEntity.getDoctorEntityType());
 			DoctorUserEntity user = DoctorUserDAL.getInstance().createUser(entity);
-			return new UserAPIResponse().successResponse(entity);
+			return new UserAPIResponse().successResponsewithType(entity);
 		} catch (ClassNotFoundException | SQLException | DALException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 
@@ -106,7 +106,7 @@ public final class UserAPI {
 	@POST
 	@Path("/userLogin")
 	public String userLogin(String jsonData){
-		UserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, getPatientUserType());
+		UserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, PatientUserEntity.getPatientUserType());
 		try {
 			PatientUserEntity patientUserEntity=PatientUserDAL.getInstance().searchPatient(entity);
 			if (patientUserEntity != null){
@@ -121,16 +121,6 @@ public final class UserAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 
-	}
-	private static Type getDoctorEntityType() {
-		return new TypeToken<DoctorUserEntity>() {
-		}.getType();
-	}
-
-	private Type getPatientUserType() {
-		Type type = new TypeToken<PatientUserEntity>() {
-		}.getType();
-		return type;
 	}
 
 }

@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class PatientUserEntity extends UserEntity {
 	public static int PATIENT_TYPE = 2;
+	public final static String GENDER_MALE = "M";
 	private String gender;
 	private Date birth;
 	private String location;
@@ -67,13 +68,11 @@ public class PatientUserEntity extends UserEntity {
 	public int getType() {
 		return PATIENT_TYPE;
 	}
-	
+
 	public static Type getPatientUserType() {
 		Type type = new TypeToken<PatientUserEntity>() {
 		}.getType();
 		return type;
 	}
-
-
 
 }

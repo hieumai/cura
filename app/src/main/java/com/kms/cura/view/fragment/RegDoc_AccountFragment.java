@@ -1,6 +1,7 @@
 package com.kms.cura.view.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,19 +13,65 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
+import com.kms.cura.controller.DegreeController;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.FacilityController;
+import com.kms.cura.controller.SpecialityController;
+import com.kms.cura.controller.UserController;
+import com.kms.cura.entity.DegreeEntity;
+import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.SpecialityEntity;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
+import com.kms.cura.model.DegreeModel;
+import com.kms.cura.model.FacilityModel;
+import com.kms.cura.model.SpecialityModel;
 import com.kms.cura.utils.InputUtils;
 import com.kms.cura.view.activity.RegisterDoctorActivity;
 
-public class RegDoc_AccountFragment extends Fragment implements View.OnClickListener, TextWatcher {
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class RegDoc_AccountFragment extends Fragment implements View.OnClickListener, TextWatcher, EventHandler {
 
     private EditText edtPhone, edtEmail, edtPwd, edtRePwd;
     private Button btnRegister;
     private ImageButton btnBack;
-
+    private List<SpecialityEntity> specialityList;
+    private List<FacilityEntity> facilityList;
+    private DegreeEntity degreeEntity;
+    private Bundle bundle;
+    private String name, sex;
+    private Date dob;
+    private EventBroker broker;
     boolean edittedPhone, edittedEmail, edittedPwd, edittedRePwd;
 
     public RegDoc_AccountFragment() {
 
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        broker = EventBroker.getInstance();
+        registerEvent();
+    }
+
+    public void registerEvent() {
+        broker.register(this, EventConstant.REGISTER_SUCCESS);
+        broker.register(this, EventConstant.REGISTER_FAILED);
+        broker.register(this, EventConstant.CONNECTION_ERROR);
+        broker.register(this, EventConstant.INTERNAL_ERROR);
+    }
+
+    public void unregisterEvent() {
+        broker.unRegister(this, EventConstant.REGISTER_SUCCESS);
+        broker.unRegister(this, EventConstant.REGISTER_FAILED);
+        broker.unRegister(this, EventConstant.CONNECTION_ERROR);
+        broker.unRegister(this, EventConstant.INTERNAL_ERROR);
     }
 
     @Override
@@ -65,15 +112,27 @@ public class RegDoc_AccountFragment extends Fragment implements View.OnClickList
                 String phone = edtPhone.getText().toString();
                 String email = edtEmail.getText().toString();
                 String pwd = edtPwd.getText().toString();
-                Bundle bundle = getArguments();
-                // check in database
-
+                bundle = getArguments();
+                specialityList = SpecialityController.getSpecialitySelected(bundle);
+                facilityList = FacilityController.getFacilitySelected(bundle);
+                degreeEntity = DegreeController.getDegreeSelected(bundle);
+                name = bundle.getString(RegisterDoctorActivity.FIRST_NAME) + " "
+                        + bundle.getString(RegisterDoctorActivity.LAST_NAME);
+                sex = bundle.getString(RegisterDoctorActivity.SEX);
+                dob = getDOB();
+                UserController.registerDoctor(null, name, email, pwd, phone, degreeEntity, specialityList, facilityList, sex, dob);
             }
         }
     }
 
     private boolean checkInput() {
         return checkEmail() && checkPwd() && checkRePwd() && checkPhone();
+    }
+
+    private Date getDOB() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(bundle.getInt(RegisterDoctorActivity.DOB_YEAR), bundle.getInt(RegisterDoctorActivity.DOB_MONTH) - 1, bundle.getInt(RegisterDoctorActivity.DOB_DAY));
+        return new Date(calendar.getTimeInMillis());
     }
 
     private boolean checkPhone() {
@@ -191,5 +250,38 @@ public class RegDoc_AccountFragment extends Fragment implements View.OnClickList
             edtRePwd.setError(null);
         }
         return true;
+    }
+
+
+    private DegreeEntity getDegreeSelected() {
+        int degree = bundle.getInt(RegisterDoctorActivity.DEGREE);
+        return DegreeModel.getInstace().getDegrees().get(degree);
+    }
+
+    @Override
+    public void handleEvent(String event, String data) {
+        switch (event) {
+            case EventConstant.REGISTER_SUCCESS:
+                ErrorController.showDialog(getActivity(), "Register success");
+                break;
+            case EventConstant.REGISTER_FAILED:
+                ErrorController.showDialog(getActivity(), "Register failed :" + data);
+                break;
+            case EventConstant.CONNECTION_ERROR:
+                if (data != null) {
+                    ErrorController.showDialog(getActivity(), "Error " + data);
+                } else {
+                    ErrorController.showDialog(getActivity(), "Error " + getResources().getString(R.string.ConnectionError));
+                }
+                break;
+            case EventConstant.INTERNAL_ERROR:
+                ErrorController.showDialog(getActivity(), getResources().getString(R.string.InternalError) + " :" + data);
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        unregisterEvent();
+        super.onDetach();
     }
 }

@@ -15,8 +15,8 @@ public class RegisterDoctorActivity extends AppCompatActivity {
     static final public String FIRST_NAME = "21";
     static final public String LAST_NAME = "22";
     static final public String SEX = "23";
-    static final public String SEX_MALE = "231";
-    static final public String SEX_FEMALE = "232";
+    static final public String SEX_MALE = "M";
+    static final public String SEX_FEMALE = "F";
     static final public String DOB_DAY = "241";
     static final public String DOB_MONTH = "242";
     static final public String DOB_YEAR = "243";

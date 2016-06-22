@@ -158,7 +158,12 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     public void handleEvent(String event, String data) {
         switch (event) {
             case EventConstant.LOGIN_SUCCESS:
-                ErrorController.showDialog(this, "Login success");
+                switch (data) {
+                    case EventConstant.TYPE_PATIENT:
+                        Intent toProfilePatient = new Intent(this, PatientProfileViewActivity.class);
+                        startActivity(toProfilePatient);
+                        break;
+                }
                 break;
             case EventConstant.LOGIN_FAILED:
                 ErrorController.showDialog(this, "Login failed :" + data);
