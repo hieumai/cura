@@ -11,23 +11,18 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kms.cura.R;
-import com.kms.cura.entity.user.PatientUserEntity;
-import com.kms.cura.utils.CurrentUserProfile;
-
-import java.io.UnsupportedEncodingException;
 
 public class PatientView extends Activity implements NavigationView.OnNavigationItemSelectedListener {
-    private Toolbar tbPatientProfileView;
+    private Toolbar PatientToolbar;
     private Fragment Doctor_HomeFragment, Patient_ProfileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation_drawer);
+        setContentView(R.layout.navigation_drawer);
         initToolBar();
         initDrawer();
         initNavigationView();
@@ -41,14 +36,14 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
 
     private void changeFragment(Fragment newFragment) {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.Fragment_PatientView, newFragment);
+        transaction.replace(R.id.Fragment_UserView, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
     private void initNavigationView() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.inflateMenu(R.menu.doctor_navigation_drawer_drawer);
+        navigationView.inflateMenu(R.menu.patient_navigation_drawer_drawer);
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -56,19 +51,19 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
     private void initDrawer() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, tbPatientProfileView, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, PatientToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
     }
 
     public void initToolBar() {
-//        tbPatientProfileView = (Toolbar) findViewById(R.id.tbPatientProfileView);
-        tbPatientProfileView = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(tbPatientProfileView);
+//        PatientToolbar = (Toolbar) findViewById(R.id.PatientToolbar);
+        PatientToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(PatientToolbar);
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        View content_toolbar = getLayoutInflater().inflate(R.layout.content_toolbar_patient_profile_view, null);
 //        Toolbar.LayoutParams layoutParams = new Toolbar.LayoutParams(Gravity.CENTER_HORIZONTAL);
-//        tbPatientProfileView.addView(content_toolbar, layoutParams);
+//        PatientToolbar.addView(content_toolbar, layoutParams);
     }
 
 
