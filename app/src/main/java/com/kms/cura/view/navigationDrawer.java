@@ -32,6 +32,8 @@ public class navigationDrawer extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.inflateMenu(R.menu.doctor_navigation_drawer_drawer);
+        navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
