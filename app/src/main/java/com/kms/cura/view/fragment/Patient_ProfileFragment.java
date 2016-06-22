@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kms.cura.R;
@@ -15,7 +16,7 @@ import java.io.UnsupportedEncodingException;
 
 public class Patient_ProfileFragment extends Fragment {
     private TextView txtName, txtGender, txtDOB, txtLocation, txtInsurance, txtHealthConcerns;
-
+    private ImageView profile;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class Patient_ProfileFragment extends Fragment {
 
     public void loadData() {
         PatientUserEntity entity = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+        profile = loadImage(R.drawable.profile_anon128,R.id.ivAccountAvatar);
         txtName = loadText(entity.getName(), R.id.txtName);
         txtGender = loadText(getGender(entity), R.id.txtGender);
         if (entity.getBirth() == null) {
@@ -66,6 +68,11 @@ public class Patient_ProfileFragment extends Fragment {
             }
         }
         return textView;
+    }
+    public ImageView loadImage(int src, int id){
+        ImageView imageView = (ImageView) getActivity().findViewById(id);
+        imageView.setBackgroundResource(src);
+        return imageView;
     }
 
 }

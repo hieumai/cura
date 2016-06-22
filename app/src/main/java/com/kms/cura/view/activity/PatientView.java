@@ -14,10 +14,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.view.fragment.Patient_ProfileFragment;
+import com.kms.cura.view.fragment.Settings_Fragment;
 
 public class PatientView extends Activity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar PatientToolbar;
-    private Fragment Doctor_HomeFragment, Patient_ProfileFragment;
+    private Fragment Patient_HomeFragment, Patient_ProfileFragment,Patient_SettingsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
 
     private void initFragments() {
         Patient_ProfileFragment = new Patient_ProfileFragment();
-
+        Patient_SettingsFragment = new Settings_Fragment();
     }
 
     private void changeFragment(Fragment newFragment) {
@@ -116,7 +118,7 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
         } else if (id == R.id.nav_messages) {
             Toast.makeText(this, "message", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_settings) {
-            Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show();
+            changeFragment(Patient_SettingsFragment);
         } else if (id == R.id.nav_signOut) {
             Toast.makeText(this, "signOut", Toast.LENGTH_SHORT).show();
         }

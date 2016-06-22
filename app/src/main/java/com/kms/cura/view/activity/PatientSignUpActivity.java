@@ -16,6 +16,7 @@ import com.kms.cura.controller.UserController;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.InputUtils;
+import com.kms.cura.view.fragment.Patient_ProfileFragment;
 
 public class PatientSignUpActivity extends AppCompatActivity implements TextWatcher, EventHandler {
     private EditText edtFirstName, edtEmail, edtPassword, edtPasswordReenter;
