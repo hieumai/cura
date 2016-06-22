@@ -21,6 +21,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_navigation_drawer" />
+    <include layout="@layout/activity_patient_view" />
 
 </android.support.design.widget.CoordinatorLayout>
