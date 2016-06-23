@@ -14,13 +14,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.view.fragment.HealthTrackerFragment;
 import com.kms.cura.view.fragment.Patient_Home_Fragment;
 import com.kms.cura.view.fragment.Patient_Profile_Fragment;
 import com.kms.cura.view.fragment.Patient_Settings_Fragment;
 
 public class PatientViewActivity extends Activity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar patientToolbar;
-    private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment;
+    private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment, patientHealthTrachkerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class PatientViewActivity extends Activity implements NavigationView.OnNa
         patientHomeFragment = new Patient_Home_Fragment();
         patientProfileFragment = new Patient_Profile_Fragment();
         patientSettingsFragment = new Patient_Settings_Fragment();
+        patientHealthTrachkerFragment = new HealthTrackerFragment();
         changeFragment(patientHomeFragment);
     }
 
@@ -117,7 +119,7 @@ public class PatientViewActivity extends Activity implements NavigationView.OnNa
         } else if (id == R.id.nav_appointment) {
             Toast.makeText(this, "appointment", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_health) {
-            Toast.makeText(this, "health", Toast.LENGTH_SHORT).show();
+            changeFragment(patientHealthTrachkerFragment);
         } else if (id == R.id.nav_messages) {
             Toast.makeText(this, "message", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_settings) {
