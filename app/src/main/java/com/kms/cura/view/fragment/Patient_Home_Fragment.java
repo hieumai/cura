@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class PatientHomeFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, UpdateSpinner, ReloadData {
+public class Patient_Home_Fragment extends Fragment implements RadioGroup.OnCheckedChangeListener, UpdateSpinner, ReloadData {
 
     private EditText edtName, edtLocation;
     private RadioGroup rdbtngroupLocation;
@@ -62,12 +62,12 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     private String HINT_TEXT = "Please choose";
 
 
-    public PatientHomeFragment() {
+    public Patient_Home_Fragment() {
         // Required empty public constructor
     }
 
-    public static PatientHomeFragment newInstance(Context mContext, Activity activity) {
-        PatientHomeFragment fragment = new PatientHomeFragment();
+    public static Patient_Home_Fragment newInstance(Context mContext, Activity activity) {
+        Patient_Home_Fragment fragment = new Patient_Home_Fragment();
         fragment.setContext(mContext);
         fragment.setActivity(activity);
         return fragment;
@@ -102,7 +102,7 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
         spnSpeciality = (Spinner) root.findViewById(R.id.spnSpeciality);
         edtLocation = (EditText) root.findViewById(R.id.edtLocation);
         rdbtngroupLocation = (RadioGroup) root.findViewById(R.id.rdbtngroupLoacation);
-        rdbtngroupLocation.setOnCheckedChangeListener(PatientHomeFragment.this);
+        rdbtngroupLocation.setOnCheckedChangeListener(Patient_Home_Fragment.this);
         rdbtnCurrentLocation = initRadioButton(root, R.id.rdbtnCurrentLocation, 1);
         rdbtnManualEnter = initRadioButton(root, R.id.rdbtnManuallyEnter, 2);
         rdbtngroupLocation.check(MANUALLY_ENTER);

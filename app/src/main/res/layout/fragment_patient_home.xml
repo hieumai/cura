@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingTop="50sp"
-    tools:context="com.kms.cura.view.activity.PatientView">
+    tools:context=".view.activity.PatientViewActivity">
 
     <TextView
         android:layout_width="wrap_content"

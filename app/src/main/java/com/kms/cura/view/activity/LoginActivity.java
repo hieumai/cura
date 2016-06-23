@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
             case EventConstant.LOGIN_SUCCESS:
                 switch (data) {
                     case EventConstant.TYPE_PATIENT:
-                        Intent toHomePatient = new Intent(this, PatientView.class);
+                        Intent toHomePatient = new Intent(this, PatientViewActivity.class);
                         startActivity(toHomePatient);
                         break;
                 }

@@ -14,11 +14,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.kms.cura.R;
-import com.kms.cura.view.fragment.PatientHomeFragment;
+import com.kms.cura.view.fragment.Patient_Home_Fragment;
 import com.kms.cura.view.fragment.Patient_Profile_Fragment;
 import com.kms.cura.view.fragment.Patient_Settings_Fragment;
 
-public class PatientView extends Activity implements NavigationView.OnNavigationItemSelectedListener {
+public class PatientViewActivity extends Activity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar patientToolbar;
     private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment;
 
@@ -33,7 +33,7 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
     }
 
     private void initFragments() {
-        patientHomeFragment = new PatientHomeFragment();
+        patientHomeFragment = new Patient_Home_Fragment();
         patientProfileFragment = new Patient_Profile_Fragment();
         patientSettingsFragment = new Patient_Settings_Fragment();
         changeFragment(patientHomeFragment);

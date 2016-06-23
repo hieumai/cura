@@ -39,7 +39,7 @@
             android:name=".view.activity.PatientSignUpActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"></activity>
-        <activity android:name=".view.activity.PatientView"></activity>
+        <activity android:name=".view.activity.PatientViewActivity"></activity>
     </application>
 
 </manifest>
