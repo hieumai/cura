@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/create_doc"
-            android:textSize="@dimen/textSizeTitle"
+            android:textSize="@dimen/textSizeTitle_25"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_marginTop="30sp"
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/spinner_60"
             android:id="@+id/spnDegree"
-            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
             android:textSize="@dimen/docText_18"
             style="@style/Widget.AppCompat.Spinner.Underlined"/>
 
@@ -53,8 +53,8 @@
                 android:layout_height="match_parent"
                 android:gravity="bottom">
                 <ImageButton
-                    android:layout_width="@dimen/arrow_70"
-                    android:layout_height="@dimen/arrow_70"
+                    android:layout_width="@dimen/arrow_60"
+                    android:layout_height="@dimen/arrow_60"
                     android:background="@drawable/arrow_left"
                     android:id="@+id/btnRegisterBack"
                     android:layout_gravity="start|bottom"/>
@@ -64,8 +64,8 @@
                 android:layout_height="match_parent"
                 android:gravity="bottom|end">
                 <ImageButton
-                    android:layout_width="@dimen/arrow_70"
-                    android:layout_height="@dimen/arrow_70"
+                    android:layout_width="@dimen/arrow_60"
+                    android:layout_height="@dimen/arrow_60"
                     android:background="@drawable/arrow_right"
                     android:id="@+id/btnRegisterNext" />
             </LinearLayout>

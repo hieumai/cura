@@ -9,7 +9,7 @@
         android:paddingTop="@dimen/padding_8"
         android:paddingBottom="@dimen/padding_8"
         android:paddingLeft="@dimen/padding_16"
-        android:paddingRight="@dimen/margin_20"
+        android:paddingRight="@dimen/margin_10"
         android:id="@+id/tvDegree"
         android:textSize="@dimen/docText_14"
         android:textColor="@color/black"

@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/create_doc"
-            android:textSize="@dimen/textSizeTitle"
+            android:textSize="@dimen/textSizeTitle_25"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_marginTop="30sp"
@@ -33,7 +33,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
             android:hint="@string/LastName"
             android:fontFamily="sans-serif"
             android:id="@+id/edtDocReg_LastName"
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/spinner_60"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
             android:padding="5sp">
             <TextView
                 android:layout_width="wrap_content"
@@ -104,8 +104,8 @@
             android:layout_height="match_parent"
             android:gravity="end|bottom">
             <ImageButton
-                android:layout_width="@dimen/arrow_70"
-                android:layout_height="@dimen/arrow_70"
+                android:layout_width="@dimen/arrow_60"
+                android:layout_height="@dimen/arrow_60"
                 android:background="@drawable/arrow_right"
                 android:id="@+id/btnRegisterNext"/>
         </LinearLayout>

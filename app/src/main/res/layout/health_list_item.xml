@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/item_list_state"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/padding_5"
+    android:paddingLeft="@dimen/padding_16"
+    android:paddingRight="@dimen/padding_16"
+    android:paddingTop="@dimen/padding_5">
+
+    <TextView
+        android:id="@+id/tvHealthItem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="@dimen/padding_8"
+        android:textColor="@color/black"
+        android:textSize="@dimen/docText_18" />
+
+</LinearLayout>

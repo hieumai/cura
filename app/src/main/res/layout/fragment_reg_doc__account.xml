@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/create_doc"
-            android:textSize="@dimen/textSizeTitle"
+            android:textSize="@dimen/textSizeTitle_25"
             android:gravity="center"
             android:textStyle="bold"
             android:layout_marginTop="30sp"
@@ -38,7 +38,7 @@
             android:ems="10"
             android:id="@+id/edtEmail"
             android:hint="@string/email"
-            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
             android:textSize="@dimen/docText_18"
             android:singleLine="true"/>
 
@@ -49,7 +49,7 @@
             android:ems="10"
             android:id="@+id/edtPwd"
             android:hint="@string/pwd"
-            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
             android:fontFamily="sans-serif"
             android:textSize="@dimen/docText_18"
             android:singleLine="true"/>
@@ -61,7 +61,7 @@
             android:ems="10"
             android:id="@+id/edtRePwd"
             android:hint="@string/re_pwd"
-            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
             android:fontFamily="sans-serif"
             android:textSize="@dimen/docText_18"
             android:singleLine="true"/>
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:text="@string/register"
             android:layout_marginBottom="20sp"
-            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_10"
             android:layout_gravity="center_horizontal"
             android:id="@+id/btnRegister"
             android:background="@drawable/btn_register_state_list"
@@ -85,8 +85,8 @@
             android:gravity="bottom">
 
             <ImageButton
-                android:layout_width="@dimen/arrow_70"
-                android:layout_height="@dimen/arrow_70"
+                android:layout_width="@dimen/arrow_60"
+                android:layout_height="@dimen/arrow_60"
                 android:layout_gravity="bottom"
                 android:background="@drawable/arrow_left"
                 android:id="@+id/btnRegisterBack"/>

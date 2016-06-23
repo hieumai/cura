@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kms.cura.R;
 
@@ -56,13 +57,5 @@ public class StringListAdapter extends BaseAdapter {
         String name = checkList.get(position);
         TextView tv = (TextView) convertView.findViewById(R.id.tvDegree);
         tv.setText(name);
-        if (position < checkList.size() - 1) {
-            tv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    checked = position;
-                }
-            });
-        }
     }
 }

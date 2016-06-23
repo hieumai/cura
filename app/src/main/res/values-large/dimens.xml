@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="textSizeTitle">50sp</dimen>
+    <dimen name="textSizeTitle_25">50sp</dimen>
     <dimen name="button_width">200sp</dimen>
     <dimen name="textSizeButton">30sp</dimen>
     <dimen name="textSize">28sp</dimen>
@@ -15,10 +16,11 @@
     <dimen name="spinner_50">90sp</dimen>
     <dimen name="spinner_60">120sp</dimen>
     <dimen name="spinner_150">250sp</dimen>
-    <dimen name="arrow_70">100sp</dimen>
-    <dimen name="margin_20">60sp</dimen>
+    <dimen name="arrow_60">120sp</dimen>
+    <dimen name="margin_10">60sp</dimen>
     <dimen name="padding_5">15sp</dimen>
     <dimen name="padding_8">16sp</dimen>
     <dimen name="padding_16">32sp</dimen>
     <dimen name="marginTop">120sp</dimen>
+    <dimen name="tab_height">60sp</dimen>
 </resources>

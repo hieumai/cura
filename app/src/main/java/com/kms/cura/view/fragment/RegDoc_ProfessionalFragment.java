@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ import com.kms.cura.view.activity.RegisterDoctorActivity;
 
 import java.util.ArrayList;
 
-public class RegDoc_ProfessionalFragment extends Fragment implements View.OnClickListener, UpdateSpinner {
+public class RegDoc_ProfessionalFragment extends Fragment implements View.OnClickListener, UpdateSpinner, AdapterView.OnItemSelectedListener {
 
     private ArrayList<String> degree, speciality, facility;
     private ArrayList<String> userSpeciality, userFacility;
@@ -87,6 +88,7 @@ public class RegDoc_ProfessionalFragment extends Fragment implements View.OnClic
         spnDegree = (Spinner) myFragmentView.findViewById(R.id.spnDegree);
         spnDegree.setAdapter(adapterDegree);
         spnDegree.setSelection(checkedDegree);
+        spnDegree.setOnItemSelectedListener(this);
         spnSpeciality = setupSpinner(myFragmentView, R.id.spnSpeciality, adapterSpeciality);
         spnFacility = setupSpinner(myFragmentView, R.id.spnFacility, adapterFacility);
     }
@@ -210,6 +212,16 @@ public class RegDoc_ProfessionalFragment extends Fragment implements View.OnClic
         adapterSpeciality = new CheckBoxAdapter(getActivity(), R.layout.check_box_item, speciality, adapterSpeciality.getSelectedBoolean(), updateSpinner);
         spnSpeciality.setAdapter(adapterSpeciality);
         spnSpeciality.setSelection(adapterSpeciality.getCount());
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        checkedDegree = position;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
 }

@@ -37,6 +37,9 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
         registerEvent();
         createAccountButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
+        if (UserController.checkSignIn(this)) {
+            UserController.autoSignIn(this);
+        }
     }
 
     /**
@@ -155,6 +158,9 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     public void handleEvent(String event, String data) {
         switch (event) {
             case EventConstant.LOGIN_SUCCESS:
+                if (!UserController.checkSignIn(this)) {
+                    UserController.saveLoginInfo(this, email.getText().toString(), password.getText().toString());
+                }
                 switch (data) {
                     case EventConstant.TYPE_PATIENT:
                         Intent toHomePatient = new Intent(this, PatientViewActivity.class);
@@ -190,4 +196,5 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
         registerEvent();
         super.onResume();
     }
+
 }
