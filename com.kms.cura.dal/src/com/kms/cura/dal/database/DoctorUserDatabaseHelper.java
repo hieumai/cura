@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,18 +155,20 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		List<OpeningHour> hours = doctorUserEntity.getFacility().get(0).getOpeningHours();
 		PreparedStatement stmt = null;
 		StringBuilder builder = new StringBuilder();
-
+		String doctorID = doctorUserEntity.getId();
+		String facilityID = doctorUserEntity.getFacility().get(0).getId();
 		builder.append("INSERT INTO ");
 		builder.append(Doctor_FacilityColumn.TABLE_NAME);
 		builder.append(" VALUES (?, ?, ?, ?, ?);");
 		try{
 			for(int i=0; i<hours.size();++i){
+				OpeningHour hour = hours.get(i);
 				stmt = con.prepareStatement(builder.toString());
-				stmt.setInt(1,Integer.parseInt(doctorUserEntity.getId()));
-				stmt.setInt(2,Integer.parseInt(doctorUserEntity.getFacility().get(0).getId()));
-				stmt.setInt(3,hours.get(i).getDayOfTheWeek().getCode());
-				stmt.setTime(4, hours.get(i).getOpenTime());
-				stmt.setTime(5, hours.get(i).getCloseTime());
+				stmt.setInt(1, Integer.parseInt(doctorID));
+				stmt.setInt(2, Integer.parseInt(facilityID));
+				stmt.setInt(3, hour.getDayOfTheWeek().getCode());
+				stmt.setTime(4, hour.getOpenTime());
+				stmt.setTime(5, hour.getCloseTime());
 				stmt.executeUpdate();
 			}
 		}
@@ -234,7 +237,7 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 	}
 
 
-	public List<OpeningHour> getWorkingHour(int doctorID, int facilityID) throws SQLException {
+	public List<OpeningHour> getWorkingHourbyDoctorFacilityID(int doctorID, int facilityID) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		StringBuilder builder = new StringBuilder();
@@ -312,16 +315,13 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		}
 	}
 
-	public List<OpeningHour> getWorkingHourAll(int doctorID) throws SQLException {
+	private List<Integer> getAllFacilityIDfromDoctorID(int doctorID) throws SQLException{
+		List<Integer> allFacilityID = new ArrayList<>();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT ");
-		builder.append(Doctor_FacilityColumn.WORKING_DAY.getColumnName());
-		builder.append(", ");
-		builder.append(Doctor_FacilityColumn.START_WORKING_TIME.getColumnName());
-		builder.append(", ");
-		builder.append(Doctor_FacilityColumn.END_WORKING_TIME.getColumnName());
+		builder.append("SELECT DISTINCT ");
+		builder.append(Doctor_FacilityColumn.FACILITY_ID.getColumnName());
 		builder.append(" FROM ");
 		builder.append(Doctor_FacilityColumn.TABLE_NAME);
 		builder.append(" WHERE ");
@@ -332,12 +332,24 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 			stmt.setInt(1, doctorID);
 			rs = stmt.executeQuery();
 			if(rs != null){
-				return getListfromResultSet(rs);
+				while(rs.next()){
+					allFacilityID.add(rs.getInt(Doctor_FacilityColumn.FACILITY_ID.getColumnName()));
+				}
+				return allFacilityID;
 			}
 		}
 		finally{
 			stmt.close();
 		}
 		return null;
+	}
+
+	public HashMap<Integer, List<OpeningHour>> getAllWorkingHourByDoctorID(int doctorID) throws SQLException {
+		HashMap<Integer, List<OpeningHour>> allWorkingHour = new HashMap<>();
+		List<Integer> allfacilityID = getAllFacilityIDfromDoctorID(doctorID);
+		for(int i =0; i<allfacilityID.size(); ++i){
+			allWorkingHour.put(allfacilityID.get(i), getWorkingHourbyDoctorFacilityID(doctorID, allfacilityID.get(i)));
+		}
+		return allWorkingHour;
 	}
 }

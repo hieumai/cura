@@ -11,6 +11,7 @@ public class OpeningHour {
     private Time openTime;
     private Time closeTime;
     public static String HOURS_LIST = "hours_list";
+    public static String LIST_HOURS_LIST = "list_hours_list";
 	public OpeningHour(DayOfTheWeek dayOfTheWeek, Time openTime, Time closeTime) {
 		super();
 		this.dayOfTheWeek = dayOfTheWeek;

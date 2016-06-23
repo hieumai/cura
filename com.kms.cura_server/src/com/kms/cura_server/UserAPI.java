@@ -3,6 +3,7 @@ package com.kms.cura_server;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -132,27 +133,27 @@ public final class UserAPI {
 	}
 
 	@POST
-	@Path("/getDoctorWorkingHour")
-	public String getDoctorWorkingHour(String jsonData){
+	@Path("/getDoctorWorkingHourbyFacilityID")
+	public String getDoctorWorkingHourbyFacilityID(String jsonData){
 		JSONObject jsonObject = new JSONObject(jsonData);
 		int doctorID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.DOCTOR_ID.getColumnName()));
 		int facilityID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.FACILITY_ID.getColumnName()));
 		try {
-			List<OpeningHour> hours = DoctorUserDAL.getInstance().getWorkingHours(doctorID, facilityID);
+			List<OpeningHour> hours = DoctorUserDAL.getInstance().getWorkingHoursbyFAcilityID(doctorID, facilityID);
 			return new UserAPIResponse().successResponseOpeningHour(hours);
 		} catch (ClassNotFoundException | SQLException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
-	
+
 	@POST
-	@Path("/getDoctorWorkingHourAll")
-	public String getDoctorWorkingHourAll(String jsonData){
+	@Path("/getAllDoctorWorkingHour")
+	public String getAllDoctorWorkingHour(String jsonData){
 		JSONObject jsonObject = new JSONObject(jsonData);
 		int doctorID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.DOCTOR_ID.getColumnName()));
 		try {
-			List<OpeningHour> hours = DoctorUserDAL.getInstance().getWorkingHours(doctorID);
-			return new UserAPIResponse().successResponseOpeningHour(hours);
+			HashMap<Integer,List<OpeningHour>> allWorkinghours = DoctorUserDAL.getInstance().getAllWorkingHours(doctorID);
+			return new UserAPIResponse().successResponseAllOpeningHour(allWorkinghours);
 		} catch (ClassNotFoundException | SQLException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
