@@ -15,6 +15,7 @@
     <string name="create_doc">Create Doctor Account</string>
     <string name="sex">Sex*: </string>
     <string name="birthday">Birth Date*:</string>
+    <string name="account">Account</string>
     <string-array name="sex">
         <item>Male</item>
         <item>Female</item>
@@ -26,6 +27,9 @@
     <string name="LastName">Last Name*</string>
     <string name="Email">E-Mail Address*"</string>
     <string name="profile">Profile</string>
+    <string name="city">City</string>
+    <string name="country">Country</string>
+    <string name="insurance">Insurance</string>
     <string name="healthConcerns">Health Concerns</string>
     <string name="Password">Password (6-16 characters)*</string>
     <string name="ReenterPassword">Re-enter Password*</string>
@@ -37,6 +41,44 @@
     <string name="register">Register</string>
     <string name="name">Name*</string>
     <string name="encrypt_key">enfldsgbnlsngdlksdsgm</string>
+
+    <string name="title_activity_navigation_drawer">navigationDrawer</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="home">Home</string>
+    <string name="appointment">Appointments</string>
+    <string name="request">Request</string>
+    <string name="health">Health</string>
+    <string name="message">Message</string>
+    <string name="settings">Settings</string>
+    <string name="signOut">Sign Out</string>
+    <string name="nameSettings">Name</string>
+    <string name="sexSettings">Sex</string>
+    <string name="birthdaySettings">Birth Date</string>
+    <string name="save">Save</string>
+
+    <string-array name="Settings">
+        <item>Picture</item>
+        <item>Basic Information</item>
+        <item>Password</item>
+    </string-array>
+
+    <string-array name="Insurance">
+        <item>Aetna</item>
+        <item>Altius</item>
+        <item>Assurant Health</item>
+        <item>BlueCross BlueShield</item>
+        <item>Celtic Healthcare</item>
+        <item>Cigna</item>
+        <item>United HealthCare</item>
+        <item>Humana</item>
+        <item>Molina</item>
+        <item>Kaiser</item>
+        <item>Fidelis Care</item>
+    </string-array>
+
+
     <string name="DoctorSearch">Doctor Search</string>
     <string name="Name">Name :</string>
     <string name="Location">Location :</string>

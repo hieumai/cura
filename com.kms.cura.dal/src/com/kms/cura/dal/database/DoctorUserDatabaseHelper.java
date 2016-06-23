@@ -212,4 +212,5 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 				entity.getEmail(), entity.getPassword(), DoctorColumn.USER_ID.getColumnName(),
 				UserColumn.ID.getColumnName());
 	}
+
 }

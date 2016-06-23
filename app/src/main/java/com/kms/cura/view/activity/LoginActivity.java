@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Paint;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -19,7 +20,6 @@ import com.kms.cura.controller.UserController;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.InputUtils;
-import com.kms.cura.view.PatientHomeActivity;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener, EventHandler {
 
@@ -31,6 +31,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         broker = EventBroker.getInstance();
         initView();
         registerEvent();
@@ -162,7 +163,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
                 }
                 switch (data) {
                     case EventConstant.TYPE_PATIENT:
-                        Intent toHomePatient = new Intent(this, PatientHomeActivity.class);
+                        Intent toHomePatient = new Intent(this, PatientViewActivity.class);
                         startActivity(toHomePatient);
                         break;
                 }

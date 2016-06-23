@@ -2,19 +2,17 @@ package com.kms.cura.view.fragment;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +24,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.kms.cura.R;
-import com.kms.cura.controller.DegreeController;
 import com.kms.cura.controller.ErrorController;
-import com.kms.cura.controller.FacilityController;
 import com.kms.cura.controller.SpecialityController;
 import com.kms.cura.model.Settings;
 import com.kms.cura.model.SpecialityModel;
@@ -43,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class PatientHomeFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, UpdateSpinner, ReloadData {
+public class Patient_Home_Fragment extends Fragment implements RadioGroup.OnCheckedChangeListener, UpdateSpinner, ReloadData {
 
     private EditText edtName, edtLocation;
     private RadioGroup rdbtngroupLocation;
@@ -66,12 +62,12 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     private String HINT_TEXT = "Please choose";
 
 
-    public PatientHomeFragment() {
+    public Patient_Home_Fragment() {
         // Required empty public constructor
     }
 
-    public static PatientHomeFragment newInstance(Context mContext, Activity activity) {
-        PatientHomeFragment fragment = new PatientHomeFragment();
+    public static Patient_Home_Fragment newInstance(Context mContext, Activity activity) {
+        Patient_Home_Fragment fragment = new Patient_Home_Fragment();
         fragment.setContext(mContext);
         fragment.setActivity(activity);
         return fragment;
@@ -106,7 +102,7 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
         spnSpeciality = (Spinner) root.findViewById(R.id.spnSpeciality);
         edtLocation = (EditText) root.findViewById(R.id.edtLocation);
         rdbtngroupLocation = (RadioGroup) root.findViewById(R.id.rdbtngroupLoacation);
-        rdbtngroupLocation.setOnCheckedChangeListener(PatientHomeFragment.this);
+        rdbtngroupLocation.setOnCheckedChangeListener(Patient_Home_Fragment.this);
         rdbtnCurrentLocation = initRadioButton(root, R.id.rdbtnCurrentLocation, 1);
         rdbtnManualEnter = initRadioButton(root, R.id.rdbtnManuallyEnter, 2);
         rdbtngroupLocation.check(MANUALLY_ENTER);

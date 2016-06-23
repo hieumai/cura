@@ -1,9 +1,9 @@
 package com.kms.cura.view.adapter;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.app.FragmentManager;
+import android.support.v13.app.FragmentPagerAdapter;
 
 import com.kms.cura.view.fragment.HealthTrackerFragment;
 import com.kms.cura.view.fragment.HealthTrackerTabFragment;

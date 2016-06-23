@@ -17,33 +17,24 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".view.activity.AccountTypeSelectionActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".view.activity.RegisterDoctorActivity"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation"/>
-        <activity android:name=".view.activity.PatientProfileViewActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"
-            android:configChanges="orientation"></activity>
-        <activity
-            android:name=".view.activity.PatientSignUpActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".view.activity.DummyForHealthTracker"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.PatientHomeActivity"></activity>
+        <activity
+            android:name=".view.activity.AccountTypeSelectionActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.RegisterDoctorActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".view.activity.PatientSignUpActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".view.activity.PatientViewActivity"></activity>
     </application>
 
 </manifest>
