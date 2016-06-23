@@ -72,10 +72,10 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 			throw e;
 		} finally {
 			con.setAutoCommit(true);
-			if(stmt != null){
+			if (stmt != null) {
 				stmt.close();
 			}
-			if(stmt2 != null){
+			if (stmt2 != null) {
 				stmt2.close();
 			}
 		}
@@ -160,8 +160,8 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		builder.append("INSERT INTO ");
 		builder.append(Doctor_FacilityColumn.TABLE_NAME);
 		builder.append(" VALUES (?, ?, ?, ?, ?);");
-		try{
-			for(int i=0; i<hours.size();++i){
+		try {
+			for (int i = 0; i < hours.size(); ++i) {
 				OpeningHour hour = hours.get(i);
 				stmt = con.prepareStatement(builder.toString());
 				stmt.setInt(1, Integer.parseInt(doctorID));
@@ -171,8 +171,14 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 				stmt.setTime(5, hour.getCloseTime());
 				stmt.executeUpdate();
 			}
-		}
-		finally{
+		} catch (SQLException e) {
+			if (con != null) {
+				System.err.print("Transaction is being rolled back");
+				con.rollback();
+			}
+			throw e;
+		} finally {
+			con.setAutoCommit(true);
 			stmt.close();
 		}
 	}
@@ -236,7 +242,6 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 				UserColumn.ID.getColumnName());
 	}
 
-
 	public List<OpeningHour> getWorkingHourbyDoctorFacilityID(int doctorID, int facilityID) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -254,34 +259,33 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		builder.append(" = ? AND ");
 		builder.append(Doctor_FacilityColumn.FACILITY_ID.getColumnName());
 		builder.append(" = ?");
-		try{
+		try {
 			stmt = con.prepareStatement(builder.toString());
 			stmt.setInt(1, doctorID);
 			stmt.setInt(2, facilityID);
 			rs = stmt.executeQuery();
-			if(rs != null){
+			if (rs != null) {
 				return getListfromResultSet(rs);
 			}
-		}
-		finally{
+		} finally {
 			stmt.close();
 		}
 		return null;
 	}
 
-	private List<OpeningHour> getListfromResultSet(ResultSet rs) throws SQLException{
+	private List<OpeningHour> getListfromResultSet(ResultSet rs) throws SQLException {
 		List<OpeningHour> hours = new ArrayList<>();
-		while(rs.next()){
-			OpeningHour hour = new OpeningHour(DayOfTheWeek.getDayOfTheWeek((rs.getInt(Doctor_FacilityColumn.WORKING_DAY.getColumnName()))), 
-					rs.getTime(Doctor_FacilityColumn.START_WORKING_TIME.getColumnName()), 
+		while (rs.next()) {
+			OpeningHour hour = new OpeningHour(
+					DayOfTheWeek.getDayOfTheWeek((rs.getInt(Doctor_FacilityColumn.WORKING_DAY.getColumnName()))),
+					rs.getTime(Doctor_FacilityColumn.START_WORKING_TIME.getColumnName()),
 					rs.getTime(Doctor_FacilityColumn.END_WORKING_TIME.getColumnName()));
 			hours.add(hour);
 		}
 		return hours;
 	}
 
-
-	public void editDoctorWorkingHour(List<OpeningHour> workingHours, int doctorID, int facilityID) throws Exception{
+	public void editDoctorWorkingHour(List<OpeningHour> workingHours, int doctorID, int facilityID) throws Exception {
 		PreparedStatement stmt = null;
 		StringBuilder builder = new StringBuilder();
 		builder.append("UPDATE ");
@@ -297,25 +301,31 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		builder.append(" = ? AND ");
 		builder.append(Doctor_FacilityColumn.FACILITY_ID.getColumnName());
 		builder.append(" = ?");
-		try{
-			for (int i = 0; i<workingHours.size();++i){
+		try {
+			for (int i = 0; i < workingHours.size(); ++i) {
 				stmt = con.prepareStatement(builder.toString());
 				stmt.setInt(1, workingHours.get(i).getDayOfTheWeek().getCode());
 				stmt.setTime(2, workingHours.get(i).getOpenTime());
 				stmt.setTime(3, workingHours.get(i).getCloseTime());
 				stmt.setInt(4, doctorID);
 				stmt.setInt(5, facilityID);
-				if(stmt.executeUpdate() == 0){
+				if (stmt.executeUpdate() == 0) {
 					throw new Exception("Edit Working Hours failed");
 				}
 			}
-		}
-		finally{
+		} catch (SQLException e) {
+			if (con != null) {
+				System.err.print("Transaction is being rolled back");
+				con.rollback();
+			}
+			throw e;
+		} finally {
+			con.setAutoCommit(true);
 			stmt.close();
 		}
 	}
 
-	private List<Integer> getAllFacilityIDfromDoctorID(int doctorID) throws SQLException{
+	private List<Integer> getAllFacilityIDfromDoctorID(int doctorID) throws SQLException {
 		List<Integer> allFacilityID = new ArrayList<>();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -327,27 +337,25 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		builder.append(" WHERE ");
 		builder.append(Doctor_FacilityColumn.DOCTOR_ID.getColumnName());
 		builder.append(" = ?");
-		try{
+		try {
 			stmt = con.prepareStatement(builder.toString());
 			stmt.setInt(1, doctorID);
 			rs = stmt.executeQuery();
-			if(rs != null){
-				while(rs.next()){
+			if (rs != null) {
+				while (rs.next()) {
 					allFacilityID.add(rs.getInt(Doctor_FacilityColumn.FACILITY_ID.getColumnName()));
 				}
-				return allFacilityID;
 			}
-		}
-		finally{
+		} finally {
 			stmt.close();
 		}
-		return null;
+		return allFacilityID;
 	}
 
 	public HashMap<Integer, List<OpeningHour>> getAllWorkingHourByDoctorID(int doctorID) throws SQLException {
 		HashMap<Integer, List<OpeningHour>> allWorkingHour = new HashMap<>();
 		List<Integer> allfacilityID = getAllFacilityIDfromDoctorID(doctorID);
-		for(int i =0; i<allfacilityID.size(); ++i){
+		for (int i = 0; i < allfacilityID.size(); ++i) {
 			allWorkingHour.put(allfacilityID.get(i), getWorkingHourbyDoctorFacilityID(doctorID, allfacilityID.get(i)));
 		}
 		return allWorkingHour;
