@@ -1,15 +1,13 @@
 package com.kms.cura.view.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Paint;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -22,8 +20,6 @@ import com.kms.cura.controller.UserController;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.InputUtils;
-import com.kms.cura.view.activity.AccountTypeSelectionActivity;
-import com.kms.cura.view.PatientHomeActivity;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener, EventHandler {
 
@@ -161,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
             case EventConstant.LOGIN_SUCCESS:
                 switch (data) {
                     case EventConstant.TYPE_PATIENT:
-                        Intent toHomePatient = new Intent(this, PatientHomeActivity.class);
+                        Intent toHomePatient = new Intent(this, PatientView.class);
                         startActivity(toHomePatient);
                         break;
                 }

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.view.fragment.PatientHomeFragment;
 import com.kms.cura.view.fragment.Patient_Profile_Fragment;
 import com.kms.cura.view.fragment.Patient_Settings_Fragment;
 
@@ -32,8 +33,10 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
     }
 
     private void initFragments() {
+        patientHomeFragment = new PatientHomeFragment();
         patientProfileFragment = new Patient_Profile_Fragment();
         patientSettingsFragment = new Patient_Settings_Fragment();
+        changeFragment(patientHomeFragment);
     }
 
     private void changeFragment(Fragment newFragment) {
@@ -108,7 +111,7 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Toast.makeText(this, "home", Toast.LENGTH_SHORT).show();
+            changeFragment(patientHomeFragment);
         } else if (id == R.id.nav_profile) {
             changeFragment(patientProfileFragment);
         } else if (id == R.id.nav_appointment) {
