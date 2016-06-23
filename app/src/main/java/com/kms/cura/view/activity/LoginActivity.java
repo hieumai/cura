@@ -22,6 +22,8 @@ import com.kms.cura.controller.UserController;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.InputUtils;
+import com.kms.cura.view.activity.AccountTypeSelectionActivity;
+import com.kms.cura.view.PatientHomeActivity;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener, EventHandler {
 
@@ -37,6 +39,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
         broker = EventBroker.getInstance();
         initView();
         registerEvent();
+        createAccountButton.setOnClickListener(this);
+        loginButton.setOnClickListener(this);
     }
 
     /**
@@ -80,7 +84,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     private void initLoginButton() {
         loginButton = initButton(R.id.button_LoginUI_Login);
         loginButton.setEnabled(false);
-        loginButton.setOnClickListener(this);
     }
 
     private void initAccountButton() {
@@ -158,8 +161,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
             case EventConstant.LOGIN_SUCCESS:
                 switch (data) {
                     case EventConstant.TYPE_PATIENT:
-                        Intent toProfilePatient = new Intent(this, PatientView.class);
-                        startActivity(toProfilePatient);
+                        Intent toHomePatient = new Intent(this, PatientHomeActivity.class);
+                        startActivity(toHomePatient);
                         break;
                 }
                 break;

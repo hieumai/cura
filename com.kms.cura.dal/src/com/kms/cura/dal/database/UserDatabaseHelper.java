@@ -124,7 +124,7 @@ public class UserDatabaseHelper extends DatabaseHelper {
 
 	@Override
 	protected UserEntity getEntityFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException {
-		return new UserEntity(resultSet.getString(UserColumn.ID.getColumnName()), "",
+		return new UserEntity(resultSet.getString(UserColumn.ID.getColumnName()), null,
 				resultSet.getString(UserColumn.EMAIL.getColumnName()),
 				resultSet.getString(UserColumn.PASSWORD.getColumnName()));
 	}

@@ -6,6 +6,7 @@
     <dimen name="textSizeTitle">30sp</dimen>
     <dimen name="button_width">120sp</dimen>
     <dimen name="textSizeButton">20sp</dimen>
+    <dimen name="textSize">18sp</dimen>
     <dimen name="imageviewSize">128sp</dimen>
     <dimen name="iconSize">64sp</dimen>
     <dimen name="docText_14">14sp</dimen>
@@ -27,4 +28,5 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">80dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="marginTop">60sp</dimen>
 </resources>

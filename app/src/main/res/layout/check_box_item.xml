@@ -11,6 +11,8 @@
         android:textColor="@color/black"
         android:fontFamily="sans-serif"
         android:paddingTop="@dimen/padding_8"
+        android:singleLine="true"
+        android:gravity="center_vertical"
         android:paddingBottom="@dimen/padding_8"
         android:paddingLeft="@dimen/padding_16" />
     <CheckBox
