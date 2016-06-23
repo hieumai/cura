@@ -14,12 +14,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.kms.cura.R;
-import com.kms.cura.view.fragment.Patient_ProfileFragment;
-import com.kms.cura.view.fragment.Settings_Fragment;
+import com.kms.cura.view.fragment.Patient_Profile_Fragment;
+import com.kms.cura.view.fragment.Patient_Settings_Fragment;
 
 public class PatientView extends Activity implements NavigationView.OnNavigationItemSelectedListener {
-    private Toolbar PatientToolbar;
-    private Fragment Patient_HomeFragment, Patient_ProfileFragment,Patient_SettingsFragment;
+    private Toolbar patientToolbar;
+    private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +32,8 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
     }
 
     private void initFragments() {
-        Patient_ProfileFragment = new Patient_ProfileFragment();
-        Patient_SettingsFragment = new Settings_Fragment();
+        patientProfileFragment = new Patient_Profile_Fragment();
+        patientSettingsFragment = new Patient_Settings_Fragment();
     }
 
     private void changeFragment(Fragment newFragment) {
@@ -53,19 +53,19 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
     private void initDrawer() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, PatientToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, patientToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
     }
 
     public void initToolBar() {
-//        PatientToolbar = (Toolbar) findViewById(R.id.PatientToolbar);
-        PatientToolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(PatientToolbar);
+//        patientToolbar = (Toolbar) findViewById(R.id.patientToolbar);
+        patientToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(patientToolbar);
 //        getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        View content_toolbar = getLayoutInflater().inflate(R.layout.content_toolbar_patient_profile_view, null);
 //        Toolbar.LayoutParams layoutParams = new Toolbar.LayoutParams(Gravity.CENTER_HORIZONTAL);
-//        PatientToolbar.addView(content_toolbar, layoutParams);
+//        patientToolbar.addView(content_toolbar, layoutParams);
     }
 
 
@@ -110,7 +110,7 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
         if (id == R.id.nav_home) {
             Toast.makeText(this, "home", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_profile) {
-            changeFragment(Patient_ProfileFragment);
+            changeFragment(patientProfileFragment);
         } else if (id == R.id.nav_appointment) {
             Toast.makeText(this, "appointment", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_health) {
@@ -118,7 +118,7 @@ public class PatientView extends Activity implements NavigationView.OnNavigation
         } else if (id == R.id.nav_messages) {
             Toast.makeText(this, "message", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_settings) {
-            changeFragment(Patient_SettingsFragment);
+            changeFragment(patientSettingsFragment);
         } else if (id == R.id.nav_signOut) {
             Toast.makeText(this, "signOut", Toast.LENGTH_SHORT).show();
         }

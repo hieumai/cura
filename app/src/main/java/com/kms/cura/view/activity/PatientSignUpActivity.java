@@ -16,7 +16,7 @@ import com.kms.cura.controller.UserController;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.InputUtils;
-import com.kms.cura.view.fragment.Patient_ProfileFragment;
+import com.kms.cura.view.fragment.Patient_Profile_Fragment;
 
 public class PatientSignUpActivity extends AppCompatActivity implements TextWatcher, EventHandler {
     private EditText edtFirstName, edtEmail, edtPassword, edtPasswordReenter;
@@ -131,7 +131,7 @@ public class PatientSignUpActivity extends AppCompatActivity implements TextWatc
     public void handleEvent(String event, String data) {
         switch (event) {
             case EventConstant.REGISTER_SUCCESS:
-                Intent toProfile = new Intent(this, Patient_ProfileFragment.class);
+                Intent toProfile = new Intent(this, Patient_Profile_Fragment.class);
                 startActivity(toProfile);
                 break;
             case EventConstant.REGISTER_FAILED:

@@ -1,9 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="@dimen/nav_header_height"
-    tools:context=".view.fragment.RegDoc_PersonalFragment">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,24 +9,41 @@
         android:orientation="vertical"
         android:layout_marginRight="20sp"
         android:layout_marginLeft="20sp">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30sp"
-            android:text=""
-            android:fontFamily="sans-serif"
-            android:id="@+id/editText_settings_name"
-            android:maxLines="1"
-            android:textSize="@dimen/docText_18"
-            android:singleLine="true"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/spinner_60"
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/margin_20"
             android:padding="5sp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/nameSettings"
+                android:gravity="center"
+                android:fontFamily="sans-serif"
+                android:textSize="@dimen/docText_18"
+                android:textColor="@color/black"
+                android:layout_marginBottom="@dimen/padding_8"
+                android:paddingBottom="2sp"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:gravity="center"
+                android:fontFamily="sans-serif"
+                android:id="@+id/editText_settings_name"
+                android:maxLines="1"
+                android:textSize="@dimen/docText_18"
+                android:singleLine="true"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spinner_60"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/margin_20"
+            android:padding="5sp"
+            android:weightSum="1">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -44,10 +59,10 @@
                 android:layout_width="@dimen/spinner_150"
                 android:layout_height="@dimen/spinner_50"
                 android:id="@+id/spnSex_Settings"
-                android:layout_gravity="center"
-                android:gravity="bottom"
+                android:gravity="center"
                 android:fontFamily="sans-serif"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:layout_weight="1.10" />
         </LinearLayout>
 
         <LinearLayout

@@ -14,7 +14,7 @@ import com.kms.cura.utils.CurrentUserProfile;
 
 import java.io.UnsupportedEncodingException;
 
-public class Patient_ProfileFragment extends Fragment {
+public class Patient_Profile_Fragment extends Fragment {
     private TextView txtName, txtGender, txtDOB, txtLocation, txtInsurance, txtHealthConcerns;
     private ImageView profile;
     @Override
