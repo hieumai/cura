@@ -2,12 +2,18 @@ package com.kms.cura_server;
 
 import java.lang.reflect.Type;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -15,10 +21,13 @@ import com.kms.cura.dal.database.DoctorUserDatabaseHelper;
 import com.kms.cura.dal.database.PatientUserDatabaseHelper;
 import com.kms.cura.dal.database.UserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
+import com.kms.cura.dal.mapping.DoctorColumn;
+import com.kms.cura.dal.mapping.Doctor_FacilityColumn;
 import com.kms.cura.dal.user.DoctorUserDAL;
 import com.kms.cura.dal.user.PatientUserDAL;
 import com.kms.cura.dal.user.UserDAL;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.json.JsonToEntityConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
@@ -123,4 +132,52 @@ public final class UserAPI {
 
 	}
 
+	@POST
+	@Path("/getDoctorWorkingHourbyFacilityID")
+	public String getDoctorWorkingHourbyFacilityID(String jsonData){
+		JSONObject jsonObject = new JSONObject(jsonData);
+		int doctorID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.DOCTOR_ID.getColumnName()));
+		int facilityID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.FACILITY_ID.getColumnName()));
+		try {
+			List<OpeningHour> hours = DoctorUserDAL.getInstance().getWorkingHoursbyFAcilityID(doctorID, facilityID);
+			return new UserAPIResponse().successResponseOpeningHour(hours);
+		} catch (ClassNotFoundException | SQLException e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+
+	@POST
+	@Path("/getAllDoctorWorkingHour")
+	public String getAllDoctorWorkingHour(String jsonData){
+		JSONObject jsonObject = new JSONObject(jsonData);
+		int doctorID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.DOCTOR_ID.getColumnName()));
+		try {
+			HashMap<Integer,List<OpeningHour>> allWorkinghours = DoctorUserDAL.getInstance().getAllWorkingHours(doctorID);
+			return new UserAPIResponse().successResponseAllOpeningHour(allWorkinghours);
+		} catch (ClassNotFoundException | SQLException e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+
+	@POST
+	@Path("/editDoctorWorkingHour")
+	public String editDoctorWorkingHour(String jsonData){
+		JSONObject jsonObject = new JSONObject(jsonData);
+		Gson gson = new Gson();
+		int doctorID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.DOCTOR_ID.getColumnName()));
+		int facilityID = Integer.parseInt(jsonObject.getString(Doctor_FacilityColumn.FACILITY_ID.getColumnName()));
+		List<OpeningHour> hours = new ArrayList<>();
+		JSONArray list = jsonObject.getJSONArray(OpeningHour.HOURS_LIST);
+		for (int i = 0; i < list.length(); i++) {
+			OpeningHour entity = gson.fromJson(
+					list.getJSONObject(i).toString(), OpeningHour.class);
+			hours.add(entity);
+		}
+		try {
+			DoctorUserDAL.getInstance().editDoctorWorkingHour(hours, doctorID, facilityID);
+			return new UserAPIResponse().successEdit();
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
 }

@@ -1,12 +1,14 @@
 package com.kms.cura.dal.user;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import com.kms.cura.dal.database.DatabaseHelper;
 import com.kms.cura.dal.database.DoctorUserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 
@@ -47,4 +49,20 @@ public class DoctorUserDAL extends UserDAL {
 		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
 		return dbh.searchDoctor(entity);
 	}
+	
+	public List<OpeningHour> getWorkingHoursbyFAcilityID(int doctorID, int facilityID) throws SQLException, ClassNotFoundException {
+		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
+		return dbh.getWorkingHourbyDoctorFacilityID(doctorID, facilityID);
+	}
+	
+	public HashMap<Integer,List<OpeningHour>> getAllWorkingHours(int doctorID) throws SQLException, ClassNotFoundException {
+		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
+		return dbh.getAllWorkingHourByDoctorID(doctorID);
+	}
+	
+	public void editDoctorWorkingHour(List<OpeningHour> workingHours, int doctorID, int facilityID) throws SQLException, ClassNotFoundException, Exception{
+		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
+		dbh.editDoctorWorkingHour(workingHours, doctorID, facilityID);
+	}
+	
 }
