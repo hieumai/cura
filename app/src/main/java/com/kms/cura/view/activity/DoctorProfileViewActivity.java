@@ -83,7 +83,7 @@ public class DoctorProfileViewActivity extends AppCompatActivity {
         listWorkingHour.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                setListViewHeight(listWorkingHour,0);
+                setListViewHeight(listWorkingHour, 0);
                 return false;
             }
         });
@@ -179,9 +179,22 @@ public class DoctorProfileViewActivity extends AppCompatActivity {
     private void setListViewHeight(ExpandableListView listView,
                                    int group) {
         ExpandableListAdapter listAdapter = (ExpandableListAdapter) listView.getExpandableListAdapter();
-        int totalHeight = 0;
         int desiredWidth = View.MeasureSpec.makeMeasureSpec(listView.getWidth(),
                 View.MeasureSpec.EXACTLY);
+        int totalHeight = getTotalHeight(listView, listAdapter, group, desiredWidth);
+        ViewGroup.LayoutParams params = listView.getLayoutParams();
+        int height = totalHeight
+                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
+        if (height < 10) {
+            height = 200;
+        }
+        params.height = height;
+        listView.setLayoutParams(params);
+        listView.requestLayout();
+    }
+
+    private int getTotalHeight(ExpandableListView listView, ExpandableListAdapter listAdapter, int group, int desiredWidth) {
+        int totalHeight = 0;
         for (int i = 0; i < listAdapter.getGroupCount(); i++) {
             View groupItem = listAdapter.getGroupView(i, false, null, listView);
             groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
@@ -191,8 +204,7 @@ public class DoctorProfileViewActivity extends AppCompatActivity {
             if (((listView.isGroupExpanded(i)) && (i != group))
                     || ((!listView.isGroupExpanded(i)) && (i == group))) {
                 for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
-                    View listItem = listAdapter.getChildView(i, j, false, null,
-                            listView);
+                    View listItem = listAdapter.getChildView(i, j, false, null, listView);
                     listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
 
                     totalHeight += listItem.getMeasuredHeight();
@@ -200,14 +212,6 @@ public class DoctorProfileViewActivity extends AppCompatActivity {
                 }
             }
         }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        int height = totalHeight
-                + (listView.getDividerHeight() * (listAdapter.getGroupCount() - 1));
-        if (height < 10)
-            height = 200;
-        params.height = height;
-        listView.setLayoutParams(params);
-        listView.requestLayout();
+        return totalHeight;
     }
 }

@@ -30,12 +30,13 @@ public class WorkingHourExpandableAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getGroupCount() {
+        //The expandable listview has only one group so that return 1
         return 1;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return 7;
+        return DayOfTheWeek.values().length;
     }
 
     @Override
@@ -50,6 +51,7 @@ public class WorkingHourExpandableAdapter extends BaseExpandableListAdapter {
 
     @Override
     public long getGroupId(int groupPosition) {
+        //Because we only have one group, so the id alwys is 0
         return 0;
     }
 
