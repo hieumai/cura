@@ -165,6 +165,10 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
                         Intent toHomePatient = new Intent(this, PatientHomeActivity.class);
                         startActivity(toHomePatient);
                         break;
+                    case EventConstant.TYPE_DOCTOR:
+                        Intent toProfileDoctor = new Intent(this, DoctorProfileViewActivity.class);
+                        startActivity(toProfileDoctor);
+                        break;
                 }
                 break;
             case EventConstant.LOGIN_FAILED:

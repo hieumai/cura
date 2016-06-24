@@ -1,5 +1,6 @@
 package com.kms.cura.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -28,6 +29,7 @@ import com.kms.cura.model.DegreeModel;
 import com.kms.cura.model.FacilityModel;
 import com.kms.cura.model.SpecialityModel;
 import com.kms.cura.utils.InputUtils;
+import com.kms.cura.view.activity.DoctorProfileViewActivity;
 import com.kms.cura.view.activity.RegisterDoctorActivity;
 
 import java.sql.Date;
@@ -262,7 +264,8 @@ public class RegDoc_AccountFragment extends Fragment implements View.OnClickList
     public void handleEvent(String event, String data) {
         switch (event) {
             case EventConstant.REGISTER_SUCCESS:
-                ErrorController.showDialog(getActivity(), "Register success");
+                Intent toDoctorProfile = new Intent(getActivity(), DoctorProfileViewActivity.class);
+                startActivity(toDoctorProfile);
                 break;
             case EventConstant.REGISTER_FAILED:
                 ErrorController.showDialog(getActivity(), "Register failed :" + data);

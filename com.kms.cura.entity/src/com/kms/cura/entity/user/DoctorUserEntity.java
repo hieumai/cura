@@ -23,7 +23,7 @@ public class DoctorUserEntity extends UserEntity {
     private String gender;
     private Date birth;
     private String insurance;
-
+	public static String MALE = "M";
     public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
                             List<SpecialityEntity> speciality, double rating, int experience, double minPrice, double maxPrice,
                             List<FacilityEntity> facility, String gender, Date birth, String insurance) {
@@ -148,6 +148,14 @@ public class DoctorUserEntity extends UserEntity {
     public static Type getDoctorEntityType() {
         return new TypeToken<DoctorUserEntity>() {
         }.getType();
+    }
+    
+    public String getPriceRange() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(getMinPrice());
+        builder.append("-");
+        builder.append(getMaxPrice());
+        return builder.toString();
     }
 }
 

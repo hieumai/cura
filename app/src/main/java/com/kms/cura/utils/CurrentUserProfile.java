@@ -38,4 +38,5 @@ public class CurrentUserProfile {
         return (entity instanceof PatientUserEntity);
     }
 
+
 }

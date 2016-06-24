@@ -14,4 +14,6 @@ public class Settings {
     public static final String CREATE_DOCTOR_API = "/user/createDoctor";
 
 
+
+
 }
