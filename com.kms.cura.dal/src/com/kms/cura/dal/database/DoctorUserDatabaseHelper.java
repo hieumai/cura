@@ -179,7 +179,9 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 			throw e;
 		} finally {
 			con.setAutoCommit(true);
-			stmt.close();
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
 	}
 
@@ -268,7 +270,9 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 				return getListfromResultSet(rs);
 			}
 		} finally {
-			stmt.close();
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
 		return null;
 	}
@@ -321,7 +325,9 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 			throw e;
 		} finally {
 			con.setAutoCommit(true);
-			stmt.close();
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
 	}
 
@@ -347,7 +353,9 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 				}
 			}
 		} finally {
-			stmt.close();
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
 		return allFacilityID;
 	}
