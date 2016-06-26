@@ -23,7 +23,7 @@ import com.kms.cura.view.activity.RegisterDoctorActivity;
 
 import java.util.ArrayList;
 
-public class RegDoc_ProfessionalFragment extends Fragment implements View.OnClickListener, UpdateSpinner, AdapterView.OnItemSelectedListener {
+public class RegDocProfessionalFragment extends Fragment implements View.OnClickListener, UpdateSpinner, AdapterView.OnItemSelectedListener {
 
     private ArrayList<String> degree, speciality, facility;
     private ArrayList<String> userSpeciality, userFacility;
@@ -39,7 +39,7 @@ public class RegDoc_ProfessionalFragment extends Fragment implements View.OnClic
     private String spnText[] = {"Degree Types", "Areas of Speciality", "Facilities"};
 
 
-    public RegDoc_ProfessionalFragment() {
+    public RegDocProfessionalFragment() {
 
     }
 

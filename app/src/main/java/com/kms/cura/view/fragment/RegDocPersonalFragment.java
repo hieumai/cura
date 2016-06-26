@@ -22,8 +22,6 @@ import com.kms.cura.controller.DegreeController;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.controller.FacilityController;
 import com.kms.cura.controller.SpecialityController;
-import com.kms.cura.entity.DegreeEntity;
-import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.utils.InputUtils;
 import com.kms.cura.view.activity.RegisterDoctorActivity;
 import com.kms.cura.view.adapter.StringSexListAdapter;
@@ -93,7 +91,7 @@ public class RegDocPersonalFragment extends Fragment implements View.OnClickList
             if (checkInput()) {
                 // process next page
                 Bundle bundle = createBundle();
-                final Fragment professional = new RegDoc_ProfessionalFragment();
+                final Fragment professional = new RegDocProfessionalFragment();
                 professional.setArguments(bundle);
                 pDialog = new ProgressDialog(getActivity());
                 pDialog.setMessage("Loading...");
