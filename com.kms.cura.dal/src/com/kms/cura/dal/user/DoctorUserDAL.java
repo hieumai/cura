@@ -47,5 +47,9 @@ public class DoctorUserDAL extends UserDAL {
 		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
 		return dbh.searchDoctor(entity);
 	}
-
+	
+	public List<DoctorUserEntity> searchDoctorFunction (DoctorUserEntity doctor) throws SQLException, ClassNotFoundException{
+		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
+		return dbh.searchDoctorFunction(doctor);
+	}
 }

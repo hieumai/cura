@@ -3,7 +3,7 @@ package com.kms.cura.dal.mapping;
 public enum DoctorColumn {
 	USER_ID(UserColumn.USER_ID), NAME(UserColumn.NAME), PHONE("phone"), DEGREE_ID(
 			"degree_id"), RATING("rating"), EXPERIENCE("experience"), MIN_PRICE("price_min"), MAX_PRICE(
-					"price_max"), GENDER("gender"), BIRTH("birth"), LOCATION("location"), INSURANCE("insurance");
+					"price_max"), GENDER("gender"), BIRTH("birth"), INSURANCE("insurance");
 
 	String columnName;
 

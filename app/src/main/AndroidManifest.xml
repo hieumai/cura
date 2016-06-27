@@ -38,6 +38,15 @@
             android:screenOrientation="portrait" />
         <activity android:name=".view.activity.PatientViewActivity" />
         <activity android:name=".view.activity.DoctorViewActivity"></activity>
+        <activity
+            android:name=".view.activity.SearchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PatientBasicSettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name=".view.activity.ProfilePictureActivity" />
+        <activity android:name=".view.activity.ChangePasswordActivity"></activity>
     </application>
 
 </manifest>

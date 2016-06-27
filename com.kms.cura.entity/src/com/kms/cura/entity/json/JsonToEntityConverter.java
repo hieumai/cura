@@ -21,7 +21,9 @@ public class JsonToEntityConverter {
 		return new Gson().fromJson(jsonElement, type);
 	}
 	
-	public static <T extends Entity> List<T> convertJsonArrayToEntityList(JsonArray jsonArray, Type type) {
-		return new Gson().fromJson(jsonArray, type);
+	public static <T extends Entity> List<T> convertJsonArrayToEntityList(JsonElement jsonElement, Type type) {
+		return new Gson().fromJson(jsonElement, type);
 	}
+
+
 }
