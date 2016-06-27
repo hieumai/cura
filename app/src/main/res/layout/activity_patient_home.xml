@@ -4,10 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.kms.cura.view.PatientHomeActivity">
+    tools:context=".view.activity.PatientViewActivity">
+
     <FrameLayout
+        android:id="@+id/layoutContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/layoutContainer"></FrameLayout>
+        android:layout_height="match_parent"></FrameLayout>
 
 </LinearLayout>

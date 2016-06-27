@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.kms.cura.R;
-import com.kms.cura.view.fragment.RegDoc_PersonalFragment;
+import com.kms.cura.view.fragment.RegDocPersonalFragment;
 
 public class RegisterDoctorActivity extends AppCompatActivity {
 
@@ -35,7 +35,7 @@ public class RegisterDoctorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_doctor);
-        Fragment personal = new RegDoc_PersonalFragment();
+        Fragment personal = new RegDocPersonalFragment();
         getSupportFragmentManager().beginTransaction().add(R.id.Fragment_DocReg, personal).commit();
     }
 }

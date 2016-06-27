@@ -72,10 +72,10 @@ public class UserDatabaseHelper extends DatabaseHelper {
 
 		} finally {
 			con.setAutoCommit(true);
-			if(stmt != null){
+			if (stmt != null) {
 				stmt.close();
 			}
-			if(stmt2 != null){
+			if (stmt2 != null) {
 				stmt2.close();
 			}
 		}
@@ -167,5 +167,5 @@ public class UserDatabaseHelper extends DatabaseHelper {
 		return null;
 
 	}
-
+	
 }

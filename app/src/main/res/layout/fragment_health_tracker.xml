@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.kms.cura.view.fragment.HealthTrackerFragment"
-    app:theme="@style/AppTheme.NoActionBar">
+    android:theme="@style/AppTheme.NoActionBar">
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="5sp">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"

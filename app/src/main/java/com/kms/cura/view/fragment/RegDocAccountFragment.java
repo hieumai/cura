@@ -25,17 +25,14 @@ import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
 import com.kms.cura.model.DegreeModel;
-import com.kms.cura.model.FacilityModel;
-import com.kms.cura.model.SpecialityModel;
 import com.kms.cura.utils.InputUtils;
 import com.kms.cura.view.activity.RegisterDoctorActivity;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class RegDoc_AccountFragment extends Fragment implements View.OnClickListener, TextWatcher, EventHandler {
+public class RegDocAccountFragment extends Fragment implements View.OnClickListener, TextWatcher, EventHandler {
 
     private EditText edtPhone, edtEmail, edtPwd, edtRePwd;
     private Button btnRegister;
@@ -49,7 +46,7 @@ public class RegDoc_AccountFragment extends Fragment implements View.OnClickList
     private EventBroker broker;
     boolean edittedPhone, edittedEmail, edittedPwd, edittedRePwd;
 
-    public RegDoc_AccountFragment() {
+    public RegDocAccountFragment() {
 
     }
 
@@ -104,7 +101,7 @@ public class RegDoc_AccountFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         if (v.getId() == R.id.btnRegisterBack) {
             Bundle bundle = createBundle();
-            Fragment professional = new RegDoc_ProfessionalFragment();
+            Fragment professional = new RegDocProfessionalFragment();
             professional.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_DocReg, professional).commit();
         } else if (v.getId() == R.id.btnRegister) {

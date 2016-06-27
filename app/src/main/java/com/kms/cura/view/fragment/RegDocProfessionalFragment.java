@@ -12,7 +12,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.kms.cura.R;
-import com.kms.cura.controller.ErrorController;
 import com.kms.cura.model.DegreeModel;
 import com.kms.cura.model.FacilityModel;
 import com.kms.cura.model.SpecialityModel;
@@ -24,7 +23,7 @@ import com.kms.cura.view.activity.RegisterDoctorActivity;
 
 import java.util.ArrayList;
 
-public class RegDoc_ProfessionalFragment extends Fragment implements View.OnClickListener, UpdateSpinner, AdapterView.OnItemSelectedListener {
+public class RegDocProfessionalFragment extends Fragment implements View.OnClickListener, UpdateSpinner, AdapterView.OnItemSelectedListener {
 
     private ArrayList<String> degree, speciality, facility;
     private ArrayList<String> userSpeciality, userFacility;
@@ -40,7 +39,7 @@ public class RegDoc_ProfessionalFragment extends Fragment implements View.OnClic
     private String spnText[] = {"Degree Types", "Areas of Speciality", "Facilities"};
 
 
-    public RegDoc_ProfessionalFragment() {
+    public RegDocProfessionalFragment() {
 
     }
 
@@ -116,13 +115,13 @@ public class RegDoc_ProfessionalFragment extends Fragment implements View.OnClic
             if (checkInput()) {
                 // to next page
                 Bundle bundle = createBundle();
-                Fragment account = new RegDoc_AccountFragment();
+                Fragment account = new RegDocAccountFragment();
                 account.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_DocReg, account).commit();
             }
         } else if (v.getId() == R.id.btnRegisterBack) {
             Bundle bundle = createBundle();
-            Fragment personal = new RegDoc_PersonalFragment();
+            Fragment personal = new RegDocPersonalFragment();
             personal.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.Fragment_DocReg, personal).commit();
         }

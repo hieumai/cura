@@ -22,8 +22,6 @@ import com.kms.cura.controller.DegreeController;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.controller.FacilityController;
 import com.kms.cura.controller.SpecialityController;
-import com.kms.cura.entity.DegreeEntity;
-import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.utils.InputUtils;
 import com.kms.cura.view.activity.RegisterDoctorActivity;
 import com.kms.cura.view.adapter.StringSexListAdapter;
@@ -31,7 +29,7 @@ import com.kms.cura.view.adapter.StringSexListAdapter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class RegDoc_PersonalFragment extends Fragment implements View.OnClickListener {
+public class RegDocPersonalFragment extends Fragment implements View.OnClickListener {
 
     private EditText edtFName, edtLName;
     private String fName, lName;
@@ -43,7 +41,7 @@ public class RegDoc_PersonalFragment extends Fragment implements View.OnClickLis
     private Spinner spnSex;
     private ProgressDialog pDialog;
 
-    public RegDoc_PersonalFragment() {
+    public RegDocPersonalFragment() {
         setCurrentDate();
     }
 
@@ -93,7 +91,7 @@ public class RegDoc_PersonalFragment extends Fragment implements View.OnClickLis
             if (checkInput()) {
                 // process next page
                 Bundle bundle = createBundle();
-                final Fragment professional = new RegDoc_ProfessionalFragment();
+                final Fragment professional = new RegDocProfessionalFragment();
                 professional.setArguments(bundle);
                 pDialog = new ProgressDialog(getActivity());
                 pDialog.setMessage("Loading...");

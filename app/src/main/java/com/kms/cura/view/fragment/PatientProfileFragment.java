@@ -1,10 +1,11 @@
-package com.kms.cura.view.activity;
+package com.kms.cura.view.fragment;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kms.cura.R;
@@ -12,36 +13,40 @@ import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
-public class PatientProfileViewActivity extends AppCompatActivity {
-    private Toolbar tbPatientProfileView;
+public class PatientProfileFragment extends Fragment {
     private TextView txtName, txtGender, txtDOB, txtLocation, txtInsurance, txtHealthConcerns;
+    private ImageView profile;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_patient_profile_view);
-        initToolBar();
-        loadData();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fagment_patient_profile_view, container, false);
     }
 
-    public void initToolBar() {
-        tbPatientProfileView = (Toolbar) findViewById(R.id.tbPatientProfileView);
-        setSupportActionBar(tbPatientProfileView);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        View content_toolbar = getLayoutInflater().inflate(R.layout.content_toolbar_patient_profile_view, null);
-        Toolbar.LayoutParams layoutParams = new Toolbar.LayoutParams(Gravity.CENTER_HORIZONTAL);
-        tbPatientProfileView.addView(content_toolbar, layoutParams);
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        loadData();
     }
 
     public void loadData() {
         PatientUserEntity entity = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+        profile = loadImage(R.drawable.profile_anon128, R.id.ivAccountAvatar);
         txtName = loadText(entity.getName(), R.id.txtName);
         txtGender = loadText(getGender(entity), R.id.txtGender);
         if (entity.getBirth() == null) {
             txtDOB = loadText(null, R.id.txtDOB);
         } else {
-            txtDOB = loadText(entity.getBirth().toString(), R.id.txtDOB);
+            Date date = entity.getBirth();
+            StringBuilder sb = new StringBuilder();
+            sb.append(date.getDay());
+            sb.append("/");
+            sb.append(date.getMonth() + 1);
+            sb.append("/");
+            sb.append(date.getYear() + 1900);
+            txtDOB = loadText(sb.toString(), R.id.txtDOB);
         }
         txtLocation = loadText(entity.getLocation(), R.id.txtLocation);
         txtInsurance = loadText(entity.getInsurance(), R.id.txtInsurance);
@@ -59,7 +64,7 @@ public class PatientProfileViewActivity extends AppCompatActivity {
     }
 
     public TextView loadText(String src, int id) {
-        TextView textView = (TextView) findViewById(id);
+        TextView textView = (TextView) getActivity().findViewById(id);
         if (src == null) {
             textView.setHeight(0);
         } else {
@@ -73,4 +78,11 @@ public class PatientProfileViewActivity extends AppCompatActivity {
         }
         return textView;
     }
+
+    public ImageView loadImage(int src, int id) {
+        ImageView imageView = (ImageView) getActivity().findViewById(id);
+        imageView.setBackgroundResource(src);
+        return imageView;
+    }
+
 }

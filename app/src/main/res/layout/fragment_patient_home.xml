@@ -4,114 +4,128 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.kms.cura.view.PatientHomeActivity">
+    tools:context=".view.activity.PatientViewActivity">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/textSizeTitle"
-        android:text="@string/DoctorSearch"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20sp"/>
+        android:layout_marginTop="20sp"
+        android:text="@string/DoctorSearch"
+        android:textSize="@dimen/textSizeTitle" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="15sp">
+        android:layout_margin="15sp"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/textSize"
-                android:text="@string/Name"
                 android:layout_weight="2"
-                android:gravity="left|bottom"/>
+                android:gravity="left|bottom"
+                android:text="@string/Name"
+                android:textSize="@dimen/textSize" />
+
             <EditText
+                android:id="@+id/edtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/edtName"
-                android:textSize="@dimen/textSize"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:textSize="@dimen/textSize" />
         </LinearLayout>
+
         <LinearLayout
+            android:id="@+id/layoutLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/layoutLocation"
-            android:layout_marginTop="10sp">
+            android:layout_marginTop="10sp"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/textSize"
-                android:text="@string/Location"
                 android:layout_weight="2"
-                android:gravity="left|center_vertical"/>
+                android:gravity="left|center_vertical"
+                android:text="@string/Location"
+                android:textSize="@dimen/textSize" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
+
                 <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:id="@+id/rdbtngroupLoacation"
-                    >
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
                     <RadioButton
+                        android:id="@+id/rdbtnCurrentLocation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/CurrentLocation"
-                        android:textSize="@dimen/textSize"
-                        android:id="@+id/rdbtnCurrentLocation"
-                        />
+                        android:textSize="@dimen/textSize" />
+
                     <RadioButton
-                        android:textSize="@dimen/textSize"
+                        android:id="@+id/rdbtnManuallyEnter"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/ManuallyEnter"
-                        android:id="@+id/rdbtnManuallyEnter"/>
+                        android:textSize="@dimen/textSize" />
                 </RadioGroup>
+
                 <EditText
+                    android:id="@+id/edtLocation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/textSize"
-                    android:id="@+id/edtLocation"/>
+                    android:textSize="@dimen/textSize" />
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/spinner_60"
-            android:orientation="horizontal"
-            android:layout_marginTop="10sp">
+            android:layout_marginTop="10sp"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/textSize"
-                android:text="@string/Speciality"
                 android:layout_weight="2"
-                android:gravity="left|center_vertical"/>
+                android:gravity="left|center_vertical"
+                android:text="@string/Speciality"
+                android:textSize="@dimen/textSize" />
+
             <Spinner
+                android:id="@+id/spnSpeciality"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_60"
-                android:layout_weight="1"
-                android:id="@+id/spnSpeciality">
-            </Spinner>
+                android:layout_weight="1"></Spinner>
 
         </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <Button
+                android:id="@+id/button_search"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/marginTop"
-                android:text="@string/Search"
-                android:textSize="@dimen/textSize"
-                android:id="@+id/btnSearch"
                 android:background="@color/colorPrimaryDark"
-                android:textColor="@color/white"/>
+                android:text="@string/Search"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSize" />
         </RelativeLayout>
     </LinearLayout>
 

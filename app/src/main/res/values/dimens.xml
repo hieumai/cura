@@ -21,9 +21,15 @@
     <dimen name="spinner_150">150sp</dimen>
     <dimen name="arrow_60">60sp</dimen>
     <dimen name="margin_10">10sp</dimen>
+    <dimen name="margin_20">20sp</dimen>
     <dimen name="padding_5">5sp</dimen>
     <dimen name="padding_8">8sp</dimen>
     <dimen name="padding_16">16sp</dimen>
+    <dimen name="longTextBox">300sp</dimen>
+    <!-- For navigation drawer header -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">80dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
     <dimen name="marginTop">60sp</dimen>
     <dimen name="tab_height">40sp</dimen>
 </resources>
