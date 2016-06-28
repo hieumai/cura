@@ -12,9 +12,12 @@ import com.kms.cura.dal.DegreeDAL;
 import com.kms.cura.dal.FacilityDAL;
 import com.kms.cura.dal.SpecialityDAL;
 import com.kms.cura.dal.exception.DALException;
+import com.kms.cura.dal.mapping.DegreeColumn;
 import com.kms.cura.dal.mapping.DoctorColumn;
 import com.kms.cura.dal.mapping.Doctor_FacilityColumn;
 import com.kms.cura.dal.mapping.Doctor_SpecialityColumn;
+import com.kms.cura.dal.mapping.FacilityColumn;
+import com.kms.cura.dal.mapping.SpecialityColumn;
 import com.kms.cura.dal.mapping.UserColumn;
 import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.FacilityEntity;
@@ -213,4 +216,113 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 				UserColumn.ID.getColumnName());
 	}
 
+	public List<DoctorUserEntity> searchDoctorFunction(DoctorUserEntity doctor)
+			throws SQLException, ClassNotFoundException {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		List<DoctorUserEntity> result = new ArrayList<DoctorUserEntity>();
+
+		try {
+			stmt = getSearchStatement(doctor);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				result.add((DoctorUserEntity) getEntityFromResultSet(rs));
+			}
+			return result;
+		} finally {
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+	}
+
+	protected PreparedStatement getSearchStatement(DoctorUserEntity doctor) throws SQLException {
+		PreparedStatement stmt = null;
+		int count = 1;
+		stmt = con.prepareStatement(getSearchQuery(doctor));
+
+		String name = doctor.getName();
+		if (name == null) {
+			name = "";
+		}
+		stmt.setString(count, "%" + name + "%");
+		count++;
+		
+		if (doctor.getSpeciality() != null) {
+			stmt.setString(count, doctor.getSpeciality().get(0).getName());
+			count++;
+		}
+		if (doctor.getFacility() != null) {
+			String city = doctor.getFacility().get(0).getCity();
+			stmt.setString(count, "%" + city + "%");
+			count++;
+		}
+
+		return stmt;
+	}
+
+	protected String getSearchQuery(DoctorUserEntity doctor) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT * FROM ");
+		sb.append(DoctorColumn.TABLE_NAME);
+		
+		sb.append(" JOIN ");
+		sb.append(Doctor_FacilityColumn.TABLE_NAME);
+		sb.append(" ON ");
+		sb.append(DoctorColumn.USER_ID);
+		sb.append(" = ");
+		sb.append(Doctor_FacilityColumn.DOCTOR_ID);
+		sb.append(" JOIN ");
+		sb.append(FacilityColumn.TABLE_NAME);
+		sb.append(" ON ");
+		sb.append(Doctor_FacilityColumn.FACILITY_ID);
+		sb.append(" = ");
+		sb.append(FacilityColumn.ID);
+		
+		sb.append(" JOIN ");
+		sb.append(Doctor_SpecialityColumn.TABLE_NAME);
+		sb.append(" ON ");
+		sb.append(DoctorColumn.TABLE_NAME);
+		sb.append(".");
+		sb.append(DoctorColumn.USER_ID);
+		sb.append(" = ");
+		sb.append(Doctor_SpecialityColumn.TABLE_NAME);
+		sb.append(".");
+		sb.append(Doctor_SpecialityColumn.DOCTOR_ID);
+		
+		sb.append(" JOIN ");
+		sb.append(SpecialityColumn.TABLE_NAME);
+		sb.append(" ON ");
+		sb.append(Doctor_SpecialityColumn.TABLE_NAME);
+		sb.append(".");
+		sb.append(Doctor_SpecialityColumn.SPECIALITY_ID);
+		sb.append(" = ");
+		sb.append(SpecialityColumn.TABLE_NAME);
+		sb.append(".");
+		sb.append(SpecialityColumn.ID);
+		
+		
+		sb.append(" WHERE ");
+		sb.append(DoctorColumn.TABLE_NAME);
+		sb.append(".");
+		sb.append(DoctorColumn.NAME);
+		sb.append(" LIKE ?");
+		if (doctor.getSpeciality() != null) {
+			sb.append(" AND ");
+			sb.append(SpecialityColumn.TABLE_NAME);
+			sb.append(".");
+			sb.append(SpecialityColumn.NAME);
+			sb.append(" LIKE ");
+			sb.append(" ? ");
+		}
+
+		if (doctor.getFacility() != null) {
+			sb.append(" AND ");
+			sb.append(FacilityColumn.CITY);
+			sb.append(" LIKE ? ");
+		}
+		return sb.toString();
+	}
 }

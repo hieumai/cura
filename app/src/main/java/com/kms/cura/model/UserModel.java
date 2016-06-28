@@ -5,13 +5,18 @@ import com.android.volley.toolbox.StringRequest;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.UserEntity;
+import com.kms.cura.model.request.DoctorModelResponse;
 import com.kms.cura.model.request.LoginUserModelResponse;
 import com.kms.cura.model.request.RegisterModelResponse;
 import com.kms.cura.utils.RequestUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserModel extends EntityModel {
     private static UserModel instance;
     private static String tag_string_req = "string_req";
+    private List<DoctorUserEntity> doctors = new ArrayList<>();
 
     private UserModel() {
     }
@@ -45,7 +50,7 @@ public class UserModel extends EntityModel {
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
     }
 
-    public void registerDoctor(DoctorUserEntity entity){
+    public void registerDoctor(DoctorUserEntity entity) {
         StringBuilder builder = new StringBuilder();
         builder.append(Settings.SERVER_URL);
         builder.append(Settings.CREATE_DOCTOR_API);
@@ -64,4 +69,13 @@ public class UserModel extends EntityModel {
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
     }
 
+    public void doctorSearch(DoctorUserEntity entity) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_LOCAL_URL);
+        builder.append(Settings.SEARCH_DOCTOR_API);
+        DoctorModelResponse doctorResponse = new DoctorModelResponse(doctors);
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                EntityToJsonConverter.convertEntityToJson(entity).toString(), doctorResponse);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+    }
 }

@@ -41,6 +41,8 @@
     <string name="register">Register</string>
     <string name="name">Name*</string>
     <string name="encrypt_key">enfldsgbnlsngdlksdsgm</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
 
     <string name="title_activity_navigation_drawer">navigationDrawer</string>
 
@@ -90,4 +92,13 @@
     <string name="Search">Search</string>
     <string name="CurrentLocation">Current Location</string>
     <string name="ManuallyEnter">Manually Enter</string>
+    <string name="sort_by_prompt">Sort by: </string>
+    <string-array name="sort_by">
+        <item>Name</item>
+        <item>Rating</item>
+        <item>Price</item>
+    </string-array>
+
+    <string name="title_activity_navi">navi</string>
+    <string name="upload">Upload</string>
 </resources>

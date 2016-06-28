@@ -18,6 +18,7 @@ import com.kms.cura.R;
 import com.kms.cura.view.fragment.HealthTrackerFragment;
 import com.kms.cura.view.fragment.PatientHomeFragment;
 import com.kms.cura.view.fragment.PatientProfileFragment;
+import com.kms.cura.view.fragment.PatientSettingsFragment;
 
 public class PatientViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar patientToolbar;
@@ -39,6 +40,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         patientHomeFragment = PatientHomeFragment.newInstance(getApplicationContext(),this);
         patientProfileFragment = new PatientProfileFragment();
         patientHealthTrachkerFragment = new HealthTrackerFragment();
+        patientSettingsFragment = new PatientSettingsFragment();
         changeFragment(patientHomeFragment);
     }
 
@@ -122,7 +124,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         } else if (id == R.id.nav_messages) {
             Toast.makeText(this, "message", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_settings) {
-            Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show();
+            changeFragment(patientSettingsFragment);
         } else if (id == R.id.nav_signOut) {
             Toast.makeText(this, "signOut", Toast.LENGTH_SHORT).show();
         }

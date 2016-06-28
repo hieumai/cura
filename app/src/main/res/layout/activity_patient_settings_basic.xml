@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:windowSoftInputMode="adjustPan"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/view">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/basic_settings_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include
+        android:id="@+id/include"
+        android:layout_marginTop="50sp"
+        layout="@layout/fragment_settings_basic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_60"
+        android:orientation="horizontal"
+        android:padding="5sp"
+        android:id="@+id/linearLayout3"
+        android:layout_below="@+id/include"
+        android:layout_alignLeft="@+id/linearLayout2"
+        android:layout_alignStart="@+id/linearLayout2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_8"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:paddingBottom="2sp"
+            android:text="@string/city"
+            android:textColor="@color/black"
+            android:textSize="@dimen/docText_18" />
+
+        <EditText
+            android:id="@+id/editText_settings_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textSize="@dimen/docText_18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_60"
+        android:orientation="horizontal"
+        android:padding="5sp"
+        android:weightSum="1"
+        android:id="@+id/linearLayout"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_alignLeft="@+id/linearLayout3"
+        android:layout_alignStart="@+id/linearLayout3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/padding_8"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:paddingBottom="2sp"
+            android:text="@string/country"
+            android:textColor="@color/black"
+            android:textSize="@dimen/docText_18" />
+
+        <Spinner
+            android:id="@+id/spnCountry_Settings"
+            android:layout_width="@dimen/spinner_150"
+            android:layout_height="@dimen/spinner_50"
+            android:layout_weight="1.10"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_60"
+        android:orientation="horizontal"
+        android:padding="5sp"
+        android:weightSum="1"
+        android:layout_marginLeft="20sp"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/padding_8"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:paddingBottom="2sp"
+            android:text="@string/insurance"
+            android:textColor="@color/black"
+            android:textSize="@dimen/docText_18" />
+
+        <Spinner
+            android:id="@+id/spnInsurance_Settings"
+            android:layout_width="@dimen/spinner_150"
+            android:layout_height="@dimen/spinner_50"
+            android:layout_weight="1.10"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_settings_save"
+        android:text="@string/save"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp" />
+</RelativeLayout>
