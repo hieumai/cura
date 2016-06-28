@@ -47,18 +47,18 @@ public class UserController {
 
     public static void registerPatient(String name, String email, String password) {
         UserEntity entity = new UserEntity(null, name, email, password);
-        UserModel.getInstace().registerPatient(entity);
+        UserModel.getInstance().registerPatient(entity);
     }
 
     public static void registerDoctor(String id, String name, String email, String password, String phone, DegreeEntity degree,
                                       List<SpecialityEntity> speciality, List<FacilityEntity> facility, String gender, Date birth) {
         DoctorUserEntity entity = new DoctorUserEntity(id, name, email, password, phone, degree, speciality, facility, gender, birth);
-        UserModel.getInstace().registerDoctor(entity);
+        UserModel.getInstance().registerDoctor(entity);
     }
 
     public static void userLogin(String email, String password) {
         UserEntity entity = new UserEntity(null, null, email, password);
-        UserModel.getInstace().userLogin(entity);
+        UserModel.getInstance().userLogin(entity);
     }
 
     public static void doctorSearch(String name, String city, ArrayList<String> specialities){
@@ -74,7 +74,7 @@ public class UserController {
     }
 
     public static boolean saveNewUser(String email, String password) {
-        return UserModel.getInstace().save(new UserEntity(null, null, email, password));
+        return UserModel.getInstance().save(new UserEntity(null, null, email, password));
     }
 
     public static String encrypt(String pwd, char[] ENCRYPT_KEY) {

@@ -8,17 +8,22 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import org.json.JSONObject;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.kms.cura.dal.database.DoctorUserDatabaseHelper;
+import com.kms.cura.dal.database.PatientHealthDatabaseHelper;
 import com.kms.cura.dal.database.PatientUserDatabaseHelper;
 import com.kms.cura.dal.database.UserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
+import com.kms.cura.dal.mapping.UserColumn;
 import com.kms.cura.dal.user.DoctorUserDAL;
 import com.kms.cura.dal.user.PatientUserDAL;
 import com.kms.cura.dal.user.UserDAL;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.HealthEntity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.json.JsonToEntityConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
@@ -26,6 +31,7 @@ import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura_server.resources.Strings;
 import com.kms.cura_server.response.APIResponse;
+import com.kms.cura_server.response.PatientHealthResponse;
 import com.kms.cura_server.response.UserAPIResponse;
 
 @Path("/user")
@@ -108,7 +114,7 @@ public final class UserAPI {
 	public String userLogin(String jsonData){
 		UserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, PatientUserEntity.getPatientUserType());
 		try {
-			PatientUserEntity patientUserEntity=PatientUserDAL.getInstance().searchPatient(entity);
+			PatientUserEntity patientUserEntity = PatientUserDAL.getInstance().searchPatient(entity);
 			if (patientUserEntity != null){
 				return new UserAPIResponse().successResponsewithType(patientUserEntity);
 			}
@@ -122,5 +128,4 @@ public final class UserAPI {
 		}
 
 	}
-
 }

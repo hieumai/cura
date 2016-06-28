@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#558e1d</color>
-    <color name="colorPrimaryDark">#4e8419</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryDark">#00796b</color>
+    <color name="colorAccent">#FF5252</color>
     <color name="white">#FFFFFF</color>
     <color name="grey">#9E9E9E</color>
     <color name="black">#000000</color>
-    <color name="tab_chosen">#00FF00</color>
-    <color name="tab_normal">#00AA00</color>
+    <color name="tab_chosen">#B2DFDB</color>
+    <color name="tab_normal">#009688</color>
 </resources>

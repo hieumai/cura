@@ -1,5 +1,6 @@
 package com.kms.cura.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
         loginButton.setOnClickListener(this);
         if (UserController.checkSignIn(this)) {
             UserController.autoSignIn(this);
+            finish();
         }
     }
 
@@ -187,7 +189,6 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
                 ErrorController.showDialog(this, internalError + " : " + data);
         }
     }
-
 
     @Override
     protected void onPause() {

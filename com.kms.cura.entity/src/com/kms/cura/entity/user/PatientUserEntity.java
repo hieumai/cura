@@ -2,8 +2,11 @@ package com.kms.cura.entity.user;
 
 import java.lang.reflect.Type;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
+import com.kms.cura.entity.HealthEntity;
 
 public class PatientUserEntity extends UserEntity {
 	public static int PATIENT_TYPE = 2;
@@ -13,6 +16,11 @@ public class PatientUserEntity extends UserEntity {
 	private String location;
 	private String insurance;
 	private String healthConcern;
+	private List<HealthEntity> healthEntities;
+
+	public PatientUserEntity(UserEntity entity) {
+		super(entity.getId(), entity.getName(), entity.getEmail(), entity.getPassword());
+	}
 
 	public PatientUserEntity(String id, String name, String email, String password, String gender, Date birth,
 			String location, String insurance, String healthConcern) {
@@ -22,6 +30,17 @@ public class PatientUserEntity extends UserEntity {
 		this.location = location;
 		this.insurance = insurance;
 		this.healthConcern = healthConcern;
+	}
+
+	public PatientUserEntity(String id, String name, String email, String password, String gender, Date birth,
+							 String location, String insurance, String healthConcern, List<HealthEntity> healthEntities) {
+		super(id, name, email, password);
+		this.gender = gender;
+		this.birth = birth;
+		this.location = location;
+		this.insurance = insurance;
+		this.healthConcern = healthConcern;
+		this.healthEntities = healthEntities;
 	}
 
 	public String getGender() {
@@ -62,6 +81,14 @@ public class PatientUserEntity extends UserEntity {
 
 	public void setHealthConcern(String healthConcern) {
 		this.healthConcern = healthConcern;
+	}
+
+	public List<HealthEntity> getHealthEntities() {
+		return healthEntities;
+	}
+
+	public void setHealthEntities(List<HealthEntity> healthEntities) {
+		this.healthEntities = healthEntities;
 	}
 
 	@Override

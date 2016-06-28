@@ -29,7 +29,7 @@
         android:text="@string/app_name_capitalized"
         android:id="@+id/textView_LoginUI_AppTitle"
         android:textSize="110sp"
-        android:textColor="#558e1d"
+        android:textColor="@color/colorPrimary"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/textView_LoginUI_NoAccount"
         android:layout_alignEnd="@+id/textView_LoginUI_NoAccount" />
@@ -68,7 +68,8 @@
         android:layout_below="@+id/editText_LoginUI_Password"
         android:layout_alignRight="@+id/editText_LoginUI_Password"
         android:layout_alignEnd="@+id/editText_LoginUI_Password"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:background="@color/colorPrimaryDark" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -88,7 +89,8 @@
         android:id="@+id/button_LoginUI_CreateAccount"
         android:textSize="30sp"
         android:layout_below="@+id/textView_LoginUI_NoAccount"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimaryDark" />
 
     <Button
         android:layout_width="wrap_content"

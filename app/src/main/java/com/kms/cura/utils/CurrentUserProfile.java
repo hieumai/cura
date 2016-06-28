@@ -1,8 +1,11 @@
 package com.kms.cura.utils;
 
+import com.kms.cura.entity.HealthEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
+
+import java.util.ArrayList;
 
 /**
  * Created by linhtnvo on 6/8/2016.

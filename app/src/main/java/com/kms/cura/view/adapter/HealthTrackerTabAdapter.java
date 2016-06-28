@@ -36,7 +36,7 @@ public class HealthTrackerTabAdapter extends FragmentPagerAdapter {
         return null;
     }
 
-    private Fragment createFragment(ArrayList<String> healthList, int state) {
+    public Fragment createFragment(ArrayList<String> healthList, int state) {
         Fragment fragment = new HealthTrackerTabFragment();
         Bundle args = new Bundle();
         args.putStringArrayList(HealthTrackerFragment.KEY_HEALTH_LIST , healthList);

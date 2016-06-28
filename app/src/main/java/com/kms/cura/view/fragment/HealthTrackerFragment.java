@@ -1,8 +1,10 @@
 package com.kms.cura.view.fragment;
 
-import android.support.v4.app.Fragment;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,12 +15,21 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.UserController;
+import com.kms.cura.entity.HealthEntity;
+import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.entity.user.UserEntity;
+import com.kms.cura.model.UserModel;
+import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.adapter.HealthTrackerTabAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HealthTrackerFragment extends Fragment {
 
+    private ArrayList<HealthEntity> currentHealthEntities, pastHealthEntities;
     private ArrayList<String> currentHealth, pastHealth;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -37,47 +48,23 @@ public class HealthTrackerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View myFragmentView = inflater.inflate(R.layout.fragment_health_tracker, container, false);
-        // get data from somewhere
-        // just dummy data for now
-        currentHealth = new ArrayList<>();
-        currentHealth.add("Condition 1");
-        currentHealth.add("Condition 2");
-        currentHealth.add("Condition 3");
-        currentHealth.add("Condition 4");
-        currentHealth.add("Condition 5");
-        currentHealth.add("Symptom 1");
-        currentHealth.add("Symptom 2");
-        currentHealth.add("Symptom 3");
-        currentHealth.add("Condition 6");
-        currentHealth.add("Condition 7");
-        currentHealth.add("Condition 8");
-        currentHealth.add("Condition 9");
-        currentHealth.add("Symptom 4");
-        currentHealth.add("Symptom 5");
-        currentHealth.add("Condition 10");
-        currentHealth.add("Condition 11");
-        pastHealth = new ArrayList<>();
-        pastHealth.add("Condition 12");
-        pastHealth.add("Condition 13");
-        pastHealth.add("Symptom 6");
-        pastHealth.add("Symptom 7");
-        pastHealth.add("Symptom 8");
-        pastHealth.add("Condition 14");
-        pastHealth.add("Condition 15");
-        pastHealth.add("Symptom 9");
-        pastHealth.add("Symptom 10");
-        // ---------------------------------------
-        getActivity().setTitle(getString(R.string.health_tracker));
-        setHasOptionsMenu(true);
         setupTabView(myFragmentView);
+        List<HealthEntity> entities = ((PatientUserEntity) (CurrentUserProfile.getInstance().getEntity())).getHealthEntities();
+        getDataFromListAll(entities);
+        setupDataOnView();
+        getActivity().setTitle(getString(R.string.health_tracker));
+
         return myFragmentView;
     }
 
     private void setupTabView(View parent) {
-        adapter = new HealthTrackerTabAdapter(getFragmentManager(), currentHealth, pastHealth);
         viewPager = (ViewPager) parent.findViewById(R.id.tab_view);
-        viewPager.setAdapter(adapter);
         tabLayout = (TabLayout) parent.findViewById(R.id.tab_layout);
+    }
+
+    private void setupDataOnView() {
+        adapter = new HealthTrackerTabAdapter(getChildFragmentManager(), currentHealth, pastHealth);
+        viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -99,5 +86,40 @@ public class HealthTrackerFragment extends Fragment {
     private void resetAdapter(ArrayList<String> currentHealth, ArrayList<String> pastHealth) {
         adapter.resetAdapter(currentHealth, pastHealth);
         adapter.notifyDataSetChanged();
+    }
+
+    private ArrayList<String> getNameList(List<HealthEntity> list) {
+        ArrayList<String> names = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            names.add(list.get(i).getName());
+        }
+        return names;
+    }
+
+    private ArrayList<HealthEntity> getCurrentHealth(List<HealthEntity> list) {
+        ArrayList<HealthEntity> current = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (!list.get(i).isPastHealth()) {
+                current.add(list.get(i));
+            }
+        }
+        return current;
+    }
+
+    private ArrayList<HealthEntity> getPastHealth(List<HealthEntity> list) {
+        ArrayList<HealthEntity> past = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).isPastHealth()) {
+                past.add(list.get(i));
+            }
+        }
+        return past;
+    }
+
+    private void getDataFromListAll(List<HealthEntity> entities) {
+        currentHealthEntities = getCurrentHealth(entities);
+        pastHealthEntities = getPastHealth(entities);
+        currentHealth = getNameList(currentHealthEntities);
+        pastHealth = getNameList(pastHealthEntities);
     }
 }

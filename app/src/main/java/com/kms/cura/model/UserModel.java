@@ -21,7 +21,7 @@ public class UserModel extends EntityModel {
     private UserModel() {
     }
 
-    public static UserModel getInstace() {
+    public static UserModel getInstance() {
         if (instance == null) {
             instance = new UserModel();
         }

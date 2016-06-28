@@ -39,7 +39,7 @@ public class LoginUserModelResponse implements EntityModelResponse {
                 String message = jsonObject.getString(UserEntity.MESSAGE);
                 EventBroker.getInstance().pusblish(EventConstant.LOGIN_FAILED, message);
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             EventBroker.getInstance().pusblish(EventConstant.INTERNAL_ERROR, e.getMessage());
         }
     }

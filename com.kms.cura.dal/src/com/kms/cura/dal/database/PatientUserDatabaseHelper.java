@@ -3,6 +3,7 @@ package com.kms.cura.dal.database;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -110,16 +111,21 @@ public class PatientUserDatabaseHelper extends UserDatabaseHelper {
 		UserEntity userEntity = (UserEntity) dbh.queryByID(UserColumn.TABLE_NAME,
 				resultSet.getInt(PatientColumn.USER_ID.getColumnName()));
 		if (userEntity != null) {
-			return new PatientUserEntity(resultSet.getString(PatientColumn.USER_ID.getColumnName()),
+			PatientUserEntity patient = new PatientUserEntity(resultSet.getString(PatientColumn.USER_ID.getColumnName()),
 					resultSet.getString(PatientColumn.NAME.getColumnName()), userEntity.getEmail(),
 					userEntity.getPassword(), resultSet.getString(PatientColumn.GENDER.getColumnName()),
 					resultSet.getDate(PatientColumn.BIRTH.getColumnName()),
 					resultSet.getString(PatientColumn.LOCATION.getColumnName()),
 					resultSet.getString(PatientColumn.INSURANCE.getColumnName()),
 					resultSet.getString(PatientColumn.HEALTH_CONCERN.getColumnName()));
+			PatientHealthDatabaseHelper healthDbh = new PatientHealthDatabaseHelper();
+			patient.setHealthEntities(new ArrayList<>(healthDbh.queryHealthByPatientID(userEntity.getId())));
+			return patient;
 		}
 		return null;
 	}
+	
+	
 
 	public PatientUserEntity searchPatient(UserEntity entity) throws ClassNotFoundException, SQLException {
 		return (PatientUserEntity) queryUserEntitybyEmailPassword(PatientColumn.TABLE_NAME, UserColumn.TABLE_NAME,

@@ -23,6 +23,8 @@ import com.kms.cura.view.fragment.PatientSettingsFragment;
 public class PatientViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private Toolbar patientToolbar;
     private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment, patientHealthTrachkerFragment;
+    static final public String PATIENT = "500";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,4 +133,6 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

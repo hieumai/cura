@@ -4,14 +4,11 @@ import java.util.List;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.kms.cura.entity.ConditionEntity;
 import com.kms.cura.entity.Entity;
-import com.kms.cura.entity.SpecialityEntity;
+import com.kms.cura.entity.HealthEntity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
-import com.kms.cura.entity.user.UserEntity;
 
-public class ConditionAPIResponse extends APIResponse {
-
+public class PatientHealthResponse  extends APIResponse {
 	@Override
 	public String successResponse(Entity entity) {
 		return null;
@@ -21,9 +18,8 @@ public class ConditionAPIResponse extends APIResponse {
 	public String successResponse(List<? extends Entity> entity) {
 		JsonElement jsonElement = EntityToJsonConverter.convertEntityListToJson(entity);
 		JsonObject jsonObject = new JsonObject();
-		jsonObject.add(ConditionEntity.CONDITION_LIST, jsonElement);
+		jsonObject.add(HealthEntity.HEALTH_LIST, jsonElement);
 		jsonObject.addProperty(Entity.STATUS_KEY, true);
 		return jsonObject.toString();
 	}
-
 }

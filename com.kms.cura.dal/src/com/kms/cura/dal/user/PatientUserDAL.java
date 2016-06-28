@@ -1,12 +1,17 @@
 package com.kms.cura.dal.user;
 
+import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.kms.cura.dal.database.DatabaseHelper;
+import com.kms.cura.dal.database.PatientHealthDatabaseHelper;
 import com.kms.cura.dal.database.PatientUserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
+import com.kms.cura.dal.mapping.PatientHealthColumn;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.HealthEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 
@@ -45,6 +50,7 @@ public class PatientUserDAL extends UserDAL {
 	
 	public PatientUserEntity searchPatient(UserEntity entity) throws ClassNotFoundException, SQLException{
 		PatientUserDatabaseHelper dbh = new PatientUserDatabaseHelper();
-		return dbh.searchPatient(entity);
+		PatientUserEntity patient = dbh.searchPatient(entity);
+		return patient;
 	}
 }
