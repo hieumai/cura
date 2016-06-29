@@ -29,6 +29,12 @@ public class UserEntity extends Entity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+   
+
+    @Override
+    public String toString() {
+        return this.getId() + "\n" + this.getName() + "\n" + this.email;
+    }
 
 	public int getType() {
 		return USER_TYPE;

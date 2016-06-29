@@ -24,4 +24,6 @@
     <dimen name="marginTop">120sp</dimen>
     <dimen name="tab_height">60sp</dimen>
     <dimen name="buttonWidth_150">300sp</dimen>
+    <dimen name="topPadding">65sp</dimen>
+
 </resources>

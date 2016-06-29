@@ -3,16 +3,13 @@ package com.kms.cura.controller;
 import android.content.Context;
 import android.util.Base64;
 
-import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.R;
+import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.UserModel;
-
-import java.sql.Date;
-import java.util.List;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,6 +22,8 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.sql.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.crypto.BadPaddingException;

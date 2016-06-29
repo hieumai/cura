@@ -9,6 +9,9 @@ import com.kms.cura.model.request.LoginUserModelResponse;
 import com.kms.cura.model.request.RegisterModelResponse;
 import com.kms.cura.utils.RequestUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserModel extends EntityModel {
     private static UserModel instance;
     private static String tag_string_req = "string_req";
@@ -45,7 +48,7 @@ public class UserModel extends EntityModel {
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
     }
 
-    public void registerDoctor(DoctorUserEntity entity){
+    public void registerDoctor(DoctorUserEntity entity) {
         StringBuilder builder = new StringBuilder();
         builder.append(Settings.SERVER_URL);
         builder.append(Settings.CREATE_DOCTOR_API);

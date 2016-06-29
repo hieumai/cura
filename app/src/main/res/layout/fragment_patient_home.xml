@@ -117,7 +117,7 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/btnSearch"
+                android:id="@+id/button_search"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
