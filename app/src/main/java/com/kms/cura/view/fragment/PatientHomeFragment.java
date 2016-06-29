@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -25,8 +26,14 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.controller.SpecialityController;
+import com.kms.cura.controller.UserController;
+import com.kms.cura.entity.json.EntityToJsonConverter;
+import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
 import com.kms.cura.model.Settings;
 import com.kms.cura.model.SpecialityModel;
 import com.kms.cura.utils.DataUtils;
@@ -34,20 +41,22 @@ import com.kms.cura.utils.GPSTracker;
 import com.kms.cura.view.ReloadData;
 import com.kms.cura.view.UpdateSpinner;
 import com.kms.cura.view.activity.PatientViewActivity;
+import com.kms.cura.view.activity.SearchActivity;
 import com.kms.cura.view.adapter.CheckBoxAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class PatientHomeFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, UpdateSpinner, ReloadData {
-
+public class PatientHomeFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, UpdateSpinner, ReloadData, EventHandler {
+    private static final String FRAGMENT_NAME = "Home";
     private EditText edtName, edtLocation;
     private RadioGroup rdbtngroupLocation;
     private RadioButton rdbtnCurrentLocation, rdbtnManualEnter;
     private Spinner spnSpeciality;
-    private Button btnRegister;
+    private Button btnSearch;
     private Context mContext;
     private Activity activity;
     private String currentLocation = null;
@@ -62,7 +71,9 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     private ProgressDialog pDialog;
     private boolean[] checkedSpeciality;
     private ReloadData reloadData;
+    private EventBroker broker;
     private String HINT_TEXT = "Please choose";
+    public static String SEARCH_RESULT = "SearchResult";
 
 
     public PatientHomeFragment() {
@@ -78,27 +89,31 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     }
 
     private void setContext(Context src) {
-        this.mContext = src;
+        this.mContext = getContext();
     }
 
     private void setActivity(Activity src) {
-        this.activity = src;
+        this.activity = getActivity();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_patient_home, container, false);
+        broker = EventBroker.getInstance();
         updateSpinner = this;
         reloadData = this;
         initView(root);
         setUpSpnSpeciality();
         modifyToolbar();
+        initButton(root);
+        getActivity().setTitle(FRAGMENT_NAME);
         return root;
     }
 
@@ -120,14 +135,15 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     }
 
     public void initButton(View root) {
-        btnRegister = (Button) root.findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        btnSearch = (Button) root.findViewById(R.id.button_search);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!checked) {
                     currentLocation = edtLocation.getText().toString();
                 }
-                //Search Function implement here
+                showProgressDialog();
+                UserController.doctorSearch(edtName.getText().toString(), getCityFromLocation(currentLocation), specialityAdapter.getSelectedString());
             }
         });
     }
@@ -201,11 +217,11 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     }
 
     public String getAddress(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
         try {
             List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
             if (addresses.size() == 0) {
-                ErrorController.showDialog(activity, mContext.getResources().getString(R.string.AddressError));
+                ErrorController.showDialog(getActivity(), getContext().getResources().getString(R.string.AddressError));
                 return null;
             }
             StringBuilder builder = new StringBuilder();
@@ -214,13 +230,13 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
             builder.append(addresses.get(0).getCountryName());
             return builder.toString();
         } catch (IOException e) {
-            ErrorController.showDialog(activity, mContext.getResources().getString(R.string.AddressError));
+            ErrorController.showDialog(getActivity(), getContext().getResources().getString(R.string.AddressError));
             return null;
         }
     }
 
     public void requestPermission() {
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             setCurrentLocation();
             return;
         }
@@ -242,12 +258,12 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     }
 
     public void setCurrentLocation() {
-        gpsTracker = new GPSTracker(mContext);
+        gpsTracker = new GPSTracker(getContext());
         if (gpsTracker.canGetLocation()) {
             loadCurrentLocation(gpsTracker);
             return;
         }
-        ErrorController.showDialog(activity, mContext.getResources().getString(R.string.LocationError));
+        ErrorController.showDialog(getActivity(), getContext().getResources().getString(R.string.LocationError));
     }
 
     @Override
@@ -260,27 +276,19 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     public void loadCurrentLocation(GPSTracker gpsTracker) {
         Location location = gpsTracker.getLocation();
         if (location == null) {
-            ErrorController.showDialog(activity, mContext.getResources().getString(R.string.LocationError));
+            ErrorController.showDialog(getActivity(), getContext().getResources().getString(R.string.LocationError));
             return;
         }
         currentLocation = getAddress(location.getLatitude(), location.getLongitude());
         edtLocation.setText(currentLocation);
     }
 
-    private void showProgressDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
 
     @Override
     public void callBackReload() {
         setUpSpnSpeciality();
     }
+
 
     private void reformData() {
         Bundle bundle = getArguments();
@@ -290,6 +298,7 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
             specialitySelected = null;
         }
     }
+
 
     private Bundle createBundle() {
         Bundle bundle = getArguments();
@@ -309,5 +318,81 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
         toolbar.getMenu().clear();
         toolbar.setTitle(getString(R.string.DoctorSearch));
         toolbar.inflateMenu(R.menu.menu_blank);
+    }
+
+    private void showProgressDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
+    }
+
+    @Override
+    public void handleEvent(String event, Object data) {
+        switch (event) {
+            case EventConstant.SEARCH_SUCCESS:
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra(SEARCH_RESULT, EntityToJsonConverter.convertEntityListToJson((List<DoctorUserEntity>) data).toString());
+                hideProgressDialog();
+                startActivity(intent);
+
+                break;
+            case EventConstant.LOGIN_FAILED:
+                hideProgressDialog();
+                ErrorController.showDialog(getActivity(), "Login failed :" + data);
+                break;
+            case EventConstant.CONNECTION_ERROR:
+                hideProgressDialog();
+                if (data != null) {
+                    ErrorController.showDialog(getActivity(), "Error " + data);
+                } else {
+                    ErrorController.showDialog(getActivity(), "Error " + getResources().getString(R.string.ConnectionError));
+                }
+                break;
+            case EventConstant.INTERNAL_ERROR:
+                hideProgressDialog();
+                String internalError = getResources().getString(R.string.InternalError);
+                ErrorController.showDialog(getActivity(), internalError + " : " + data);
+        }
+    }
+
+    public void registerEvent() {
+        broker.register(this, EventConstant.SEARCH_SUCCESS);
+        broker.register(this, EventConstant.LOGIN_FAILED);
+        broker.register(this, EventConstant.CONNECTION_ERROR);
+        broker.register(this, EventConstant.INTERNAL_ERROR);
+    }
+
+    public void unregisterEvent() {
+        broker.unRegister(this, EventConstant.SEARCH_SUCCESS);
+        broker.unRegister(this, EventConstant.LOGIN_FAILED);
+        broker.unRegister(this, EventConstant.CONNECTION_ERROR);
+        broker.unRegister(this, EventConstant.INTERNAL_ERROR);
+    }
+
+    @Override
+    public void onPause() {
+        unregisterEvent();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        registerEvent();
+        super.onResume();
+    }
+
+    private String getCityFromLocation(String location) {
+        String data;
+        List<String> list = new ArrayList<String>(Arrays.asList(location.split(",")));
+        data = list.get(0).replaceAll("City", "");
+        data = data.replaceAll("city", "");
+        data = data.replaceAll("Hanoi","Ha Noi");
+        data = data.replaceAll("Danang","Da Nang");
+        data = data.trim();
+        return data;
     }
 }

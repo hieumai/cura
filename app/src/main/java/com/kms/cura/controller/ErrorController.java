@@ -1,5 +1,6 @@
 package com.kms.cura.controller;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,7 +23,9 @@ public class ErrorController {
                 dialog.dismiss();
             }
         });
-        dialog.show();
+        if (isActivityNotFinishing(mContext)) {
+            dialog.show();
+        }
     }
 
     public static void showDialogRefresh(Context mContext, String message, final ReloadData reloadData) {
@@ -38,7 +41,12 @@ public class ErrorController {
                 dialog.dismiss();
             }
         });
-        dialog.show();
+        if (isActivityNotFinishing(mContext)) {
+            dialog.show();
+        }
     }
 
+    private static boolean isActivityNotFinishing(Context mContext) {
+        return !((Activity) mContext).isFinishing();
+    }
 }

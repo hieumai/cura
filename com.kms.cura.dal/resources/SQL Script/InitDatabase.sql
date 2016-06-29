@@ -8,6 +8,7 @@ CREATE TABLE Facilities(
     name VARCHAR(50) NOT NULL UNIQUE,
     address VARCHAR(200) NOT NULL,
 	city VARCHAR(50) NOT NULL,
+	city_keyword VARCHAR(50) NOT NULL,
     phone VARCHAR(50),
     PRIMARY KEY (id)
     );
@@ -21,7 +22,7 @@ CREATE TABLE Opening_hours(
 );
 
 #Hue hospital data     
-INSERT INTO Facilities(name,address,city,phone) VALUES ('Hue Central Hospital', 'Lê Lợi, Vĩnh Ninh, tp. Huế, Thừa Thiên Huế, Vietnam','Huế', '+84 54 3822 325');
+INSERT INTO Facilities(name,address,city,city_keyword,phone) VALUES ('Hue Central Hospital', 'Lê Lợi, Vĩnh Ninh, tp. Huế, Thừa Thiên Huế, Vietnam','Huế','hue', '+84 54 3822 325');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Hue Central Hospital'),0,'00:00:00','23:59:59');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Hue Central Hospital'),1,'00:00:00','23:59:59');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Hue Central Hospital'),2,'00:00:00','23:59:59');
@@ -31,7 +32,7 @@ INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((s
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Hue Central Hospital'),6,'00:00:00','23:59:59');
  
 # Cho Ray hospital
-INSERT INTO Facilities(name,address,city,phone) VALUES ('Cho Ray Hospital', '201B Nguyễn Chí Thanh, phường 12, Hồ Chí Minh, Vietnam','Hồ Chí Minh', '+84 8 3955 9856');
+INSERT INTO Facilities(name,address,city,city_keyword,phone) VALUES ('Cho Ray Hospital', '201B Nguyễn Chí Thanh, phường 12, Hồ Chí Minh, Vietnam','Hồ Chí Minh','ho chi minh', '+84 8 3955 9856');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Cho Ray Hospital'),0,'00:00:00','23:59:59');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Cho Ray Hospital'),1,'00:00:00','23:59:59');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Cho Ray Hospital'),2,'00:00:00','23:59:59');
@@ -41,7 +42,7 @@ INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((s
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Cho Ray Hospital'),6,'00:00:00','23:59:59');
 
 # Starlight Dental Clinic
-INSERT INTO Facilities(name,address,city,phone) VALUES ('Starlight Dental Clinic', '2 Bis, Cong Truong Quoc Te Street, District 3, Hồ Chí Minh, Vietnam','Hồ Chí Minh', '+84 8 3822 6222');
+INSERT INTO Facilities(name,address,city,city_keyword,phone) VALUES ('Starlight Dental Clinic', '2 Bis, Cong Truong Quoc Te Street, District 3, Hồ Chí Minh, Vietnam','Hồ Chí Minh','ho chi minh', '+84 8 3822 6222');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Starlight Dental Clinic'),0,'08:00:00','20:30:00');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Starlight Dental Clinic'),1,'08:00:00','20:30:00');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Starlight Dental Clinic'),2,'08:00:00','20:30:00');
@@ -51,7 +52,7 @@ INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((s
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Starlight Dental Clinic'),6,'08:00:00','20:30:00');
 
 # Family Medical Practice
-INSERT INTO Facilities(name,address,city,phone) VALUES ('Family Medical Practice', '50 Nguyễn Văn Linh, Dương Nam, Đà Nẵng, Vietnam','Đà Nẵng', '+84 511 3582 699');
+INSERT INTO Facilities(name,address,city,city_keyword,phone) VALUES ('Family Medical Practice', '50 Nguyễn Văn Linh, Dương Nam, Đà Nẵng, Vietnam','Đà Nẵng','da nang', '+84 511 3582 699');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Family Medical Practice'),0,'08:00:00','17:30:00');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Family Medical Practice'),1,'08:00:00','17:30:00');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Family Medical Practice'),2,'08:00:00','17:30:00');
@@ -61,7 +62,7 @@ INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((s
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Family Medical Practice'),6,'08:00:00','12:00:00');
 
 # Vinaoptic
-INSERT INTO Facilities(name,address,city,phone) VALUES ('Vinaoptic', '245 Nam Kỳ Khởi Nghĩa, Ho Chi Minh City, Vietnam', 'Hồ Chí Minh','+84 8 3822 7228');
+INSERT INTO Facilities(name,address,city,city_keyword,phone) VALUES ('Vinaoptic', '245 Nam Kỳ Khởi Nghĩa, Ho Chi Minh City, Vietnam', 'Hồ Chí Minh','ho chi minh','+84 8 3822 7228');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Vinaoptic'),0,'08:00:00','21:30:00');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Vinaoptic'),1,'08:00:00','21:30:00');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Vinaoptic'),2,'08:00:00','21:30:00');
@@ -71,7 +72,7 @@ INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((s
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Vinaoptic'),6,'08:00:00','21:00:00');
 
 # Maple Healthcare Center (this one is close on Sunday)
-INSERT INTO Facilities(name,address,city,phone) VALUES ('Maple Healthcare Center', 'Lô MD6,, Nguyễn Lương Bằng, Tân Phú, Hồ Chí Minh, Tp. Ho Chi Minh 700000, Vietnam','Hồ Chí Minh', '+84 8 5410 0100');
+INSERT INTO Facilities(name,address,city,city_keyword,phone) VALUES ('Maple Healthcare Center', 'Lô MD6,, Nguyễn Lương Bằng, Tân Phú, Hồ Chí Minh, Tp. Ho Chi Minh 700000, Vietnam','Hồ Chí Minh','ho chi minh', '+84 8 5410 0100');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Maple Healthcare Center'),0,'08:30:00','19:00:00');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Maple Healthcare Center'),1,'08:30:00','19:00:00');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Maple Healthcare Center'),2,'08:30:00','19:00:00');
@@ -80,7 +81,7 @@ INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((s
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Maple Healthcare Center'),5,'08:30:00','18:00:00');
 
 # Vietnam National Hospital of Pediatrics
-INSERT INTO Facilities(name,address,city,phone) VALUES ('Vietnam National Hospital of Pediatrics', '18/879 La Thành, Đống Đa, Hà Nội, Vietnam','Hà Nội', '+84 4 6273 8573');
+INSERT INTO Facilities(name,address,city,city_keyword,phone) VALUES ('Vietnam National Hospital of Pediatrics', '18/879 La Thành, Đống Đa, Hà Nội, Vietnam','Hà Nội','ha noi', '+84 4 6273 8573');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Vietnam National Hospital of Pediatrics'),0,'00:00:00','23:59:59');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Vietnam National Hospital of Pediatrics'),1,'00:00:00','23:59:59');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Vietnam National Hospital of Pediatrics'),2,'00:00:00','23:59:59');
@@ -90,7 +91,7 @@ INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((s
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'Vietnam National Hospital of Pediatrics'),6,'00:00:00','23:59:59');
 
 # QuickCare Clinic
-INSERT INTO Facilities(name,address,city,phone) VALUES ('QuickCare Clinic', '77 Nguyễn Hữu Cầu, Tân Định, Quận 1, Hồ Chí Minh, Vietnam','Hồ Chí Minh', '+84 8 3910 4545');
+INSERT INTO Facilities(name,address,city,city_keyword,phone) VALUES ('QuickCare Clinic', '77 Nguyễn Hữu Cầu, Tân Định, Quận 1, Hồ Chí Minh, Vietnam','Hồ Chí Minh','ho chi minh', '+84 8 3910 4545');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'QuickCare Clinic'),0,'08:00:00','20:00:00');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'QuickCare Clinic'),1,'08:00:00','20:00:00');
 INSERT INTO Opening_hours (facility_id,week_day,time_open,time_close) VALUES ((select id from Facilities where name = 'QuickCare Clinic'),2,'08:00:00','20:00:00');

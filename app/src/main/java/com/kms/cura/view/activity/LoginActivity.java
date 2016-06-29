@@ -157,13 +157,14 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     }
 
     @Override
-    public void handleEvent(String event, String data) {
+    public void handleEvent(String event, Object data) {
         switch (event) {
             case EventConstant.LOGIN_SUCCESS:
                 if (!UserController.checkSignIn(this)) {
                     UserController.saveLoginInfo(this, email.getText().toString(), password.getText().toString());
+                    unregisterEvent();
                 }
-                switch (data) {
+                switch ((String) data) {
                     case EventConstant.TYPE_PATIENT:
                         Intent toHomePatient = new Intent(this, PatientViewActivity.class);
                         startActivity(toHomePatient);

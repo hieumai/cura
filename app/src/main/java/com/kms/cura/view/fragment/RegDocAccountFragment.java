@@ -249,7 +249,7 @@ public class RegDocAccountFragment extends Fragment implements View.OnClickListe
     }
 
     @Override
-    public void handleEvent(String event, String data) {
+    public void handleEvent(String event, Object data) {
         switch (event) {
             case EventConstant.REGISTER_SUCCESS:
                 ErrorController.showDialog(getActivity(), "Register success");

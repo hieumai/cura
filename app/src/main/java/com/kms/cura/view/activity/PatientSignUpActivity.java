@@ -128,7 +128,7 @@ public class PatientSignUpActivity extends AppCompatActivity implements TextWatc
     }
 
     @Override
-    public void handleEvent(String event, String data) {
+    public void handleEvent(String event, Object data) {
         switch (event) {
             case EventConstant.REGISTER_SUCCESS:
                 Intent toProfile = new Intent(this, PatientProfileFragment.class);

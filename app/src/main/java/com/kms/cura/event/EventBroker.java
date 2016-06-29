@@ -44,7 +44,7 @@ public class EventBroker {
         return eventHandlerList;
     }
 
-    public synchronized void pusblish(String event, String data) {
+    public synchronized void pusblish(String event, Object data) {
         Set<EventHandler> eventHandlerList = getEventHandlerSet(event);
         for (EventHandler eventHandler : eventHandlerList) {
             eventHandler.handleEvent(event, data);

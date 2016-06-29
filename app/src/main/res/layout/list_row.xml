@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+    <!--  ListRow Left sied Thumbnail image -->
+
+    <!-- Title Of Song-->
+    <TextView
+        android:id="@+id/doctorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Doctor Name"
+        android:textColor="#040404"
+        android:typeface="sans"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Artist Name -->
+    <TextView
+        android:id="@+id/speciality"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/doctorName"
+        android:textColor="#343434"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"
+        android:text="Speciality"
+        android:layout_centerHorizontal="true" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/ratingBarStyleSmall"
+        android:numStars="5"
+        android:stepSize="0.5"
+        android:id="@+id/ratingBar"
+        android:layout_below="@+id/speciality"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="2dp" />
+
+    <!-- Rightend Duration -->
+
+
+</RelativeLayout>

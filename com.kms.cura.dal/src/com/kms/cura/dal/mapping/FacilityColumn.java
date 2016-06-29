@@ -1,7 +1,8 @@
 package com.kms.cura.dal.mapping;
 
 public enum FacilityColumn {
-	ID(EntityColumn.ID), NAME(EntityColumn.NAME), ADDRESS("address"), CITY("city"),PHONE("phone");
+	ID(EntityColumn.ID), NAME(EntityColumn.NAME), ADDRESS("address"), CITY("city"), CITY_KEYWORD("city_keyword"), PHONE(
+			"phone");
 	String columnName;
 
 	private FacilityColumn(String columnName) {

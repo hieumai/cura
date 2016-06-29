@@ -12,16 +12,17 @@ public class JsonToEntityConverter {
 	private JsonToEntityConverter() {
 		// hide constructor
 	}
-	
+
 	public static <T extends Entity> T convertJsonStringToEntity(String jsonString, Type type) {
 		return new Gson().fromJson(jsonString, type);
 	}
-	
+
 	public static <T extends Entity> T convertJsonToEntity(JsonElement jsonElement, Type type) {
 		return new Gson().fromJson(jsonElement, type);
 	}
-	
+
 	public static <T extends Entity> List<T> convertJsonArrayToEntityList(JsonArray jsonArray, Type type) {
 		return new Gson().fromJson(jsonArray, type);
 	}
+
 }
