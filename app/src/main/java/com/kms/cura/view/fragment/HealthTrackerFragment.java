@@ -1,33 +1,28 @@
 package com.kms.cura.view.fragment;
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.kms.cura.R;
-import com.kms.cura.controller.ErrorController;
-import com.kms.cura.controller.UserController;
 import com.kms.cura.entity.HealthEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
-import com.kms.cura.entity.user.UserEntity;
-import com.kms.cura.model.UserModel;
 import com.kms.cura.utils.CurrentUserProfile;
+import com.kms.cura.view.activity.ConditionSymptomSearchActivity;
 import com.kms.cura.view.adapter.HealthTrackerTabAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HealthTrackerFragment extends Fragment {
+public class HealthTrackerFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
     private ArrayList<HealthEntity> currentHealthEntities, pastHealthEntities;
     private ArrayList<String> currentHealth, pastHealth;
@@ -52,8 +47,7 @@ public class HealthTrackerFragment extends Fragment {
         List<HealthEntity> entities = ((PatientUserEntity) (CurrentUserProfile.getInstance().getEntity())).getHealthEntities();
         getDataFromListAll(entities);
         setupDataOnView();
-        getActivity().setTitle(getString(R.string.health_tracker));
-
+        modifyToolbar();
         return myFragmentView;
     }
 
@@ -66,21 +60,6 @@ public class HealthTrackerFragment extends Fragment {
         adapter = new HealthTrackerTabAdapter(getChildFragmentManager(), currentHealth, pastHealth);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_health_tracker, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.btnAdd) {
-            Toast.makeText(getActivity(), "Add Condition/Symptom", Toast.LENGTH_SHORT).show();
-            // navigate to Conditions/Symptoms search screen
-
-        }
-        return true;
     }
 
     private void resetAdapter(ArrayList<String> currentHealth, ArrayList<String> pastHealth) {
@@ -121,5 +100,22 @@ public class HealthTrackerFragment extends Fragment {
         pastHealthEntities = getPastHealth(entities);
         currentHealth = getNameList(currentHealthEntities);
         pastHealth = getNameList(pastHealthEntities);
+    }
+
+    private void modifyToolbar() {
+        Toolbar healthTrackerToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        healthTrackerToolbar.getMenu().clear();
+        healthTrackerToolbar.setTitle(getString(R.string.health_tracker));
+        healthTrackerToolbar.inflateMenu(R.menu.menu_health_tracker);
+        healthTrackerToolbar.setOnMenuItemClickListener(this);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.btnAddConSym) {
+            Intent intent = new Intent(getActivity(), ConditionSymptomSearchActivity.class);
+            startActivity(intent);
+        }
+        return true;
     }
 }

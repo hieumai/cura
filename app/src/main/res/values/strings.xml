@@ -80,6 +80,7 @@
 
 
     <string name="DoctorSearch">Doctor Search</string>
+    <string name="ProfileView">Profile View</string>
     <string name="Name">Name :</string>
     <string name="Location">Location :</string>
     <string name="current">Current</string>
@@ -94,4 +95,10 @@
     <string name="logOutMes">Are you sure to log out this account?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="searchSymptom">Symptom </string>
+    <string name="searchCondition">Condition </string>
+    <string name="condition">Condition</string>
+    <string name="symptom">Symptom</string>
+    <string name="back">Back</string>
+    <string name="filter_name">Search</string>
 </resources>

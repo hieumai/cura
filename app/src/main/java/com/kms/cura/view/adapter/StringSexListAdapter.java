@@ -50,7 +50,7 @@ public class StringSexListAdapter extends BaseAdapter {
 
     private void setupTextView(View convertView, final int position) {
         String name = checkList.get(position);
-        TextView tv = (TextView) convertView.findViewById(R.id.tvDegree);
+        TextView tv = (TextView) convertView.findViewById(R.id.tvStringItem);
         tv.setText(name);
     }
 }

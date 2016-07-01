@@ -5,10 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kms.cura.R;
 
@@ -55,7 +52,7 @@ public class StringListAdapter extends BaseAdapter {
 
     private void setupTextView(View convertView, final int position) {
         String name = checkList.get(position);
-        TextView tv = (TextView) convertView.findViewById(R.id.tvDegree);
+        TextView tv = (TextView) convertView.findViewById(R.id.tvStringItem);
         tv.setText(name);
     }
 }

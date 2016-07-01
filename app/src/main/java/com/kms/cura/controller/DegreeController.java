@@ -12,11 +12,11 @@ import com.kms.cura.view.activity.RegisterDoctorActivity;
  */
 public class DegreeController {
     public static void initData() throws Exception {
-        DegreeModel.getInstace().init();
+        DegreeModel.getInstance().init();
     }
 
     public static DegreeEntity getDegreeSelected(Bundle bundle){
         int degree = bundle.getInt(RegisterDoctorActivity.DEGREE);
-        return DegreeModel.getInstace().getDegrees().get(degree);
+        return DegreeModel.getInstance().getDegrees().get(degree);
     }
 }

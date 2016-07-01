@@ -55,7 +55,7 @@ public class RegDocProfessionalFragment extends Fragment implements View.OnClick
                              Bundle savedInstanceState) {
         View myFragmentView = inflater.inflate(R.layout.fragment_reg_doc__professional, container, false);
         updateSpinner = this;
-        degree = (ArrayList<String>) DataUtils.getListName(DegreeModel.getInstace().getDegrees());
+        degree = (ArrayList<String>) DataUtils.getListName(DegreeModel.getInstance().getDegrees());
         speciality = (ArrayList<String>) DataUtils.getListName(SpecialityModel.getInstace().getSpecialities());
         facility = (ArrayList<String>) DataUtils.getListName(FacilityModel.getInstace().getFacilities());
         addHintText();

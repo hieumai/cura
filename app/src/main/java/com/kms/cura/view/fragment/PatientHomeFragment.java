@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,6 +98,7 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
         reloadData = this;
         initView(root);
         setUpSpnSpeciality();
+        modifyToolbar();
         return root;
     }
 
@@ -302,4 +304,10 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
         super.onDestroyView();
     }
 
+    private void modifyToolbar() {
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.getMenu().clear();
+        toolbar.setTitle(getString(R.string.DoctorSearch));
+        toolbar.inflateMenu(R.menu.menu_blank);
+    }
 }
