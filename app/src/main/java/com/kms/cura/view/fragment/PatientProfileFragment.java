@@ -2,6 +2,7 @@ package com.kms.cura.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class PatientProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        modifyToolbar();
         return inflater.inflate(R.layout.fagment_patient_profile_view, container, false);
     }
 
@@ -85,4 +87,10 @@ public class PatientProfileFragment extends Fragment {
         return imageView;
     }
 
+    private void modifyToolbar() {
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.getMenu().clear();
+        toolbar.setTitle(getString(R.string.ProfileView));
+        toolbar.inflateMenu(R.menu.menu_blank);
+    }
 }

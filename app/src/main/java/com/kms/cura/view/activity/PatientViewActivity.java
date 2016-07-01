@@ -27,7 +27,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
     private Toolbar patientToolbar;
     private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment, patientHealthTrachkerFragment;
     static final public String PATIENT = "500";
-
+    public final static String NAVIGATION_KEY = "naviKey";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,11 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         patientHomeFragment = PatientHomeFragment.newInstance(getApplicationContext(), this);
         patientProfileFragment = new PatientProfileFragment();
         patientHealthTrachkerFragment = new HealthTrackerFragment();
-        changeFragment(patientHomeFragment);
+        if (getIntent().getStringExtra(NAVIGATION_KEY) != null && getIntent().getStringExtra(NAVIGATION_KEY).equals(ConditionSymptomSearchActivity.TO_HEALTH_TRACKER)) {
+            changeFragment(patientHealthTrachkerFragment);
+        } else {
+            changeFragment(patientHomeFragment);
+        }
     }
 
     private void changeFragment(Fragment newFragment) {

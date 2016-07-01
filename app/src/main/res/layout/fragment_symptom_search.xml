@@ -1,0 +1,69 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kms.cura.view.fragment.SymptomSearchFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnSeachCondition">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:src="@drawable/back" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="start|center"
+                android:text="@string/searchCondition"
+                android:textColor="@color/colorPrimaryDark"
+                android:clickable="false"
+                android:textSize="@dimen/docText_18"/>
+
+        </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10sp"
+            android:layout_marginRight="10sp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/edtHealthSearch"
+                android:drawableTint="@color/colorPrimary"
+                android:drawableLeft="@android:drawable/ic_menu_search"
+                android:textSize="@dimen/docText_18"
+                android:hint="@string/Search"
+                android:paddingRight="25sp"
+                android:maxLines="1"
+                android:drawablePadding="@dimen/padding_5"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/ic_menu_close_clear_cancel"
+                android:backgroundTint="@color/colorPrimary"
+                android:id="@+id/btnClearSearch"
+                android:layout_gravity="center|end" />
+        </FrameLayout>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lvSymptom">
+
+        </ListView>
+    </LinearLayout>
+
+</FrameLayout>

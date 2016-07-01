@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by linhtnvo on 6/16/2016.
  */
-public class DegreeModel{
+public class DegreeModel {
     private static DegreeModel instance;
     private static String tag_string_req = "string_req";
     private List<DegreeEntity> degrees = new ArrayList<>();
@@ -23,7 +23,7 @@ public class DegreeModel{
      * If run first time then need to run in separate thread
      * @return FacilityModel
      */
-    public static DegreeModel getInstace() {
+    public static DegreeModel getInstance() {
         if (instance == null) {
             instance = new DegreeModel();
         }

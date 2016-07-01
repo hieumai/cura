@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/border_choose" android:state_pressed="true"></item>
-    <item android:drawable="@drawable/border" android:state_pressed="false"></item>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    <item android:drawable="@color/colorPrimary" android:state_pressed="true"></item>
+    <item android:drawable="@color/cardview_light_background" android:state_pressed="false"></item>
 </selector>
