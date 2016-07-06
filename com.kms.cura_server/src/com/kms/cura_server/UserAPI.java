@@ -1,21 +1,32 @@
 package com.kms.cura_server;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.kms.cura.dal.database.DoctorUserDatabaseHelper;
 import com.kms.cura.dal.database.PatientUserDatabaseHelper;
 import com.kms.cura.dal.database.UserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
+import com.kms.cura.dal.mapping.UserColumn;
+import com.kms.cura.dal.mapping.DoctorColumn;
+import com.kms.cura.dal.mapping.Doctor_FacilityColumn;
 import com.kms.cura.dal.user.DoctorUserDAL;
 import com.kms.cura.dal.user.PatientUserDAL;
 import com.kms.cura.dal.user.UserDAL;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.HealthEntity;
+import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.json.JsonToEntityConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
@@ -27,6 +38,8 @@ import com.kms.cura_server.response.UserAPIResponse;
 
 @Path("/user")
 public final class UserAPI {
+	private static String LIST_OF_CHANGES = "list_of_changes";
+
 	@GET
 	@Path("/getAllUser")
 	public String getAllUser() {
@@ -121,5 +134,18 @@ public final class UserAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 
+	}
+
+	@POST
+	@Path("/updateDoctor")
+	public String updateDoctor(String jsonData) {
+		DoctorUserEntity doctorUserEntity = JsonToEntityConverter.convertJsonStringToEntity(jsonData,
+				DoctorUserEntity.getDoctorEntityType());
+		try {
+			DoctorUserEntity newDoctor = DoctorUserDAL.getInstance().updateDoctor(doctorUserEntity);
+			return new UserAPIResponse().successResponse(newDoctor);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
 	}
 }

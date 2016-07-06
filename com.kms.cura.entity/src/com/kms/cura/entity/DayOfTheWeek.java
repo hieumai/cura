@@ -17,4 +17,9 @@ public enum DayOfTheWeek {
 		}
 		return null;
 	}
+	
+	public int getCode() {
+		return this.code;
+	}
+
 }

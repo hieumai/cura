@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     private void initPasswordButton() {
         forgotPasswordButton = initButton(R.id.button_LoginUI_ForgotPassword);
         forgotPasswordButton.setPaintFlags(forgotPasswordButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        forgotPasswordButton.setOnClickListener(this);
     }
 
     private Button initButton(int id) {
@@ -153,6 +154,10 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
             startActivity(intent);
         } else if (v.getId() == R.id.button_LoginUI_Login) {
             UserController.userLogin(email.getText().toString(), password.getText().toString());
+        }
+        else{
+            Intent intent = new Intent(this, BookAppointmentActivity.class);
+            startActivity(intent);
         }
     }
 

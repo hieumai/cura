@@ -57,6 +57,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize" />
         <activity android:name=".view.activity.ProfilePictureActivity" />
         <activity android:name=".view.activity.ChangePasswordActivity"></activity>
+        <activity android:name=".view.activity.BookAppointmentActivity" />
+        <activity android:name=".view.activity.ChooseTimeActivity"></activity>
     </application>
 
 </manifest>

@@ -50,7 +50,7 @@ public class UserController {
 
     public static void registerDoctor(String id, String name, String email, String password, String phone, DegreeEntity degree,
                                       List<SpecialityEntity> speciality, List<FacilityEntity> facility, String gender, Date birth) {
-        DoctorUserEntity entity = new DoctorUserEntity(id, name, email, password, phone, degree, speciality, facility, gender, birth);
+        DoctorUserEntity entity = new DoctorUserEntity(id, name, email, password, phone, degree, speciality, FacilityEntity.getWorkingHourFromFacility(facility), gender, birth);
         UserModel.getInstance().registerDoctor(entity);
     }
 

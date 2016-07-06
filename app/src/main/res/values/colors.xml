@@ -4,8 +4,14 @@
     <color name="colorPrimaryDark">#00796b</color>
     <color name="colorAccent">#FF5252</color>
     <color name="white">#FFFFFF</color>
-    <color name="grey">#9E9E9E</color>
+    <color name="grey">#d3d4cf</color>
+    <color name="grey2">#7f7f81</color>
     <color name="black">#000000</color>
     <color name="tab_chosen">#B2DFDB</color>
     <color name="tab_normal">#009688</color>
+    <color name="transparent">#00000000</color>
+    <color name="light_grey">#f7f7f7</color>
+    <color name="light_grey_2">#e2e2df</color>
+    <color name="red">#ff5050</color>
+    <color name="light_green">#b2d8b2</color>
 </resources>

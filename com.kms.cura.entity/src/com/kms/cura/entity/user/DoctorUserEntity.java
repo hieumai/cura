@@ -2,12 +2,14 @@ package com.kms.cura.entity.user;
 
 import java.lang.reflect.Type;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.SpecialityEntity;
+import com.kms.cura.entity.WorkingHourEntity;
 
 public class DoctorUserEntity extends UserEntity {
     public final static String DOCTOR_LIST = "doctor_list";
@@ -20,14 +22,14 @@ public class DoctorUserEntity extends UserEntity {
     private int experience;
     private double minPrice;
     private double maxPrice;
-    private List<FacilityEntity> facility;
+    private List<WorkingHourEntity> workingTime;
     private String gender;
     private Date birth;
     private String insurance;
 
     public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
                             List<SpecialityEntity> speciality, double rating, int experience, double minPrice, double maxPrice,
-                            List<FacilityEntity> facility, String gender, Date birth, String insurance) {
+                            List<WorkingHourEntity> workingTime, String gender, Date birth, String insurance) {
         super(id, name, email, password);
         this.phone = phone;
         this.degree = degree;
@@ -36,23 +38,23 @@ public class DoctorUserEntity extends UserEntity {
         this.experience = experience;
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
-        this.facility = facility;
+        this.workingTime = workingTime;
         this.gender = gender;
         this.birth = birth;
         this.insurance = insurance;
     }
 
     public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
-                            List<SpecialityEntity> speciality, List<FacilityEntity> facility, String gender, Date birth) {
+                            List<SpecialityEntity> speciality, List<WorkingHourEntity> workingTime, String gender, Date birth) {
         super(id, name, email, password);
         this.phone = phone;
         this.degree = degree;
         this.speciality = speciality;
-        this.facility = facility;
+        this.workingTime = workingTime;
         this.gender = gender;
         this.birth = birth;
     }
-
+    
     public String getPhone() {
         return phone;
     }
@@ -109,15 +111,15 @@ public class DoctorUserEntity extends UserEntity {
         this.speciality = speciality;
     }
 
-    public List<FacilityEntity> getFacility() {
-        return facility;
-    }
+    public List<WorkingHourEntity> getWorkingTime() {
+		return workingTime;
+	}
 
-    public void setFacility(List<FacilityEntity> facility) {
-        this.facility = facility;
-    }
+	public void setWorkingTime(List<WorkingHourEntity> workingTime) {
+		this.workingTime = workingTime;
+	}
 
-    public String getGender() {
+	public String getGender() {
         return gender;
     }
 
@@ -150,5 +152,9 @@ public class DoctorUserEntity extends UserEntity {
         return new TypeToken<DoctorUserEntity>() {
         }.getType();
     }
+
+	
+    
+    
 }
 

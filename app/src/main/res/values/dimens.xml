@@ -33,5 +33,7 @@
     <dimen name="marginTop">60sp</dimen>
     <dimen name="tab_height">40sp</dimen>
     <dimen name="buttonWidth_150">150sp</dimen>
+    <dimen name="CommentHeight">120sp</dimen>
+    <dimen name="timeHeight">80sp</dimen>
     <dimen name="topPadding">55sp</dimen>
 </resources>

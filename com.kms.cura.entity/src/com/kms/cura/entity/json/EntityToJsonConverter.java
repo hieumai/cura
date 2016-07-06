@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.OpeningHour;
 
 public class EntityToJsonConverter {
 	private EntityToJsonConverter() {
@@ -18,5 +19,9 @@ public class EntityToJsonConverter {
 
 	public static JsonElement convertEntityListToJson(List<? extends Entity> entityList) {
 		return new Gson().toJsonTree(entityList, new TypeToken<List<Entity>>() {}.getType());
+	}
+	
+	public static JsonElement convertOpeningHourListToJson(List<OpeningHour> list) {
+		return new Gson().toJsonTree(list, new TypeToken<List<OpeningHour>>() {}.getType());
 	}
 }

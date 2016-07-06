@@ -296,4 +296,17 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
         toolbar.setTitle(getString(R.string.DoctorSearch));
         toolbar.inflateMenu(R.menu.menu_blank);
     }
+
+    @Override
+    public void onDestroyView() {
+        createBundle();
+        super.onDestroyView();
+    }
+
+    private void modifyToolbar() {
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.getMenu().clear();
+        toolbar.setTitle(getString(R.string.DoctorSearch));
+        toolbar.inflateMenu(R.menu.menu_blank);
+    }
 }

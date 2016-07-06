@@ -1,6 +1,7 @@
 package com.kms.cura.entity;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
@@ -58,4 +59,21 @@ public class FacilityEntity extends Entity {
 		}.getType();
 		return type;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		FacilityEntity facilityEntity = (FacilityEntity) obj;
+		return (this.getId() == facilityEntity.getId());
+	}
+	
+	public static List<WorkingHourEntity> getWorkingHourFromFacility(List<FacilityEntity> facilities){
+    	List<WorkingHourEntity> workingTime = new ArrayList<>();
+    	workingTime.add(new WorkingHourEntity(facilities.get(0).getOpeningHours(), facilities.get(0)));
+    	for(int i=1; i<facilities.size(); ++i){
+    		workingTime.add(new WorkingHourEntity(facilities.get(i)));
+    	}
+    	return workingTime;
+    }
+	
+	
 }

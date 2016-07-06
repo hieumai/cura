@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:id="@+id/layoutTimeSelection"
+    android:layout_height="@dimen/spinner_60">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_40"
+        tools:text = "12am"
+        android:gravity="center"
+        android:layout_weight="4"
+        android:id="@+id/txtTime"
+        android:textSize="@dimen/docText_14"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_40"
+        android:layout_weight="1"
+        android:gravity="center"
+        tools:text="12am"
+        android:id="@+id/txtTimeChosen"
+        android:textSize="@dimen/docText_14"
+        />
+</LinearLayout>

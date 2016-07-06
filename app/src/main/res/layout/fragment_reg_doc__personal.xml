@@ -55,8 +55,7 @@
                 android:fontFamily="sans-serif"
                 android:textSize="@dimen/docText_18"
                 android:textColor="@color/black"
-                android:layout_marginBottom="@dimen/padding_8"
-                android:paddingBottom="2sp"/>
+                />
 
             <Spinner
                 android:layout_width="@dimen/spinner_150"
