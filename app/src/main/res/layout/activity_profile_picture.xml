@@ -46,9 +46,9 @@
         android:layout_height="wrap_content"
         android:text="@string/save"
         android:id="@+id/button_photo_save"
+        android:layout_marginTop="97dp"
+        android:background="@color/colorPrimary"
         android:layout_below="@+id/button_photo_upload"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="87dp"
-        android:background="@color/colorPrimary" />
+        android:layout_alignLeft="@+id/button_photo_upload"
+        android:layout_alignStart="@+id/button_photo_upload" />
 </RelativeLayout>
