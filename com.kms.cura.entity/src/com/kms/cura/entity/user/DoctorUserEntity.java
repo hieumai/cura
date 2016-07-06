@@ -12,6 +12,7 @@ import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.WorkingHourEntity;
 
 public class DoctorUserEntity extends UserEntity {
+    public final static String DOCTOR_LIST = "doctor_list";
     public static int DOCTOR_TYPE = 1;
     public final static String GENDER_MALE = "M";
     private String phone;

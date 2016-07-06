@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -25,8 +26,12 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.controller.SpecialityController;
+import com.kms.cura.controller.UserController;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
 import com.kms.cura.model.Settings;
 import com.kms.cura.model.SpecialityModel;
 import com.kms.cura.utils.DataUtils;
@@ -42,12 +47,12 @@ import java.util.List;
 import java.util.Locale;
 
 public class PatientHomeFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, UpdateSpinner, ReloadData {
-
+    private static final String FRAGMENT_NAME = "Home";
     private EditText edtName, edtLocation;
     private RadioGroup rdbtngroupLocation;
     private RadioButton rdbtnCurrentLocation, rdbtnManualEnter;
     private Spinner spnSpeciality;
-    private Button btnRegister;
+    private Button btnSearch;
     private Context mContext;
     private Activity activity;
     private String currentLocation = null;
@@ -63,6 +68,7 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     private boolean[] checkedSpeciality;
     private ReloadData reloadData;
     private String HINT_TEXT = "Please choose";
+    private EventBroker broker;
 
 
     public PatientHomeFragment() {
@@ -78,16 +84,17 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     }
 
     private void setContext(Context src) {
-        this.mContext = src;
+        this.mContext = this.getContext();
     }
 
     private void setActivity(Activity src) {
-        this.activity = src;
+        this.activity = this.getActivity();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        broker = EventBroker.getInstance();
     }
 
     @Override
@@ -99,6 +106,8 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
         initView(root);
         setUpSpnSpeciality();
         modifyToolbar();
+        initButton(root);
+        getActivity().setTitle(FRAGMENT_NAME);
         return root;
     }
 
@@ -120,14 +129,13 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     }
 
     public void initButton(View root) {
-        btnRegister = (Button) root.findViewById(R.id.btnRegister);
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        btnSearch = (Button) root.findViewById(R.id.button_search);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!checked) {
                     currentLocation = edtLocation.getText().toString();
                 }
-                //Search Function implement here
             }
         });
     }
@@ -168,7 +176,6 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
 
         speciality = (ArrayList<String>) DataUtils.getListName(SpecialityModel.getInstace().getSpecialities());
         speciality.add(HINT_TEXT);
-        reformData();
         specialityAdapter = new CheckBoxAdapter(getActivity(), R.layout.check_box_item, speciality, specialitySelected, updateSpinner);
         spnSpeciality.setAdapter(specialityAdapter);
         spnSpeciality.setSelection(specialityAdapter.getCount());
@@ -282,27 +289,6 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
         setUpSpnSpeciality();
     }
 
-    private void reformData() {
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            specialitySelected = bundle.getBooleanArray(PatientViewActivity.PATIENT);
-        } else {
-            specialitySelected = null;
-        }
-    }
-
-    private Bundle createBundle() {
-        Bundle bundle = getArguments();
-        bundle.putBooleanArray(PatientViewActivity.PATIENT, specialityAdapter.getSelectedBoolean());
-
-        return bundle;
-    }
-
-    @Override
-    public void onDestroyView() {
-        createBundle();
-        super.onDestroyView();
-    }
 
     private void modifyToolbar() {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);

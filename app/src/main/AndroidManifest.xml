@@ -20,6 +20,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -45,12 +46,19 @@
         <activity android:name=".view.activity.PatientHomeActivity"></activity>
         <activity android:name=".view.activity.ConditionSymptomSearchActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"></activity>
-
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".view.activity.SearchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PatientBasicSettingsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name=".view.activity.ProfilePictureActivity" />
+        <activity android:name=".view.activity.ChangePasswordActivity"></activity>
         <activity android:name=".view.activity.BookAppointmentActivity" />
         <activity android:name=".view.activity.ChooseTimeActivity"></activity>
-
-
     </application>
 
 </manifest>

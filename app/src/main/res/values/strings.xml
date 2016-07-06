@@ -42,6 +42,8 @@
     <string name="register">Register</string>
     <string name="name">Name*</string>
     <string name="encrypt_key">enfldsgbnlsngdlksdsgm</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
 
     <string name="title_activity_navigation_drawer">navigationDrawer</string>
 
@@ -77,6 +79,7 @@
         <item>Molina</item>
         <item>Kaiser</item>
         <item>Fidelis Care</item>
+        <item>N/A</item>
     </string-array>
 
 
@@ -173,4 +176,7 @@
         <item>11:30pm</item>
     </string-array>
     <string name="Facility">Facility</string>
+    <string name="title_activity_navi">navi</string>
+    <string name="upload">Upload</string>
+    <string name="pick_image">Pick Image</string>
 </resources>

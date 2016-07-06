@@ -26,4 +26,5 @@
     <dimen name="buttonWidth_150">300sp</dimen>
     <dimen name="CommentHeight">240sp</dimen>
     <dimen name="timeHeight">100sp</dimen>
+    <dimen name="topPadding">65sp</dimen>
 </resources>

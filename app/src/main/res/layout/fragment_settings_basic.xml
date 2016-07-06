@@ -16,15 +16,14 @@
             android:layout_marginTop="@dimen/margin_20"
             android:padding="5sp">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="100sp"
                 android:layout_height="wrap_content"
                 android:text="@string/nameSettings"
-                android:gravity="center"
                 android:fontFamily="sans-serif"
                 android:textSize="@dimen/docText_18"
                 android:textColor="@color/black"
                 android:layout_marginBottom="@dimen/padding_8"
-                android:paddingBottom="2sp"/>
+                android:paddingBottom="2sp" />
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -45,15 +44,15 @@
             android:padding="5sp"
             android:weightSum="1">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_width="100sp"
                 android:text="@string/sexSettings"
-                android:gravity="center"
                 android:fontFamily="sans-serif"
                 android:textSize="@dimen/docText_18"
                 android:textColor="@color/black"
                 android:layout_marginBottom="@dimen/padding_8"
-                android:paddingBottom="2sp"/>
+                android:paddingBottom="2sp"
+                android:layout_gravity="center" />
 
             <Spinner
                 android:layout_width="@dimen/spinner_150"
@@ -72,13 +71,12 @@
             android:gravity="center|start"
             android:padding="5sp">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:text="@string/birthdaySettings"
                 android:textSize="@dimen/docText_18"
-                android:textColor="@color/black"
-                android:gravity="center" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:layout_width="wrap_content"

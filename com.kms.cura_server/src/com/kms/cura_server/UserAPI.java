@@ -1,6 +1,5 @@
 package com.kms.cura_server;
 
-import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,10 +14,7 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.kms.cura.dal.database.DoctorUserDatabaseHelper;
-import com.kms.cura.dal.database.PatientHealthDatabaseHelper;
 import com.kms.cura.dal.database.PatientUserDatabaseHelper;
 import com.kms.cura.dal.database.UserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
@@ -38,7 +34,6 @@ import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura_server.resources.Strings;
 import com.kms.cura_server.response.APIResponse;
-import com.kms.cura_server.response.PatientHealthResponse;
 import com.kms.cura_server.response.UserAPIResponse;
 
 @Path("/user")

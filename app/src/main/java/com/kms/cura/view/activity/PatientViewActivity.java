@@ -1,12 +1,11 @@
 package com.kms.cura.view.activity;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +21,7 @@ import com.kms.cura.controller.UserController;
 import com.kms.cura.view.fragment.HealthTrackerFragment;
 import com.kms.cura.view.fragment.PatientHomeFragment;
 import com.kms.cura.view.fragment.PatientProfileFragment;
+import com.kms.cura.view.fragment.PatientSettingsFragment;
 
 public class PatientViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener {
     private Toolbar patientToolbar;
@@ -43,6 +43,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         patientHomeFragment = PatientHomeFragment.newInstance(getApplicationContext(), this);
         patientProfileFragment = new PatientProfileFragment();
         patientHealthTrachkerFragment = new HealthTrackerFragment();
+        patientSettingsFragment = new PatientSettingsFragment();
         if (getIntent().getStringExtra(NAVIGATION_KEY) != null && getIntent().getStringExtra(NAVIGATION_KEY).equals(ConditionSymptomSearchActivity.TO_HEALTH_TRACKER)) {
             changeFragment(patientHealthTrachkerFragment);
         } else {
@@ -130,7 +131,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         } else if (id == R.id.nav_messages) {
             Toast.makeText(this, "message", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_settings) {
-            Toast.makeText(this, "settings", Toast.LENGTH_SHORT).show();
+            changeFragment(patientSettingsFragment);
         } else if (id == R.id.nav_signOut) {
             showDialogSignOut();
         }
