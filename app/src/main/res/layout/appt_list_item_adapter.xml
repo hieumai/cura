@@ -41,7 +41,8 @@
             android:gravity="end">
             <Button
                 android:layout_width="@dimen/timeHeight"
-                android:layout_height="@dimen/tab_height"
+                android:layout_height="@dimen/textSizeButton"
+                android:id="@+id/btnTag"
                 android:background="@drawable/pending_tag"
                 tools:text = "Pending"
                 />
