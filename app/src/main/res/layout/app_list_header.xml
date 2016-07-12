@@ -3,13 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white"
+        android:padding="10sp"
+        android:background="@color/light_grey_2"
+        android:textColor="@color/black"
         android:textSize="@dimen/docText_16"
         android:id="@+id/txtDateHeader"
         tools:text = "Thursday, May 28, 2016"

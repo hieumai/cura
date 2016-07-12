@@ -187,4 +187,9 @@
     <string name="upload">Upload</string>
     <string name="pick_image">Pick Image</string>
     <string name="Appointment">Appointments</string>
+    <string name="Pending">  PENDING  </string>
+    <string name="Rejected">  REJECTED  </string>
+    <string name="Cancel">  CANCELLED  </string>
+    <string name="Complete">  COMPLETED  </string>
+    <string name="Incomplete">  INCOMPLETE  </string>
 </resources>

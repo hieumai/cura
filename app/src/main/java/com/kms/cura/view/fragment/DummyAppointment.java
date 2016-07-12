@@ -1,5 +1,7 @@
 package com.kms.cura.view.fragment;
 
+import com.kms.cura.R;
+
 import java.sql.Date;
 
 /**
@@ -52,17 +54,22 @@ public class DummyAppointment {
         this.status = status;
     }
 
-    public String getStatusName(){
+    public Integer getStatusName(){
         switch (status){
             case 0:
-                return "PENDING";
+                return R.string.Pending;
             case 2:
-                return "REJECTED";
+                return R.string.Rejected;
             case 3:
-                return "CANCELED";
-            default:
-                return "";
+                return R.string.Cancel;
+            case 4:
+                return R.string.Cancel;
+            case 5:
+                return R.string.Complete;
+            case 6:
+                return R.string.Incomplete;
         }
+        return null;
     }
 
     public Date getDate() {

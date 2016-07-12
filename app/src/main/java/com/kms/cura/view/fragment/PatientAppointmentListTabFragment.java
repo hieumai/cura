@@ -45,38 +45,42 @@ public class PatientAppointmentListTabFragment extends Fragment {
 
     private void setupData() {
         Bundle bundle = getArguments();
-        state = bundle.getInt(HealthTrackerFragment.KEY_STATE);
+        state = bundle.getInt(PatientAppointmentListFragment.KEY_STATE,PatientAppointmentListFragment.STATE_UPCOMING);
         apptsList = seedData();
     }
 
     public List<DummyAppointment> seedData(){
         List<DummyAppointment> dummy = new ArrayList<>();
         Date date1,date2;
-        int status1,status2;
+        int status1,status2, status3,status4;
         if(state == PatientAppointmentListFragment.STATE_PAST){
-            date1 = Date.valueOf("2016-06-25");
-            date2 = Date.valueOf("2016-06-24");
+            date1 = new Date(2016,5,20);
+            date2 = new Date(2016,5,21);
             status1 = 2;
-            status2 = 3;
+            status2 = 4;
+            status3 = 5;
+            status4 = 6;
         }
         else{
-            date1 = Date.valueOf("2016-07-14");
-            date2 = Date.valueOf("2016-07-15");
+            date1 = new Date(2016,6,20);
+            date2 = new Date(2016,6,22);
             status1 = 0;
             status2 = 1;
+            status3 = 2;
+            status4 = 3;
         }
-        dummy.add(new DummyAppointment("Alex","ABC","08:00am - 09:00am",status1,date1));
-        dummy.add(new DummyAppointment("Alex","ABC","10:00am - 11:00am",status2,date1));
-        dummy.add(new DummyAppointment("Alex","ABC","01:00pm - 02:00pm",status1,date1));
-        dummy.add(new DummyAppointment("Alex","ABC","08:00am - 09:00am",status1,date1));
-        dummy.add(new DummyAppointment("Alex","ABC","10:00am - 11:00am",status2,date1));
-        dummy.add(new DummyAppointment("Alex","ABC","01:00pm - 02:00pm",status1,date1));
-        dummy.add(new DummyAppointment("Alex","ABC","08:00am - 09:00am",status2,date2));
-        dummy.add(new DummyAppointment("Alex","ABC","10:00am - 11:00am",status1,date2));
-        dummy.add(new DummyAppointment("Alex","ABC","01:00pm - 02:00pm",status2,date2));
-        dummy.add(new DummyAppointment("Alex","ABC","08:00am - 09:00am",status2,date2));
-        dummy.add(new DummyAppointment("Alex","ABC","10:00am - 11:00am",status1,date2));
-        dummy.add(new DummyAppointment("Alex","ABC","01:00pm - 02:00pm",status2,date2));
+        dummy.add(new DummyAppointment("A","ABC","08:00am - 09:00am",status1,date1));
+        dummy.add(new DummyAppointment("B","ABC","10:00am - 11:00am",status2,date1));
+        dummy.add(new DummyAppointment("C","ABC","01:00pm - 02:00pm",status3,date1));
+        dummy.add(new DummyAppointment("D","ABC","08:00am - 09:00am",status4,date1));
+        dummy.add(new DummyAppointment("E","ABC","10:00am - 11:00am",status1,date1));
+        dummy.add(new DummyAppointment("F","ABC","01:00pm - 02:00pm",status2,date1));
+        dummy.add(new DummyAppointment("G","ABC","08:00am - 09:00am",status3,date2));
+        dummy.add(new DummyAppointment("H","ABC","10:00am - 11:00am",status4,date2));
+        dummy.add(new DummyAppointment("I","ABC","01:00pm - 02:00pm",status1,date2));
+        dummy.add(new DummyAppointment("J","ABC","08:00am - 09:00am",status2,date2));
+        dummy.add(new DummyAppointment("K","ABC","10:00am - 11:00am",status3,date2));
+        dummy.add(new DummyAppointment("L","ABC","01:00pm - 02:00pm",status4,date2));
         return dummy;
     }
 

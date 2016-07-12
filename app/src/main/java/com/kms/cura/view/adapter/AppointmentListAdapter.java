@@ -68,8 +68,7 @@ public class AppointmentListAdapter extends BaseAdapter implements StickyListHea
     }
 
     public String getDate(Date date) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
+        Calendar calendar = new GregorianCalendar(date.getYear(), date.getMonth(), date.getDate());
         String dayOftheWeek = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
         SimpleDateFormat month_date = new SimpleDateFormat("MMMM");
         String month_name = month_date.format(calendar.getTime());
@@ -78,15 +77,15 @@ public class AppointmentListAdapter extends BaseAdapter implements StickyListHea
         builder.append(", ");
         builder.append(month_name);
         builder.append(" ");
-        builder.append(calendar.DAY_OF_MONTH);
+        builder.append(date.getDate());
         builder.append(", ");
-        builder.append(calendar.YEAR);
+        builder.append(date.getYear());
         return builder.toString();
     }
 
     @Override
     public View getHeaderView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
+        if (convertView == null) {
             convertView = mInflater.inflate(R.layout.app_list_header, parent, false);
         }
         TextView header = (TextView) convertView.findViewById(R.id.txtDateHeader);
@@ -117,37 +116,51 @@ public class AppointmentListAdapter extends BaseAdapter implements StickyListHea
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null){
-            convertView = mInflater.inflate(R.layout.appt_list_item_adapter,parent,false);
+        if (convertView == null) {
+            convertView = mInflater.inflate(R.layout.appt_list_item_adapter, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-        }
-        else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
         DummyAppointment appointment = appointments.get(position);
-        holder.doctorName.setText(appointment.getDoctorName());
-        holder.facilityName.setText(appointment.getFacilityName());
-        holder.apptTime.setText(appointment.getTime());
-        holder.tag.setText(appointment.getStatusName());
-        Integer tagId = getTagId(appointment.getStatus());
-        if(tagId == null){
-            holder.tag.setVisibility(View.GONE);
-        }
-        else{
-            holder.tag.setBackgroundResource(tagId);
-        }
+        loadData(holder,appointment);
         return convertView;
     }
 
-    private Integer getTagId(int status){
-        switch (status){
+    private void loadData(ViewHolder holder, DummyAppointment appointment){
+        holder.doctorName.setText(appointment.getDoctorName());
+        holder.facilityName.setText(appointment.getFacilityName());
+        holder.apptTime.setText(appointment.getTime());
+        holder.tag.setVisibility(View.VISIBLE);
+        Integer tagStringID = appointment.getStatusName();
+        if (tagStringID != null) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("  ");
+            builder.append(mContext.getResources().getString(tagStringID));
+            builder.append("  ");
+            holder.tag.setText(builder.toString());
+        }
+        Integer tagId = getTagId(appointment.getStatus());
+        if (tagId == null) {
+            holder.tag.setVisibility(View.INVISIBLE);
+        } else {
+            holder.tag.setBackgroundResource(tagId);
+        }
+    }
+
+    private Integer getTagId(int status) {
+        switch (status) {
             case 0:
                 return R.drawable.pending_tag;
             case 2:
                 return R.drawable.reject_tag;
             case 3:
                 return R.drawable.cancel_tag;
+            case 5:
+                return R.drawable.complete_tag;
+            case 6:
+                return R.drawable.pending_tag;
             default:
                 return null;
         }
@@ -160,13 +173,12 @@ public class AppointmentListAdapter extends BaseAdapter implements StickyListHea
 
     @Override
     public int getPositionForSection(int sectionIndex) {
-        if(mSectionIndices.length == 0){
-            return  0;
+        if (mSectionIndices.length == 0) {
+            return 0;
         }
-        if(sectionIndex >= mSectionIndices.length){
-            sectionIndex = mSectionIndices.length-1;
-        }
-        else if(sectionIndex < 0){
+        if (sectionIndex >= mSectionIndices.length) {
+            sectionIndex = mSectionIndices.length - 1;
+        } else if (sectionIndex < 0) {
             sectionIndex = 0;
         }
         return mSectionIndices[sectionIndex];
@@ -182,7 +194,7 @@ public class AppointmentListAdapter extends BaseAdapter implements StickyListHea
         return mSectionIndices.length - 1;
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         private TextView doctorName;
         private TextView facilityName;
         private TextView apptTime;

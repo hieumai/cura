@@ -17,12 +17,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class AppointmentListTabAdapter extends FragmentPagerAdapter{
     public static String title[] = {"Upcoming", "Past"};
     private static final int FRAGMENT_NUM = 2;
-    private List<DummyAppointment> upcomingAppts, pastAppts;
 
-    public AppointmentListTabAdapter(FragmentManager fragmentManager, List<DummyAppointment> upcomingAppts, List<DummyAppointment> pastAppts) {
+
+    public AppointmentListTabAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
-        this.upcomingAppts = upcomingAppts;
-        this.pastAppts = pastAppts;
     }
 
     @Override
@@ -54,8 +52,4 @@ public class AppointmentListTabAdapter extends FragmentPagerAdapter{
         return title[position];
     }
 
-    public void resetAdapter(List<DummyAppointment> upcomingAppts, List<DummyAppointment> pastAppts) {
-        this.upcomingAppts = upcomingAppts;
-        this.pastAppts = pastAppts;
-    }
 }
