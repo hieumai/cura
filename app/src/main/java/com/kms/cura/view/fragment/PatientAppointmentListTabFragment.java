@@ -4,9 +4,11 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class PatientAppointmentListTabFragment extends Fragment {
     private List<AppointmentEntity> apptsList;
     private ExpandableStickyListHeadersListView lvAppts;
     private PatientAppointmentListAdapter adapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private WeakHashMap<View,Integer> mOriginalViewHeightPool = new WeakHashMap<View, Integer>();
     public PatientAppointmentListTabFragment() {
     }
@@ -44,6 +47,14 @@ public class PatientAppointmentListTabFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View myFragmentView = inflater.inflate(R.layout.fragment_appts_list_tab, container, false);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) myFragmentView.findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Toast.makeText(getActivity(),"Refreshing",Toast.LENGTH_LONG).show();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
         setupData();
         setupListView(myFragmentView);
         return myFragmentView;

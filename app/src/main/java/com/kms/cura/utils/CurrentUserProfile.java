@@ -48,6 +48,14 @@ public class CurrentUserProfile {
         return (entity instanceof PatientUserEntity);
     }
 
+    public void setUpcomingAppts(List<AppointmentEntity> upcomingAppts) {
+        this.upcomingAppts = upcomingAppts;
+    }
+
+    public void setPastAppts(List<AppointmentEntity> pastAppts) {
+        this.pastAppts = pastAppts;
+    }
+
     public List<AppointmentEntity> getUpcomingAppts(){
         if(upcomingAppts != null){
             return upcomingAppts;

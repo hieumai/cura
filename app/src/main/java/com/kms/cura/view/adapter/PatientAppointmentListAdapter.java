@@ -154,9 +154,9 @@ public class PatientAppointmentListAdapter extends BaseAdapter implements Sticky
 
     private String getAppointmentTime(AppointmentEntity appointment){
         StringBuilder builder = new StringBuilder();
-        builder.append(appointment.getStartTime());
+        builder.append(appointment.getStartTime().toString().substring(0,5));
         builder.append(" - ");
-        builder.append(appointment.getEndTime());
+        builder.append(appointment.getEndTime().toString().substring(0,5));
         return builder.toString();
     }
 

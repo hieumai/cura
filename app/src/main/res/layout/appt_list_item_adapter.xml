@@ -58,6 +58,7 @@
                 android:id="@+id/btnTag"
                 android:background="@drawable/pending_tag"
                 tools:text = "  INCOMPLETE  "
+                android:textColor="@color/white"
                 />
         </LinearLayout>
 

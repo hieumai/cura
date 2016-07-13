@@ -12,6 +12,7 @@ import com.kms.cura.entity.WorkingHourEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.UserModel;
+import com.kms.cura.utils.CurrentUserProfile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -153,5 +154,7 @@ public class UserController {
         if (file.exists()) {
             file.delete();
         }
+        CurrentUserProfile.getInstance().setPastAppts(null);
+        CurrentUserProfile.getInstance().setUpcomingAppts(null);
     }
 }
