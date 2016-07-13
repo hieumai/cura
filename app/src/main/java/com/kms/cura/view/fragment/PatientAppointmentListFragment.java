@@ -10,21 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.kms.cura.R;
-import com.kms.cura.view.adapter.AppointmentListAdapter;
-import com.kms.cura.view.adapter.AppointmentListTabAdapter;
+import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.view.adapter.PatientAppointmentListTabAdapter;
 
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by linhtnvo on 7/8/2016.
  */
 public class PatientAppointmentListFragment extends Fragment {
-    private List<DummyAppointment> dummy1, dummy2;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private AppointmentListTabAdapter adapter;
+    private PatientAppointmentListTabAdapter adapter;
     public static final int STATE_UPCOMING = 0;
     public static final int STATE_PAST = 1;
     public static final String KEY_STATE = "state";
@@ -50,7 +47,7 @@ public class PatientAppointmentListFragment extends Fragment {
     }
 
     private void setupDataOnView() {
-        adapter = new AppointmentListTabAdapter(getChildFragmentManager());
+        adapter = new PatientAppointmentListTabAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }

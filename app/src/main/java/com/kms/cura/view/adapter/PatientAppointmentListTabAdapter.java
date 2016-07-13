@@ -4,9 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
-import java.util.List;
-
-import com.kms.cura.view.fragment.DummyAppointment;
 import com.kms.cura.view.fragment.PatientAppointmentListFragment;
 import com.kms.cura.view.fragment.PatientAppointmentListTabFragment;
 
@@ -14,12 +11,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 /**
  * Created by linhtnvo on 7/12/2016.
  */
-public class AppointmentListTabAdapter extends FragmentPagerAdapter{
+public class PatientAppointmentListTabAdapter extends FragmentPagerAdapter{
     public static String title[] = {"Upcoming", "Past"};
     private static final int FRAGMENT_NUM = 2;
 
 
-    public AppointmentListTabAdapter(FragmentManager fragmentManager) {
+    public PatientAppointmentListTabAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
     }
 

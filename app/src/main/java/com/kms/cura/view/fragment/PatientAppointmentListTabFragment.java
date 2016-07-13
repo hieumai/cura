@@ -7,15 +7,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.WeakHashMap;
 
 import com.kms.cura.R;
-import com.kms.cura.view.adapter.AppointmentListAdapter;
+import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.utils.CurrentUserProfile;
+import com.kms.cura.view.adapter.PatientAppointmentListAdapter;
 
 
 import se.emilsjolander.stickylistheaders.ExpandableStickyListHeadersListView;
@@ -26,9 +32,9 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
  */
 public class PatientAppointmentListTabFragment extends Fragment {
     private int state;
-    private List<DummyAppointment> apptsList;
+    private List<AppointmentEntity> apptsList;
     private ExpandableStickyListHeadersListView lvAppts;
-    private AppointmentListAdapter adapter;
+    private PatientAppointmentListAdapter adapter;
     private WeakHashMap<View,Integer> mOriginalViewHeightPool = new WeakHashMap<View, Integer>();
     public PatientAppointmentListTabFragment() {
     }
@@ -46,47 +52,37 @@ public class PatientAppointmentListTabFragment extends Fragment {
     private void setupData() {
         Bundle bundle = getArguments();
         state = bundle.getInt(PatientAppointmentListFragment.KEY_STATE,PatientAppointmentListFragment.STATE_UPCOMING);
-        apptsList = seedData();
+        apptsList = getData();
     }
 
-    public List<DummyAppointment> seedData(){
-        List<DummyAppointment> dummy = new ArrayList<>();
-        Date date1,date2;
-        int status1,status2, status3,status4;
+    public List<AppointmentEntity> getData(){
+        List<AppointmentEntity> appts = new ArrayList<>();
         if(state == PatientAppointmentListFragment.STATE_PAST){
-            date1 = new Date(2016,5,20);
-            date2 = new Date(2016,5,21);
-            status1 = 2;
-            status2 = 4;
-            status3 = 5;
-            status4 = 6;
+            appts.addAll(CurrentUserProfile.getInstance().getPastAppts());
         }
-        else{
-            date1 = new Date(2016,6,20);
-            date2 = new Date(2016,6,22);
-            status1 = 0;
-            status2 = 1;
-            status3 = 2;
-            status4 = 3;
+        else {
+            appts.addAll(CurrentUserProfile.getInstance().getUpcomingAppts());
         }
-        dummy.add(new DummyAppointment("A","ABC","08:00am - 09:00am",status1,date1));
-        dummy.add(new DummyAppointment("B","ABC","10:00am - 11:00am",status2,date1));
-        dummy.add(new DummyAppointment("C","ABC","01:00pm - 02:00pm",status3,date1));
-        dummy.add(new DummyAppointment("D","ABC","08:00am - 09:00am",status4,date1));
-        dummy.add(new DummyAppointment("E","ABC","10:00am - 11:00am",status1,date1));
-        dummy.add(new DummyAppointment("F","ABC","01:00pm - 02:00pm",status2,date1));
-        dummy.add(new DummyAppointment("G","ABC","08:00am - 09:00am",status3,date2));
-        dummy.add(new DummyAppointment("H","ABC","10:00am - 11:00am",status4,date2));
-        dummy.add(new DummyAppointment("I","ABC","01:00pm - 02:00pm",status1,date2));
-        dummy.add(new DummyAppointment("J","ABC","08:00am - 09:00am",status2,date2));
-        dummy.add(new DummyAppointment("K","ABC","10:00am - 11:00am",status3,date2));
-        dummy.add(new DummyAppointment("L","ABC","01:00pm - 02:00pm",status4,date2));
-        return dummy;
+        Collections.sort(appts, new Comparator<AppointmentEntity>() {
+            @Override
+            public int compare(AppointmentEntity lhs, AppointmentEntity rhs) {
+                if(lhs.getApptDay().before(rhs.getApptDay())){
+                    return -1;
+                }
+                else if(lhs.getApptDay().after(rhs.getApptDay())){
+                    return 1;
+                }
+                else{
+                    return 0;
+                }
+            }
+        });
+        return appts;
     }
 
     private void setupListView(View parent) {
         lvAppts = (ExpandableStickyListHeadersListView) parent.findViewById(R.id.lvApptsList);
-        adapter = new AppointmentListAdapter(getActivity(),apptsList);
+        adapter = new PatientAppointmentListAdapter(getActivity(),apptsList);
         lvAppts.setAdapter(adapter);
         lvAppts.setAnimExecutor(new AnimationExecutor());
         lvAppts.setOnHeaderClickListener(new StickyListHeadersListView.OnHeaderClickListener() {
