@@ -184,4 +184,3 @@ public class DoctorUserEntity extends UserEntity {
     
     
 }
-

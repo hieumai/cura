@@ -1,5 +1,8 @@
 package com.kms.cura.entity.user;
 
+import java.util.List;
+
+import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.Entity;
 
 public class UserEntity extends Entity {
@@ -29,8 +32,7 @@ public class UserEntity extends Entity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-   
-
+	
     @Override
     public String toString() {
         return this.getId() + "\n" + this.getName() + "\n" + this.email;

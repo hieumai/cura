@@ -19,13 +19,14 @@ import android.widget.Toast;
 import com.kms.cura.R;
 import com.kms.cura.controller.UserController;
 import com.kms.cura.view.fragment.HealthTrackerFragment;
+import com.kms.cura.view.fragment.PatientAppointmentListFragment;
 import com.kms.cura.view.fragment.PatientHomeFragment;
 import com.kms.cura.view.fragment.PatientProfileFragment;
 import com.kms.cura.view.fragment.PatientSettingsFragment;
 
 public class PatientViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener {
     private Toolbar patientToolbar;
-    private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment, patientHealthTrachkerFragment;
+    private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment, patientHealthTrachkerFragment, patientAppointmentFragment;
     static final public String PATIENT = "500";
     public final static String NAVIGATION_KEY = "naviKey";
 
@@ -43,6 +44,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         patientHomeFragment = PatientHomeFragment.newInstance(getApplicationContext(), this);
         patientProfileFragment = new PatientProfileFragment();
         patientHealthTrachkerFragment = new HealthTrackerFragment();
+        patientAppointmentFragment = new PatientAppointmentListFragment();
         if (getIntent().getStringExtra(NAVIGATION_KEY) != null && getIntent().getStringExtra(NAVIGATION_KEY).equals(ConditionSymptomSearchActivity.TO_HEALTH_TRACKER)) {
             changeFragment(patientHealthTrachkerFragment);
         } else {
@@ -126,7 +128,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         } else if (id == R.id.nav_profile) {
             changeFragment(patientProfileFragment);
         } else if (id == R.id.nav_appointment) {
-            Toast.makeText(this, "appointment", Toast.LENGTH_SHORT).show();
+            changeFragment(patientAppointmentFragment);
         } else if (id == R.id.nav_health) {
             changeFragment(patientHealthTrachkerFragment);
         } else if (id == R.id.nav_messages) {

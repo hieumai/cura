@@ -17,6 +17,11 @@ public class AppointmentEntity {
 	public static int DOCTOR_CANCEL_STT = 4;
 	public static int COMPLETED_STT = 5;
 	public static int INCOMPLETED_STT = 6;
+	public static String PENDING = "PENDING";
+	public static String REJECTED = "REJECTED";
+	public static String CANCEL = "CANCELLED";
+	public static String COMPLETED = "COMPLETED";
+	public static String INCOMPLETE = "INCOMPLETE";
 	
 	private PatientUserEntity patientUserEntity;
 	private DoctorUserEntity doctorUserEntity;
@@ -102,5 +107,22 @@ public class AppointmentEntity {
 		 return new TypeToken<List<AppointmentEntity>>() {
 	        }.getType();
 	}
-	
+
+	public String getStatusName(){
+		switch (status){
+			case 0:
+				return PENDING;
+			case 2:
+				return REJECTED;
+			case 3:
+				return CANCEL;
+			case 4:
+				return CANCEL;
+			case 5:
+				return COMPLETED;
+			case 6:
+				return INCOMPLETE;
+		}
+		return null;
+	}
 }

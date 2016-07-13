@@ -14,4 +14,8 @@
     <color name="light_grey_2">#e2e2df</color>
     <color name="red">#ff5050</color>
     <color name="light_green">#b2d8b2</color>
+    <color name="light_yellow">#fef7b2</color>
+    <color name="yellow">#ffaa00</color>
+    <color name="light_red">#db817e</color>
+    <color name="green">#099913</color>
 </resources>
