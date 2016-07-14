@@ -21,7 +21,7 @@ public class AppointSearchEntity {
 	}
 
 	public static Type getAppointmentSearchType() {
-		return new TypeToken<List<AppointSearchEntity>>() {
+		return new TypeToken<AppointSearchEntity>() {
 		}.getType();
 	}
 }

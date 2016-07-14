@@ -21,10 +21,7 @@ import android.widget.Toast;
 
 import com.kms.cura.R;
 import com.kms.cura.controller.AppointmentController;
-import com.kms.cura.controller.DegreeController;
 import com.kms.cura.controller.ErrorController;
-import com.kms.cura.controller.FacilityController;
-import com.kms.cura.controller.SpecialityController;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.OpeningHour;
