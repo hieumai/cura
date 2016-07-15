@@ -7,13 +7,13 @@ import com.kms.cura.R;
 import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.DoctorSearchEntity;
 import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.ImageEntity;
 import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.WorkingHourEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.UserModel;
-import com.kms.cura.utils.CurrentUserProfile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -55,7 +55,7 @@ public class UserController {
 
     public static void registerDoctor(String id, String name, String email, String password, String phone, DegreeEntity degree,
                                       List<SpecialityEntity> speciality, List<FacilityEntity> facility, String gender, Date birth) {
-        DoctorUserEntity entity = new DoctorUserEntity(id, name, email, password, phone, degree, speciality, FacilityEntity.getWorkingHourFromFacility(facility), gender, birth);
+        DoctorUserEntity entity = new DoctorUserEntity(id, name, email, password, phone, degree, speciality, FacilityEntity.getWorkingHourFromFacility(facility), gender, birth, null);
         UserModel.getInstance().registerDoctor(entity);
     }
 
@@ -74,7 +74,7 @@ public class UserController {
             specialityEntities.add(new SpecialityEntity(null, specialty));
         }
 
-        DoctorUserEntity doctor = new DoctorUserEntity(null, name, null, null, null, null, specialityEntities, 0, 0, 0, 0, workingHourEntities, null, null, null);
+        DoctorUserEntity doctor = new DoctorUserEntity(null, name, null, null, null, null, specialityEntities, 0, 0, 0, 0, workingHourEntities, null, null, null, null);
         DoctorSearchEntity search = new DoctorSearchEntity(doctor);
         UserModel.getInstance().doctorSearch(search);
     }
@@ -159,5 +159,18 @@ public class UserController {
 
     public static PatientUserEntity updatePatientHealth(PatientUserEntity entity) throws Exception {
         return UserModel.getInstance().updatePatientHealth(entity);
+    }
+
+    public static UserEntity savePhoto(UserEntity user, String encodedImage) throws Exception {
+        UserEntity newUserEntity = new UserEntity(user.getId(), user.getName(), user.getEmail(), user.getPassword(), new ImageEntity(encodedImage, null, null, null));
+        return UserModel.getInstance().savePhoto(newUserEntity);
+    }
+
+    public static PatientUserEntity updatePatient(PatientUserEntity patient) throws Exception {
+        return UserModel.getInstance().updatePatient(patient);
+    }
+
+    public static void updatePassword(UserEntity user) {
+        UserModel.getInstance().updatePassword(user);
     }
 }

@@ -1,98 +1,190 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:touchscreenBlocksFocus="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_marginLeft="20sp"
         android:layout_marginRight="20sp"
-        android:layout_marginLeft="20sp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spinner_60"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_20"
-            android:padding="5sp">
-            <TextView
-                android:layout_width="100sp"
-                android:layout_height="wrap_content"
-                android:text="@string/nameSettings"
-                android:fontFamily="sans-serif"
-                android:textSize="@dimen/docText_18"
-                android:textColor="@color/black"
-                android:layout_marginBottom="@dimen/padding_8"
-                android:paddingBottom="2sp" />
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:gravity="center"
-                android:fontFamily="sans-serif"
-                android:id="@+id/editText_settings_name"
-                android:maxLines="1"
-                android:textSize="@dimen/docText_18"
-                android:singleLine="true"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spinner_60"
-            android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_20"
-            android:padding="5sp"
-            android:weightSum="1">
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_width="100sp"
-                android:text="@string/sexSettings"
-                android:fontFamily="sans-serif"
-                android:textSize="@dimen/docText_18"
-                android:textColor="@color/black"
-                android:layout_gravity="center" />
-
-            <Spinner
-                android:layout_width="@dimen/spinner_150"
-                android:layout_height="@dimen/spinner_50"
-                android:id="@+id/spnSex_Settings"
-                android:gravity="center"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/black"
-                android:layout_weight="1.10" />
-        </LinearLayout>
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:orientation="horizontal"
-            android:gravity="center|start"
             android:padding="5sp">
+
+            <ImageView
+                android:id="@+id/photo_profile"
+                android:layout_width="@dimen/imageviewSize"
+                android:layout_height="@dimen/imageviewSize"
+                android:adjustViewBounds="true"
+                android:maxHeight="75dp"
+                android:minHeight="75dp"
+                android:paddingLeft="5dp"
+                android:paddingStart="5dp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="end|right">
+
+                <Button
+                    android:id="@+id/button_upload_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/tab_height"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:background="@android:drawable/editbox_background_normal"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:drawableLeft="@drawable/ic_menu_camera"
+                    android:drawablePadding="5sp"
+                    android:gravity="center"
+                    android:text="@string/upload"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/docText_16"
+                    android:maxLines="1"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spinner_50"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5sp">
+
             <TextView
                 android:layout_width="100sp"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
-                android:text="@string/birthdaySettings"
-                android:textSize="@dimen/docText_18"
-                android:textColor="@color/black" />
+                android:paddingLeft="@dimen/padding_5"
+                android:text="@string/nameSettings"
+                android:textColor="@color/material_grey_600"
+                android:textSize="@dimen/docText_18" />
+
+            <EditText
+                android:id="@+id/editText_settings_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:fontFamily="sans-serif"
+                android:gravity="end"
+                android:maxLines="1"
+                android:paddingRight="10dp"
+                android:selectAllOnFocus="false"
+                android:singleLine="true"
+                android:text=""
+                android:textSize="@dimen/docText_18" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"></LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spinner_50"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="1">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/spinner_60"
-                android:id="@+id/setting_birthday"
-                android:textSize="@dimen/docText_18"
+                android:layout_width="100sp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:fontFamily="sans-serif"
-                android:textColor="@color/black"
-                android:gravity="center"/>
+                android:paddingLeft="@dimen/padding_5"
+                android:text="@string/sexSettings"
+                android:textColor="@color/material_grey_600"
+                android:textSize="@dimen/docText_18" />
 
-            <ImageButton
-                android:layout_width="@dimen/spinner_40"
-                android:layout_height="@dimen/spinner_40"
-                android:background="@drawable/calendar_icon"
-                android:id="@+id/button_settings_calendar"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spinner_50"
+                android:gravity="end">
+                <Spinner
+                    android:id="@+id/spnSex_Settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/spinner_40"
+                    android:layout_gravity="end"
+                    android:fontFamily="sans-serif"
+                    android:gravity="end|center"
+                    android:paddingRight="5dp"
+                    android:textColor="@color/black"
+                    android:textDirection="rtl" />
+            </LinearLayout>
 
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spinner_50"
+            android:gravity="center|start"
+            android:orientation="horizontal"
+            android:padding="5sp">
+
+            <TextView
+                android:layout_width="150sp"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="@dimen/padding_5"
+                android:text="@string/birthdaySettings"
+                android:textColor="@color/material_grey_600"
+                android:textSize="@dimen/docText_18" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/setting_birthday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:paddingRight="10dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/docText_18" />
+
+                <ImageButton
+                    android:id="@+id/button_settings_calendar"
+                    android:layout_width="40sp"
+                    android:layout_height="@dimen/spinner_40"
+                    android:background="@drawable/calendar_icon"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"></LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

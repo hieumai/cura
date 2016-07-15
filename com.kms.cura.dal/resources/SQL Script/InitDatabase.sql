@@ -199,8 +199,8 @@ CREATE TABLE Patient (
     gender CHAR(1),
 	birth DATE,
     location VARCHAR(50),
-    insurance VARCHAR(10),
-    health_concern VARCHAR(10),
+    insurance VARCHAR(50),
+    health_concern VARCHAR(100),
     FOREIGN KEY (user_id) REFERENCES users (id)
     );
 
@@ -217,7 +217,7 @@ CREATE TABLE Doctor (
     price_max DOUBLE,
     gender CHAR(1),
     birth DATE,
-    insurance VARCHAR(10),
+    insurance VARCHAR(50),
     FOREIGN KEY (user_id)
         REFERENCES Users (id),
     FOREIGN KEY (degree_id)

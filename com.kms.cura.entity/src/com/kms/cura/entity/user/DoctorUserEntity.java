@@ -1,17 +1,17 @@
 package com.kms.cura.entity.user;
 
-import java.lang.reflect.Type;
-import java.sql.Date;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.reflect.TypeToken;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.WorkingHourEntity;
+
+import java.lang.reflect.Type;
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class DoctorUserEntity extends UserEntity {
     public final static String DOCTOR_LIST = "doctor_list";
@@ -63,136 +63,165 @@ public class DoctorUserEntity extends UserEntity {
         this.birth = birth;
     }
 
-    public String getPhone() {
-        return phone;
-    }
+	
+	public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
+			List<SpecialityEntity> speciality, double rating, int experience, double minPrice, double maxPrice,
+			List<WorkingHourEntity> workingTime, String gender, Date birth, String insurance,String path) {
+		super(id, name, email, password,path);
+		this.phone = phone;
+		this.degree = degree;
+		this.speciality = speciality;
+		this.rating = rating;
+		this.experience = experience;
+		this.minPrice = minPrice;
+		this.maxPrice = maxPrice;
+		this.workingTime = workingTime;
+		this.gender = gender;
+		this.birth = birth;
+		this.insurance = insurance;
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
+			List<SpecialityEntity> speciality, List<WorkingHourEntity> workingTime, String gender, Date birth,
+			String encodedImage) {
+		super(id, name, email, password, encodedImage);
+		this.phone = phone;
+		this.degree = degree;
+		this.speciality = speciality;
+		this.workingTime = workingTime;
+		this.gender = gender;
+		this.birth = birth;
+	}
 
-    public DegreeEntity getDegree() {
-        return degree;
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    public void setDegree(DegreeEntity degree) {
-        this.degree = degree;
-    }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    public double getRating() {
-        return rating;
-    }
+	public DegreeEntity getDegree() {
+		return degree;
+	}
 
-    public void setRating(double rating) {
-        this.rating = rating;
-    }
+	public void setDegree(DegreeEntity degree) {
+		this.degree = degree;
+	}
 
-    public int getExperience() {
-        return experience;
-    }
+	public double getRating() {
+		return rating;
+	}
 
-    public void setExperience(int experience) {
-        this.experience = experience;
-    }
+	public void setRating(double rating) {
+		this.rating = rating;
+	}
 
-    public double getMinPrice() {
-        return minPrice;
-    }
+	public int getExperience() {
+		return experience;
+	}
 
-    public void setMinPrice(double minPrice) {
-        this.minPrice = minPrice;
-    }
+	public void setExperience(int experience) {
+		this.experience = experience;
+	}
 
-    public double getMaxPrice() {
-        return maxPrice;
-    }
+	public double getMinPrice() {
+		return minPrice;
+	}
 
-    public void setMaxPrice(double maxPrice) {
-        this.maxPrice = maxPrice;
-    }
+	public void setMinPrice(double minPrice) {
+		this.minPrice = minPrice;
+	}
 
-    public List<SpecialityEntity> getSpeciality() {
-        return speciality;
-    }
+	public double getMaxPrice() {
+		return maxPrice;
+	}
 
-    public void setSpeciality(List<SpecialityEntity> speciality) {
-        this.speciality = speciality;
-    }
+	public void setMaxPrice(double maxPrice) {
+		this.maxPrice = maxPrice;
+	}
 
-    public List<WorkingHourEntity> getWorkingTime() {
-        return workingTime;
-    }
+	public List<SpecialityEntity> getSpeciality() {
+		return speciality;
+	}
 
-    public void setWorkingTime(List<WorkingHourEntity> workingTime) {
-        this.workingTime = workingTime;
-    }
+	public void setSpeciality(List<SpecialityEntity> speciality) {
+		this.speciality = speciality;
+	}
 
-    public String getGender() {
-        return gender;
-    }
+	public List<WorkingHourEntity> getWorkingTime() {
+		return workingTime;
+	}
 
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
+	public void setWorkingTime(List<WorkingHourEntity> workingTime) {
+		this.workingTime = workingTime;
+	}
 
-    public Date getBirth() {
-        return birth;
-    }
+	public String getGender() {
+		return gender;
+	}
 
-    public void setBirth(Date birth) {
-        this.birth = birth;
-    }
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 
-    public String getInsurance() {
-        return insurance;
-    }
+	public Date getBirth() {
+		return birth;
+	}
 
-    public void setInsurance(String insurance) {
-        this.insurance = insurance;
-    }    
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+
+	public String getInsurance() {
+		return insurance;
+	}
+
+	public void setInsurance(String insurance) {
+		this.insurance = insurance;
+	}
 
 	public List<AppointmentEntity> getAppointmentList() {
 		return appointmentList;
 	}
 
-    public void setAppointmentList(List<AppointmentEntity> appointmentList) {
-        this.appointmentList = appointmentList;
-    }
+	public void setAppointmentList(List<AppointmentEntity> appointmentList) {
+		this.appointmentList = appointmentList;
+	}
 
-    public void addAllAppointmentList(List<AppointmentEntity> appointmentList) {
-        this.appointmentList.addAll(appointmentList);
-    }
+	public void addAllAppointmentList(List<AppointmentEntity> appointmentList) {
+		this.appointmentList.addAll(appointmentList);
+	}
 
-    public List<FacilityEntity> getFacilities() {
-        List<FacilityEntity> result = new ArrayList<FacilityEntity>();
-        for (WorkingHourEntity workingHourEntity : this.workingTime) {
-            result.add(workingHourEntity.getFacilityEntity());
-        }
-        return result;
-    }
+	public List<FacilityEntity> getFacilities() {
+		List<FacilityEntity> result = new ArrayList<FacilityEntity>();
+		for (WorkingHourEntity workingHourEntity : this.workingTime) {
+			result.add(workingHourEntity.getFacilityEntity());
+		}
+		return result;
+	}
 
-    @Override
-    public int getType() {
-        return DOCTOR_TYPE;
-    }
+	@Override
+	public int getType() {
+		return DOCTOR_TYPE;
+	}
 
-    public static Type getDoctorEntityType() {
-        return new TypeToken<DoctorUserEntity>() {
-        }.getType();
-    }
+	public static Type getDoctorEntityType() {
+		return new TypeToken<DoctorUserEntity>() {
+		}.getType();
+	}
 
-    public String getPriceRange() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(getMinPrice());
-        builder.append("-");
-        builder.append(getMaxPrice());
-        return builder.toString();
-    }
+	public String getPriceRange() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(getMinPrice());
+		builder.append("-");
+		builder.append(getMaxPrice());
+		return builder.toString();
+	}
 
-    public static Type getDoctorEntityListType() {
-        return new TypeToken<Collection<DoctorUserEntity>>() {
-        }.getType();
-    }
-
+	public static Type getDoctorEntityListType() {
+		return new TypeToken<Collection<DoctorUserEntity>>() {
+		}.getType();
+	}
 
 }

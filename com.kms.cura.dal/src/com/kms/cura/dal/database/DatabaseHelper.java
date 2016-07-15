@@ -1,5 +1,6 @@
 package com.kms.cura.dal.database;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -12,11 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.kms.cura.dal.mapping.AppointmentColumn;
+import javax.servlet.http.HttpServlet;
+
 import com.kms.cura.dal.mapping.EntityColumn;
 import com.kms.cura.entity.Entity;
 
 public abstract class DatabaseHelper {
+	
 	private static final String USE_CURA_DATABASE = "use cura";
 	private static final String CONNECTION_NAME = "jdbc:mysql://localhost:3306/";
 	private static final String CONNECTION_ID = "root";
@@ -42,7 +45,7 @@ public abstract class DatabaseHelper {
 		}
 	}
 
-	public List<Entity> queryAll(String tableName) throws SQLException, ClassNotFoundException {
+	public List<Entity> queryAll(String tableName) throws SQLException, ClassNotFoundException, IOException {
 		ResultSet rs = null;
 		PreparedStatement stmt = null;
 		List<Entity> result = new ArrayList<Entity>();
@@ -62,11 +65,11 @@ public abstract class DatabaseHelper {
 		}
 	}
 
-	public Entity queryByID(String tableName, int id) throws SQLException, ClassNotFoundException {
+	public Entity queryByID(String tableName, int id) throws SQLException, ClassNotFoundException, IOException {
 		return queryByID(tableName, EntityColumn.ID.getColumnName(), id);
 	}
 	
-	public Entity queryByID(String tableName, String idColumnName, int id) throws SQLException, ClassNotFoundException {
+	public Entity queryByID(String tableName, String idColumnName, int id) throws SQLException, ClassNotFoundException, IOException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -87,7 +90,7 @@ public abstract class DatabaseHelper {
 		}
 	}
 
-	public Entity queryByName(String tableName, String name) throws SQLException, ClassNotFoundException {
+	public Entity queryByName(String tableName, String name) throws SQLException, ClassNotFoundException, IOException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -114,7 +117,7 @@ public abstract class DatabaseHelper {
 		return rs;
 	}
 
-	protected abstract Entity getEntityFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException;
+	protected abstract Entity getEntityFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException, IOException;
 
 	public void insertReferenceRowsToReferenceTable(String database, List<ReferenceTableRow> referenceRows)
 			throws SQLException {

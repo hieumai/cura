@@ -12,7 +12,7 @@
     <dimen name="docText_18">28sp</dimen>
     <dimen name="docText_20">30sp</dimen>
     <dimen name="spinner_prof">40sp</dimen>
-    <dimen name="spinner_40">60sp</dimen>
+    <dimen name="spinner_40">80sp</dimen>
     <dimen name="spinner_50">90sp</dimen>
     <dimen name="spinner_60">120sp</dimen>
     <dimen name="spinner_150">250sp</dimen>
@@ -37,4 +37,5 @@
     <dimen name="widthTag">40sp</dimen>
     <dimen name="profilePicture">120sp</dimen>
     <dimen name="marginTopPager">30sp</dimen>
+    <dimen name="btnUpload">280sp</dimen>
 </resources>

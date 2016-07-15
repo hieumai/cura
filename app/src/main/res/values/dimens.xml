@@ -71,4 +71,5 @@
     <dimen name="weekTitlePaddingBottom">8dp</dimen>
     <dimen name="minDayCellHeight">40dp</dimen>
     <dimen name="marginTopPager">20sp</dimen>
+    <dimen name="btnUpload">200sp</dimen>
 </resources>

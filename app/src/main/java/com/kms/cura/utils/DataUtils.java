@@ -1,7 +1,17 @@
 package com.kms.cura.utils;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.kms.cura.R;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.user.UserEntity;
+import com.kms.cura.model.Settings;
 
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -92,5 +102,15 @@ public class DataUtils {
         return newList;
     }
 
+    public static void loadProfile(UserEntity user, ImageView profile, Context context) {
+        if (user.getImage() != null && user.getImage().getPath() != null) {
+            StringBuilder link = new StringBuilder();
+            link.append(Settings.IMAGE_URL);
+            link.append(user.getImage().getPath());
+            Glide.with(context).load(link.toString()).into(profile);
+        } else {
+            profile.setImageResource(R.drawable.profile_anon128);
+        }
+    }
 
 }

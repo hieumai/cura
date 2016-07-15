@@ -1,5 +1,6 @@
 package com.kms.cura.dal.database;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -19,7 +20,7 @@ public class DegreeDatabaseHelper extends DatabaseHelper {
 				resultSet.getString(DegreeColumn.NAME.getColumnName()));
 	}
 	
-	public DegreeEntity queryByID(int id) throws SQLException, ClassNotFoundException {
+	public DegreeEntity queryByID(int id) throws SQLException, ClassNotFoundException, IOException {
 		return (DegreeEntity) super.queryByID(DegreeColumn.TABLE_NAME, id);
 	}
 

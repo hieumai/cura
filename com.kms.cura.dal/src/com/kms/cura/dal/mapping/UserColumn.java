@@ -1,7 +1,7 @@
 package com.kms.cura.dal.mapping;
 
 public enum UserColumn {
-	ID(EntityColumn.ID), USER_ID("user_id"), NAME("name"), EMAIL("email"), PASSWORD("password");
+	ID(EntityColumn.ID), USER_ID("user_id"), NAME("name"), EMAIL("email"), PASSWORD("password"), IMAGE_PATH("imagePath");
 
 	String columnName;
 

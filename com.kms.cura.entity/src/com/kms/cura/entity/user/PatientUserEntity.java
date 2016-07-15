@@ -30,8 +30,8 @@ public class PatientUserEntity extends UserEntity {
 	}
 
 	public PatientUserEntity(String id, String name, String email, String password, String gender, Date birth,
-			String location, String insurance, String healthConcern) {
-		super(id, name, email, password);
+			String location, String insurance, String healthConcern, String path) {
+		super(id, name, email, password,path);
 		this.gender = gender;
 		this.birth = birth;
 		this.location = location;

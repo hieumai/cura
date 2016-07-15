@@ -60,15 +60,14 @@
     <string name="sexSettings">Sex</string>
     <string name="birthdaySettings">Birth Date</string>
     <string name="save">Save</string>
+    <string name="saved">Saved</string>
 
     <string-array name="Settings">
-        <item>Picture</item>
         <item>Basic Information</item>
         <item>Password</item>
     </string-array>
 
     <string-array name="DoctorSettings">
-        <item>Picture</item>
         <item>Basic Information</item>
         <item>Professional Information</item>
         <item>Password</item>
@@ -196,7 +195,7 @@
 
     <string name="sort_by_prompt">Sort by: </string>
     <string name="title_activity_navi">navi</string>
-    <string name="upload">Upload</string>
+    <string name="upload">Choose Photo</string>
     <string name="pick_image">Pick Image</string>
     <string name="description">Description</string>
     <string name="commonCondition">Associated Conditions</string>
@@ -227,6 +226,7 @@
     <string name="experience_start">Experience Start</string>
     <string name="price_range">Price Range</string>
     <string name="hyphen">-</string>
+    <string name="UpdatingMessage">Updating...</string>
     <string-array name="Time48">
         <item>00:00:00</item>
         <item>00:30:00</item>

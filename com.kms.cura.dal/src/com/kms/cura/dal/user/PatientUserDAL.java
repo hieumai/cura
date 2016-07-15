@@ -1,5 +1,6 @@
 package com.kms.cura.dal.user;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class PatientUserDAL extends UserDAL {
 		return _instance;
 	}
 
-	public List<Entity> getAll() throws ClassNotFoundException, SQLException {
+	public List<Entity> getAll() throws ClassNotFoundException, SQLException, IOException {
 		PatientUserDatabaseHelper dbh = new PatientUserDatabaseHelper();
 		try{
 			List<PatientUserEntity> list = dbh.getAllPatient();
@@ -44,7 +45,7 @@ public class PatientUserDAL extends UserDAL {
 	}
 
 	private PatientUserEntity getAllReferenceAttributeforPatient(PatientUserEntity patientUserEntity)
-			throws ClassNotFoundException, SQLException {
+			throws ClassNotFoundException, SQLException, IOException {
 		if (patientUserEntity == null) {
 			return null;
 		}
@@ -55,7 +56,7 @@ public class PatientUserDAL extends UserDAL {
 		return patientUserEntity;
 	}
 
-	public PatientUserEntity createUser(UserEntity entity) throws ClassNotFoundException, SQLException, DALException {
+	public PatientUserEntity createUser(UserEntity entity) throws ClassNotFoundException, SQLException, DALException, IOException {
 		if (!(entity instanceof PatientUserEntity)) {
 			return null;
 		}
@@ -67,7 +68,7 @@ public class PatientUserDAL extends UserDAL {
 		}
 	}
 
-	public PatientUserEntity searchPatient(UserEntity entity) throws ClassNotFoundException, SQLException {
+	public PatientUserEntity searchPatient(UserEntity entity) throws ClassNotFoundException, SQLException, IOException {
 		PatientUserDatabaseHelper dbh = new PatientUserDatabaseHelper();
 		try {
 			PatientUserEntity patient = dbh.searchPatient(entity);
@@ -77,7 +78,7 @@ public class PatientUserDAL extends UserDAL {
 		}
 	}
 
-	public PatientUserEntity getByID(int id) throws SQLException, ClassNotFoundException {
+	public PatientUserEntity getByID(int id) throws SQLException, ClassNotFoundException, IOException {
 		PatientUserDatabaseHelper databaseHelper = new PatientUserDatabaseHelper();
 		try {
 			return getAllReferenceAttributeforPatient(
@@ -97,5 +98,14 @@ public class PatientUserDAL extends UserDAL {
 			dbh.closeConnection();
 		}
 	}
-
+	
+	public PatientUserEntity updatePatient(PatientUserEntity entity)throws ClassNotFoundException, SQLException, IOException {
+		PatientUserDatabaseHelper dbh = new PatientUserDatabaseHelper();
+		try {
+			PatientUserEntity patient = dbh.updatePatient(entity);
+			return getAllReferenceAttributeforPatient(patient);
+		} finally {
+			dbh.closeConnection();
+		}
+	}
 }

@@ -1,5 +1,6 @@
 package com.kms.cura.dal.database;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +20,7 @@ public class ConditionDatabaseHelper extends DatabaseHelper {
 		super();
     }
     
-    public List<Entity> queryAll() throws SQLException, ClassNotFoundException {
+    public List<Entity> queryAll() throws SQLException, ClassNotFoundException, IOException {
     	return super.queryAll(ConditionColumn.TABLE_NAME);
 	}
 
