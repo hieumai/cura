@@ -179,12 +179,13 @@ CREATE TABLE Users (
 	id INT UNIQUE NOT NULL AUTO_INCREMENT,
 	email VARCHAR(50) UNIQUE,
     password VARCHAR(30),
+	imagePath VARCHAR(350),
     PRIMARY KEY (id)
 	);
     
-INSERT INTO Users (email,password) VALUES ('admin@kms-technology.com','admin123');
-INSERT INTO Users (email,password) VALUE ('patient@kms-technology.com','patient123');
-INSERT INTO Users (email,password) VALUE ('doctor@kms-technology.com','doctor123');
+INSERT INTO Users (email,password,imagePath) VALUES ('admin@kms-technology.com','admin123','D:\\cura-server\\image\\default.png');
+INSERT INTO Users (email,password,imagePath) VALUE ('patient@kms-technology.com','patient123','D:\\cura-server\\image\\default.png');
+INSERT INTO Users (email,password,imagePath) VALUE ('doctor@kms-technology.com','doctor123','D:\\cura-server\\image\\default.png');
 
 CREATE TABLE Admin (
 	user_id INT NOT NULL,
@@ -257,7 +258,7 @@ CREATE TABLE Rating (
     FOREIGN KEY (doctor_id) REFERENCES Doctor (user_id)
     );
  
- INSERT INTO Users (email,password) VALUE ('awruck@yahoo.com','annabellewruck');
+ INSERT INTO Users (email,password,imagePath) VALUE ('awruck@yahoo.com','annabellewruck','D:\\cura-server\\image\\default.png');
     
 INSERT INTO Doctor(user_id,name, degree_id,gender,birth,experience,rating,price_min,price_max,phone) VALUES ((SELECT id FROM Users WHERE email = 'awruck@yahoo.com'),'Annabelle Wruck', (SELECT id FROM Degree WHERE name = 'DDS'), 'F', '19700311', 14,4.5,100,250,'123456789');
 
@@ -269,7 +270,7 @@ INSERT INTO Doctor_Facilities(doctor_id,facility_id) VALUES ((SELECT id FROM Use
 
 
 
-INSERT INTO Users (email,password) VALUE ('mitrak@gmail.com','mitchellrakes');
+INSERT INTO Users (email,password,imagePath) VALUE ('mitrak@gmail.com','mitchellrakes','D:\\cura-server\\image\\default.png');
     
 INSERT INTO Doctor(user_id,name, degree_id,gender,birth,experience,rating,price_min,price_max,phone) VALUES ((SELECT id FROM Users WHERE email = 'mitrak@gmail.com'),'Mitchell Rakes', (SELECT id FROM Degree WHERE name = 'DDS'), 'M', '19801212', 6,4.0,100,250,'123456789');
 

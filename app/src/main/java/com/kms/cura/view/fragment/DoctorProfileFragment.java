@@ -10,12 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.kms.cura.R;
-import com.kms.cura.entity.DayOfTheWeek;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.SpecialityEntity;
@@ -25,7 +25,6 @@ import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.adapter.WorkingHourExpandableAdapter;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,10 +37,11 @@ public class DoctorProfileFragment extends Fragment {
     private LinearLayout facilityLayout;
     private ExpandableListView listWorkingHour;
     private RatingBar ratingBar;
-    private DoctorUserEntity doctorUserEntity;
     private LayoutInflater inflater;
     private View root;
     private List<WorkingHourEntity> listWH;
+    private ImageView profile;
+    private DoctorUserEntity doctorUserEntity;
 
     public DoctorProfileFragment() {
 
@@ -61,7 +61,7 @@ public class DoctorProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        root = this.inflater.inflate(R.layout.activity_doctor_profile_view, null);
+        root = this.inflater.inflate(R.layout.fragment_doctor_profile_view, null);
         loadData();
         if (CurrentUserProfile.getInstance().isDoctor()) {
             modifyToolbar();
@@ -70,9 +70,8 @@ public class DoctorProfileFragment extends Fragment {
     }
 
     public void loadData() {
-        if (CurrentUserProfile.getInstance().isDoctor()) {
-            doctorUserEntity = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
-        }
+        doctorUserEntity = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
+        DataUtils.loadProfile(doctorUserEntity, (ImageView) root.findViewById(R.id.ivDoctor));
         txtName = loadText(doctorUserEntity.getName(), R.id.txtDoctorName);
         txtDegree = loadText(doctorUserEntity.getDegree().getName(), R.id.txtDoctorDegree);
         txtSpeciality = loadText(getSpecialityName(doctorUserEntity), R.id.txtDoctorSpecialties);
@@ -239,4 +238,5 @@ public class DoctorProfileFragment extends Fragment {
         toolbar.setTitle(getString(R.string.ProfileView));
         toolbar.inflateMenu(R.menu.menu_blank);
     }
+
 }

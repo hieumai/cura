@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.kms.cura.R;
 import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
 
@@ -20,6 +21,8 @@ import java.util.Date;
 public class PatientProfileFragment extends Fragment {
     private TextView txtName, txtGender, txtDOB, txtLocation, txtInsurance, txtHealthConcerns;
     private ImageView profile;
+    private UserEntity user;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,20 +34,21 @@ public class PatientProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        user = CurrentUserProfile.getInstance().getEntity();
         loadData();
     }
 
     public void loadData() {
         PatientUserEntity entity = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
-        profile = loadImage(R.drawable.profile_anon128, R.id.ivAccountAvatar);
-        txtName = loadText(DataUtils.showUnicode(entity.getName()),R.id.txtName);
+        DataUtils.loadProfile(entity, (ImageView) getActivity().findViewById(R.id.ivAccountAvatar));
+        txtName = loadText(DataUtils.showUnicode(entity.getName()), R.id.txtName);
         txtGender = loadText(getGender(entity), R.id.txtGender, R.id.ivGender);
         if (entity.getBirth() == null) {
             txtDOB = loadText(null, R.id.txtDOB, R.id.ivDOB);
         } else {
             Date date = entity.getBirth();
             StringBuilder sb = new StringBuilder();
-            sb.append(date.getDay());
+            sb.append(date.getDate());
             sb.append("/");
             sb.append(date.getMonth() + 1);
             sb.append("/");
@@ -92,12 +96,6 @@ public class PatientProfileFragment extends Fragment {
             }
         }
         return textView;
-    }
-
-    public ImageView loadImage(int src, int id) {
-        ImageView imageView = (ImageView) getActivity().findViewById(id);
-        imageView.setBackgroundResource(src);
-        return imageView;
     }
 
     private void modifyToolbar() {

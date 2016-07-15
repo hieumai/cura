@@ -1,20 +1,18 @@
 package com.kms.cura.dal.user;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.kms.cura.dal.AppointmentDAL;
 import com.kms.cura.dal.database.DoctorUserDatabaseHelper;
-import com.kms.cura.dal.database.PatientUserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
-import com.kms.cura.dal.mapping.DoctorColumn;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.DoctorSearchEntity;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.user.DoctorUserEntity;
-import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 
 public class DoctorUserDAL extends UserDAL {
@@ -32,7 +30,7 @@ public class DoctorUserDAL extends UserDAL {
 	}
 
 	private DoctorUserEntity getAllReferenceAttributeforDoctor(DoctorUserEntity doctorUserEntity)
-			throws ClassNotFoundException, SQLException {
+			throws ClassNotFoundException, SQLException, IOException {
 		if (doctorUserEntity == null) {
 			return null;
 		}
@@ -43,7 +41,7 @@ public class DoctorUserDAL extends UserDAL {
 		return doctorUserEntity;
 	}
 
-	public DoctorUserEntity getByID(String id) throws SQLException, ClassNotFoundException {
+	public DoctorUserEntity getByID(String id) throws SQLException, ClassNotFoundException, IOException {
 		DoctorUserDatabaseHelper databaseHelper = new DoctorUserDatabaseHelper();
 		try {
 			return getAllReferenceAttributeforDoctor((DoctorUserEntity) databaseHelper.queryDoctorByID(id));
@@ -52,7 +50,7 @@ public class DoctorUserDAL extends UserDAL {
 		}
 	}
 
-	public DoctorUserEntity createUser(UserEntity entity) throws ClassNotFoundException, SQLException, DALException {
+	public DoctorUserEntity createUser(UserEntity entity) throws ClassNotFoundException, SQLException, DALException, IOException {
 		if (!(entity instanceof DoctorUserEntity)) {
 			return null;
 		}
@@ -64,7 +62,7 @@ public class DoctorUserDAL extends UserDAL {
 		}
 	}
 
-	public DoctorUserEntity searchDoctor(UserEntity entity) throws ClassNotFoundException, SQLException {
+	public DoctorUserEntity searchDoctor(UserEntity entity) throws ClassNotFoundException, SQLException, IOException {
 		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
 		try {
 			return getAllReferenceAttributeforDoctor(dbh.searchDoctor(entity));
@@ -83,7 +81,7 @@ public class DoctorUserDAL extends UserDAL {
 	}
 
 	public List<DoctorUserEntity> searchDoctorFunction(DoctorSearchEntity search)
-			throws SQLException, ClassNotFoundException {
+			throws SQLException, ClassNotFoundException, IOException {
 		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
 		try {
 			List<DoctorUserEntity> doctorUserEntities = dbh.searchDoctorFunction(search);
@@ -96,18 +94,17 @@ public class DoctorUserDAL extends UserDAL {
 			dbh.closeConnection();
 		}
 	}
-	
-	public List<Entity> getAll() throws ClassNotFoundException, SQLException {
+
+	public List<Entity> getAll() throws ClassNotFoundException, SQLException, IOException {
 		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
-		try{
+		try {
 			List<DoctorUserEntity> list = dbh.getAllDoctor();
 			List<Entity> doctors = new ArrayList<>();
 			for (DoctorUserEntity entity : list) {
 				doctors.add(getAllReferenceAttributeforDoctor((DoctorUserEntity) entity));
 			}
 			return doctors;
-		}
-		finally{
+		} finally {
 			dbh.closeConnection();
 		}
 	}

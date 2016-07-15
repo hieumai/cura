@@ -7,6 +7,7 @@ import com.kms.cura.R;
 import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.DoctorSearchEntity;
 import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.ImageEntity;
 import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.WorkingHourEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
@@ -55,7 +56,7 @@ public class UserController {
 
     public static void registerDoctor(String id, String name, String email, String password, String phone, DegreeEntity degree,
                                       List<SpecialityEntity> speciality, List<FacilityEntity> facility, String gender, Date birth) {
-        DoctorUserEntity entity = new DoctorUserEntity(id, name, email, password, phone, degree, speciality, FacilityEntity.getWorkingHourFromFacility(facility), gender, birth);
+        DoctorUserEntity entity = new DoctorUserEntity(id, name, email, password, phone, degree, speciality, FacilityEntity.getWorkingHourFromFacility(facility), gender, birth,null);
         UserModel.getInstance().registerDoctor(entity);
     }
 
@@ -74,7 +75,7 @@ public class UserController {
             specialityEntities.add(new SpecialityEntity(null, specialty));
         }
 
-        DoctorUserEntity doctor = new DoctorUserEntity(null, name, null, null, null, null, specialityEntities, 0, 0, 0, 0, workingHourEntities, null, null, null);
+        DoctorUserEntity doctor = new DoctorUserEntity(null, name, null, null, null, null, specialityEntities, 0, 0, 0, 0, workingHourEntities, null, null, null,null);
         DoctorSearchEntity search = new DoctorSearchEntity(doctor);
         UserModel.getInstance().doctorSearch(search);
     }
@@ -159,5 +160,22 @@ public class UserController {
 
     public static PatientUserEntity updatePatientHealth(PatientUserEntity entity) throws Exception {
         return UserModel.getInstance().updatePatientHealth(entity);
+    }
+
+    public static void savePhoto(byte[] byteArray) {
+        String encoded = base64Encode(byteArray);
+    }
+    public static void savePhoto(UserEntity user, String encodedImage) {
+        ImageEntity imageEntity = new ImageEntity(encodedImage, null, null, null);
+        user.setImageEntity(imageEntity);
+        UserModel.getInstance().savePhoto(user);
+    }
+
+    public static void updatePatient(PatientUserEntity patient){
+        UserModel.getInstance().updatePatient(patient);
+    }
+
+    public static void updatePassword(UserEntity user){
+        UserModel.getInstance().updatePassword(user);
     }
 }

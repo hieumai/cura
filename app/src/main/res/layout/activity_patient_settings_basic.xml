@@ -28,76 +28,122 @@
         android:layout_height="wrap_content" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/spinner_60"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:padding="5sp"
         android:id="@+id/linearLayout3"
         android:layout_below="@+id/include"
         android:layout_alignLeft="@+id/linearLayout2"
-        android:layout_alignStart="@+id/linearLayout2">
+        android:layout_alignStart="@+id/linearLayout2"
+        android:gravity="center"
+        android:layout_marginRight="20dp">
 
         <TextView
-            android:layout_width="100sp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_8"
             android:fontFamily="sans-serif"
-            android:paddingBottom="2sp"
             android:text="@string/city"
-            android:textColor="@color/black"
-            android:textSize="@dimen/docText_18" />
+            android:textColor="@color/material_grey_600"
+            android:textSize="17dp"
+            android:textIsSelectable="true"
+            android:paddingStart="5dp" />
 
         <EditText
             android:id="@+id/editText_settings_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:gravity="center"
             android:maxLines="1"
             android:singleLine="true"
-            android:textSize="@dimen/docText_18" />
+            android:textSize="@dimen/docText_18"
+            android:background="@color/transparent"
+            android:gravity="end"
+            android:paddingEnd="10dp" />
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/spinner_60"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
         android:padding="5sp"
         android:weightSum="1"
         android:layout_marginLeft="20sp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:id="@+id/linearLayout2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/linearLayout3">
+        android:layout_below="@+id/linearLayout3"
+        android:gravity="start">
 
         <TextView
             android:layout_height="wrap_content"
-            android:layout_width="100sp"
+            android:layout_width="wrap_content"
             android:text="@string/insurance"
             android:fontFamily="sans-serif"
-            android:textSize="@dimen/docText_18"
-            android:textColor="@color/black"
-            android:layout_gravity="center"/>
+            android:textSize="17dp"
+            android:textColor="@color/material_grey_600"
+            android:layout_gravity="center"
+            android:paddingStart="5dp" />
 
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:gravity="end"
+        android:paddingBottom="10dp"
+        android:layout_toRightOf="@+id/linearLayout2"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
         <Spinner
             android:id="@+id/spnInsurance_Settings"
-            android:layout_width="@dimen/spinner_150"
-            android:layout_height="@dimen/spinner_50"
-            android:layout_weight="1.10"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
             android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textDirection="rtl"
+            android:paddingEnd="5dp"
+            android:paddingRight="5dp"
+            android:layout_gravity="right"
+            android:gravity="end" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
     </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40sp"
         android:id="@+id/button_settings_save"
         android:text="@string/save"
         android:textColor="@color/white"
         android:layout_below="@+id/linearLayout2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
-        android:background="@color/colorPrimary" />
+        android:layout_marginTop="25sp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30sp"
+        android:textSize="18sp"
+        android:paddingStart="15sp"
+        android:paddingEnd="15sp"
+        android:paddingLeft="15sp"
+        android:paddingRight="15sp"/>
 </RelativeLayout>

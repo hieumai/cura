@@ -1,7 +1,14 @@
 package com.kms.cura.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+import android.widget.ImageView;
+
+import com.kms.cura.R;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.user.UserEntity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -81,5 +88,14 @@ public class DataUtils {
         return date;
     }
 
+    public static void loadProfile(UserEntity user, ImageView profile) {
+        if (user.getImage() != null && user.getImage().getImage() != null && !user.getImage().getImage().isEmpty()) {
+            byte[] decodedString = Base64.decode(user.getImage().getImage(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            profile.setImageBitmap(decodedByte);
+        } else {
+            profile.setImageResource(R.drawable.profile_anon128);
+        }
+    }
 
 }

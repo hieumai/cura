@@ -1,5 +1,6 @@
 package com.kms.cura.dal.database;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class FacilityDatabaseHelper extends DatabaseHelper {
 		}
 	}
 	
-	public FacilityEntity queryByID(int id) throws SQLException, ClassNotFoundException {
+	public FacilityEntity queryByID(int id) throws SQLException, ClassNotFoundException, IOException {
 		return (FacilityEntity) super.queryByID(FacilityColumn.TABLE_NAME, id);
 	}
 }

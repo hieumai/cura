@@ -29,12 +29,21 @@
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40sp"
         android:id="@+id/button_settings_save"
         android:text="@string/save"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
-        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
         android:layout_below="@+id/include"
-        android:textColor="@color/white" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25sp"
+        android:background="@android:drawable/editbox_background_normal"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:textSize="18sp"
+        android:paddingStart="15sp"
+        android:paddingEnd="15sp"
+        android:paddingLeft="15sp"
+        android:paddingRight="15sp"/>
 </RelativeLayout>

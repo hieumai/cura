@@ -1,7 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:textAlignment="viewEnd"
+    android:touchscreenBlocksFocus="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,60 +13,137 @@
         android:layout_marginLeft="20sp">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/spinner_60"
+            android:layout_height="85dp"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_20"
+            android:layout_marginTop="15dp"
             android:padding="5sp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:maxHeight="75dp"
+                android:minHeight="75dp"
+                android:paddingStart="5dp"
+                android:paddingLeft="5dp"
+                android:id="@+id/photo_profile"
+                />
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="end|right">
+                <Button
+                    android:layout_width="120dp"
+                    android:layout_height="40dp"
+                    android:text="@string/upload"
+                    android:textColor="@color/white"
+                    android:background="@android:drawable/editbox_background_normal"
+                    android:drawableLeft="@drawable/ic_menu_camera"
+                    android:padding="10dp"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="20dp"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="20dp"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/button_upload_image" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey">
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+
+            android:padding="5sp"
+            android:gravity="center">
             <TextView
                 android:layout_width="100sp"
                 android:layout_height="wrap_content"
                 android:text="@string/nameSettings"
                 android:fontFamily="sans-serif"
-                android:textSize="@dimen/docText_18"
-                android:textColor="@color/black"
-                android:layout_marginBottom="@dimen/padding_8"
-                android:paddingBottom="2sp" />
+                android:textSize="17dp"
+                android:textColor="@color/material_grey_600"
+                android:paddingStart="5dp" />
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:gravity="center"
                 android:fontFamily="sans-serif"
                 android:id="@+id/editText_settings_name"
                 android:maxLines="1"
-                android:textSize="@dimen/docText_18"
-                android:singleLine="true"/>
+                android:textSize="18dp"
+                android:singleLine="true"
+                android:gravity="end"
+                android:background="@color/transparent"
+                android:selectAllOnFocus="false"
+                android:paddingEnd="10dp" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/spinner_60"
+            android:layout_height="1dp"
+            android:background="@color/grey">
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/margin_20"
-            android:padding="5sp"
-            android:weightSum="1">
+            android:weightSum="1"
+            android:layout_gravity="left"
+            android:padding="5dp">
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="100sp"
                 android:text="@string/sexSettings"
                 android:fontFamily="sans-serif"
-                android:textSize="@dimen/docText_18"
-                android:textColor="@color/black"
-                android:layout_gravity="center" />
+                android:textSize="17dp"
+                android:textColor="@color/material_grey_600"
+                android:layout_gravity="center"
+                android:paddingStart="5dp" />
 
-            <Spinner
-                android:layout_width="@dimen/spinner_150"
-                android:layout_height="@dimen/spinner_50"
-                android:id="@+id/spnSex_Settings"
-                android:gravity="center"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/black"
-                android:layout_weight="1.10" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:gravity="end"
+                android:paddingBottom="5dp">
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spnSex_Settings"
+                    android:fontFamily="sans-serif"
+                    android:textDirection="rtl"
+                    android:gravity="end"
+                    android:paddingEnd="5dp"
+                    android:paddingRight="5dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/textView5" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="1dp"
+            android:background="@color/grey">
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:orientation="horizontal"
             android:gravity="center|start"
             android:padding="5sp">
@@ -73,26 +152,44 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:text="@string/birthdaySettings"
-                android:textSize="@dimen/docText_18"
-                android:textColor="@color/black" />
+                android:textSize="17dp"
+                android:textColor="@color/material_grey_600"
+                android:paddingStart="5dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/spinner_60"
-                android:id="@+id/setting_birthday"
-                android:textSize="@dimen/docText_18"
-                android:fontFamily="sans-serif"
-                android:textColor="@color/black"
-                android:gravity="center"/>
 
-            <ImageButton
-                android:layout_width="@dimen/spinner_40"
-                android:layout_height="@dimen/spinner_40"
-                android:background="@drawable/calendar_icon"
-                android:id="@+id/button_settings_calendar"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/setting_birthday"
+                    android:textSize="@dimen/docText_18"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/black" />
+
+                <ImageButton
+                    android:layout_width="40sp"
+                    android:layout_height="@dimen/spinner_40"
+                    android:background="@drawable/calendar_icon"
+                    android:id="@+id/button_settings_calendar"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey">
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

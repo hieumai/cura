@@ -1,5 +1,6 @@
 package com.kms.cura_server;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class SymptomAPI {
 		try {
 			List<Entity> symptom = SymptomDAL.getInstance().getAll();
 			return new SymptonAPIResponse().successResponse(symptom);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}

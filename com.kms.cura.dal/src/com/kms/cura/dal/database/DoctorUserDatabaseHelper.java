@@ -1,5 +1,8 @@
 package com.kms.cura.dal.database;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,6 +10,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import com.kms.cura.dal.exception.DALException;
 import com.kms.cura.dal.exception.DuplicatedUserEmailException;
@@ -32,7 +37,7 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 	}
 
 	public DoctorUserEntity insertDoctorUser(UserEntity entity)
-			throws SQLException, DALException, ClassNotFoundException {
+			throws SQLException, DALException, ClassNotFoundException, IOException {
 		PreparedStatement stmt = null;
 		PreparedStatement stmt2 = null;
 		if (!(entity instanceof DoctorUserEntity)) {
@@ -175,9 +180,23 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 	}
 
 	@Override
-	protected DoctorUserEntity getEntityFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException {
+	protected DoctorUserEntity getEntityFromResultSet(ResultSet resultSet)
+			throws SQLException, ClassNotFoundException, IOException {
 		ResultSet doctorSpecialityRS = null;
 		ResultSet workingHourRS = null;
+		String encodedImg = null;
+
+		BufferedImage img = null;
+		try {
+			String path = resultSet.getString(UserColumn.IMAGE_PATH.getColumnName());
+			if (path != null && !path.isEmpty()) {
+				img = ImageIO.read(new File(path));
+				encodedImg = encodeToString(img, "png");
+			}
+
+		} finally {
+		}
+
 		try {
 			doctorSpecialityRS = queryByReferenceID(Doctor_SpecialityColumn.TABLE_NAME,
 					Doctor_SpecialityColumn.DOCTOR_ID.getColumnName(),
@@ -225,7 +244,7 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 					resultSet.getDouble(DoctorColumn.MAX_PRICE.getColumnName()), workingTime,
 					resultSet.getString(DoctorColumn.GENDER.getColumnName()),
 					resultSet.getDate(DoctorColumn.BIRTH.getColumnName()),
-					resultSet.getString(DoctorColumn.INSURANCE.getColumnName()));
+					resultSet.getString(DoctorColumn.INSURANCE.getColumnName()), encodedImg);
 			return doctor;
 		} finally {
 			if (resultSet.isAfterLast()) {
@@ -240,13 +259,13 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		}
 	}
 
-	public DoctorUserEntity searchDoctor(UserEntity entity) throws ClassNotFoundException, SQLException {
+	public DoctorUserEntity searchDoctor(UserEntity entity) throws ClassNotFoundException, SQLException, IOException {
 		return (DoctorUserEntity) queryUserEntitybyEmailPassword(DoctorColumn.TABLE_NAME, entity.getEmail(),
 				entity.getPassword(), DoctorColumn.USER_ID.getColumnName());
 	}
 
 	public List<DoctorUserEntity> searchDoctorFunction(DoctorSearchEntity search)
-			throws SQLException, ClassNotFoundException {
+			throws SQLException, ClassNotFoundException, IOException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		List<DoctorUserEntity> result = new ArrayList<DoctorUserEntity>();
@@ -543,12 +562,12 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		}
 	}
 
-	public DoctorUserEntity queryDoctorByID(String id) throws SQLException, ClassNotFoundException {
+	public DoctorUserEntity queryDoctorByID(String id) throws SQLException, ClassNotFoundException, IOException {
 		return (DoctorUserEntity) queryUserEntitybyId(DoctorColumn.TABLE_NAME, id,
 				DoctorColumn.USER_ID.getColumnName());
 	}
 
-	public List<DoctorUserEntity> getAllDoctor() throws SQLException, ClassNotFoundException {
+	public List<DoctorUserEntity> getAllDoctor() throws SQLException, ClassNotFoundException, IOException {
 		List<DoctorUserEntity> list = new ArrayList<>();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;

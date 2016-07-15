@@ -1,5 +1,6 @@
 package com.kms.cura.dal.database;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,7 +30,7 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 
 	protected AppointmentEntity geAppointmentEntityFromResultSet(ResultSet resultSet,
 			PatientUserEntity patientUserEntity, DoctorUserEntity doctorUserEntity)
-			throws SQLException, ClassNotFoundException {
+			throws SQLException, ClassNotFoundException, IOException {
 		DoctorUserEntity doctor = null;
 		PatientUserEntity patient = null;
 		if (doctorUserEntity == null) {
@@ -68,7 +69,7 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 	}
 
 	public List<AppointmentEntity> getAppointment(AppointSearchEntity criteria, PatientUserEntity patientUserEntity,
-			DoctorUserEntity doctorUserEntity) throws SQLException, ClassNotFoundException {
+			DoctorUserEntity doctorUserEntity) throws SQLException, ClassNotFoundException, IOException {
 		List<AppointmentEntity> listAppts = new ArrayList<>();
 		AppointmentEntity entity = criteria.getAppointmentEntity();
 		ResultSet rs = null;
@@ -137,7 +138,7 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 	}
 
 	public List<AppointmentEntity> bookAppointment(AppointmentEntity entity)
-			throws SQLException, ClassNotFoundException {
+			throws SQLException, ClassNotFoundException, IOException {
 		List<AppointmentEntity> patientAppts;
 		try {
 			con.setAutoCommit(false);

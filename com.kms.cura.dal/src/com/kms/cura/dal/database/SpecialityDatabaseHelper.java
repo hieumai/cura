@@ -1,5 +1,6 @@
 package com.kms.cura.dal.database;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,7 +26,7 @@ public class SpecialityDatabaseHelper extends DatabaseHelper{
 		return new SpecialityEntity(resultSet.getString(DegreeColumn.ID.getColumnName()), resultSet.getString(DegreeColumn.NAME.getColumnName()));
 	}
 	
-	public SpecialityEntity queryByID(int id) throws SQLException, ClassNotFoundException {
+	public SpecialityEntity queryByID(int id) throws SQLException, ClassNotFoundException, IOException {
 		return (SpecialityEntity) queryByID(SpecialityColumn.TABLE_NAME, EntityColumn.ID.getColumnName(), id);
 	}
 	

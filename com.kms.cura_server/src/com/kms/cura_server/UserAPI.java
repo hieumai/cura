@@ -1,5 +1,6 @@
 package com.kms.cura_server;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import com.google.gson.JsonElement;
-import com.kms.cura.dal.database.PatientUserDatabaseHelper;
 import com.kms.cura.dal.database.UserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
 import com.kms.cura.dal.user.DoctorUserDAL;
@@ -35,7 +35,7 @@ public final class UserAPI {
 			List<Entity> users = UserDAL.getInstance().getAll(new UserDatabaseHelper());
 			JsonElement element = EntityToJsonConverter.convertEntityListToJson(users);
 			return element.toString();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return Strings.error_internal + e.getMessage();
 		}
 	}
@@ -47,7 +47,7 @@ public final class UserAPI {
 			List<Entity> users = UserDAL.getInstance().getAll(new UserDatabaseHelper());
 			JsonElement element = EntityToJsonConverter.convertEntityListToJson(users);
 			return element.toString();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return Strings.error_internal + e.getMessage();
 		}
 	}
@@ -58,7 +58,7 @@ public final class UserAPI {
 		try {
 			List<Entity> users = PatientUserDAL.getInstance().getAll();
 			return new UserAPIResponse().successResponsePatient(users);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
@@ -69,7 +69,7 @@ public final class UserAPI {
 		try {
 			List<Entity> users = DoctorUserDAL.getInstance().getAll();
 			return new UserAPIResponse().successResponse(users);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return UserAPIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
@@ -82,7 +82,7 @@ public final class UserAPI {
 					PatientUserEntity.getPatientUserType());
 			PatientUserEntity user = PatientUserDAL.getInstance().createUser(entity);
 			return new UserAPIResponse().successResponsewithType(user);
-		} catch (ClassNotFoundException | SQLException | DALException e) {
+		} catch (ClassNotFoundException | SQLException | DALException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
@@ -95,7 +95,7 @@ public final class UserAPI {
 					DoctorUserEntity.getDoctorEntityType());
 			DoctorUserEntity user = DoctorUserDAL.getInstance().createUser(entity);
 			return new UserAPIResponse().successResponsewithType(user);
-		} catch (ClassNotFoundException | SQLException | DALException e) {
+		} catch (ClassNotFoundException | SQLException | DALException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 
 		}
@@ -116,12 +116,12 @@ public final class UserAPI {
 				return new UserAPIResponse().successResponsewithType(doctorUserEntity);
 			}
 			return APIResponse.unsuccessResponse("Email and password combination does not exist");
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 
 	}
-	
+
 	@POST
 	@Path("/updateDoctor")
 	public String updateDoctor(String jsonData) {
@@ -134,7 +134,7 @@ public final class UserAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
-	
+
 	@POST
 	@Path("/updatePatientHealth")
 	public String updatePatientHealth(String jsonData) {
@@ -146,4 +146,41 @@ public final class UserAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
+
+	@Path("/updatePhoto")
+	public String updatePhoto(String jsonData) {
+		UserEntity user = JsonToEntityConverter.convertJsonStringToEntity(jsonData, UserEntity.getUserEntityType());
+		try {
+			UserEntity result = UserDAL.getInstance().updatePhoto(user);
+			return new UserAPIResponse().successResponse(result);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+
+	@POST
+	@Path("/updatePatient")
+	public String updatePatient(String jsonData) {
+		PatientUserEntity patient = JsonToEntityConverter.convertJsonStringToEntity(jsonData,
+				PatientUserEntity.getPatientUserType());
+		try {
+			PatientUserEntity result = PatientUserDAL.getInstance().updatePatient(patient);
+			return new UserAPIResponse().successResponsewithType(result);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+
+	@POST
+	@Path("/updatePassword")
+	public String updatePassword(String jsonData) {
+		UserEntity user = JsonToEntityConverter.convertJsonStringToEntity(jsonData, UserEntity.getUserEntityType());
+		try {
+			UserEntity result = UserDAL.getInstance().updatePassword(user);
+			return new UserAPIResponse().successResponse(result);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+
 }

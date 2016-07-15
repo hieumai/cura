@@ -1,5 +1,6 @@
 package com.kms.cura.dal;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class DegreeDAL extends EntityDAL {
 		return _instance;
 	}
 
-	public List<Entity> getAll() throws ClassNotFoundException, SQLException {
+	public List<Entity> getAll() throws ClassNotFoundException, SQLException, IOException {
 		return super.getAll(DegreeColumn.TABLE_NAME, new DegreeDatabaseHelper());
 	}
 

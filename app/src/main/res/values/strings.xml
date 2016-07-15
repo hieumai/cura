@@ -60,6 +60,7 @@
     <string name="sexSettings">Sex</string>
     <string name="birthdaySettings">Birth Date</string>
     <string name="save">Save</string>
+    <string name="saved">Saved</string>
 
     <string-array name="Settings">
         <item>Picture</item>
