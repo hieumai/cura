@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -122,14 +123,22 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
            *   Disable the login button if either condition is invalid nad display an error message accordingly*/
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        if (!InputUtils.isEmailValid(email.getText().toString())) {
-            email.setError(getResources().getString(R.string.email_error));
-            loginButton.setEnabled(false);
+        if (email.hasFocus()) {
+            if (!InputUtils.isEmailValid(email.getText().toString())) {
+                email.setError(getResources().getString(R.string.email_error));
+                loginButton.setEnabled(false);
 
+            } else {
+                email.setError(null);
+            }
         }
-        if (!InputUtils.isPasswordValid(password.getText().toString())) {
-            password.setError(getResources().getString(R.string.pwd_error));
-            loginButton.setEnabled(false);
+        if (password.hasFocus()) {
+            if (!InputUtils.isPasswordValid(password.getText().toString())) {
+                password.setError(getResources().getString(R.string.pwd_error));
+                loginButton.setEnabled(false);
+            } else {
+                password.setError(null);
+            }
         }
     }
 
@@ -150,8 +159,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
             startActivity(intent);
         } else if (v.getId() == R.id.button_LoginUI_Login) {
             UserController.userLogin(email.getText().toString(), password.getText().toString());
-        }
-        else{
+        } else {
             Intent intent = new Intent(this, BookAppointmentActivity.class);
             startActivity(intent);
         }
