@@ -29,4 +29,5 @@
     <string name="endDateErrorStart2">End date can\'t be before start date</string>
     <string name="endDateErrorStart1">Please input start date</string>
     <string name="endDateErrorCurrent">End date can\'t be after current date</string>
+    <string name="duplicateHealth">Same condition or symptom info is already exist</string>
 </resources>

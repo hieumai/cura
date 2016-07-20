@@ -18,26 +18,29 @@ public class HealthTrackerTabAdapter extends FragmentPagerAdapter {
     public static String title[] = {"Current", "Past"};
     private static final int FRAGMENT_NUM = 2;
     private ArrayList<String> currentHealth, pastHealth;
+    HealthTrackerTabFragment currentTab, pastTab;
 
     public HealthTrackerTabAdapter(FragmentManager fragmentManager, ArrayList<String> currentHealth, ArrayList<String> pastHealth) {
         super(fragmentManager);
         this.currentHealth = currentHealth;
         this.pastHealth = pastHealth;
+        currentTab = createFragment(currentHealth, HealthTrackerFragment.STATE_CURRENT);
+        pastTab = createFragment(pastHealth, HealthTrackerFragment.STATE_PAST);
     }
 
     @Override
     public Fragment getItem(int position) {
         if (position == HealthTrackerFragment.STATE_CURRENT) {
-            return createFragment(currentHealth, HealthTrackerFragment.STATE_CURRENT);
+            return currentTab;
         }
         if (position == HealthTrackerFragment.STATE_PAST) {
-            return createFragment(pastHealth, HealthTrackerFragment.STATE_PAST);
+            return pastTab;
         }
         return null;
     }
 
-    public Fragment createFragment(ArrayList<String> healthList, int state) {
-        Fragment fragment = new HealthTrackerTabFragment();
+    public HealthTrackerTabFragment createFragment(ArrayList<String> healthList, int state) {
+        HealthTrackerTabFragment fragment = new HealthTrackerTabFragment();
         Bundle args = new Bundle();
         args.putStringArrayList(HealthTrackerFragment.KEY_HEALTH_LIST , healthList);
         args.putInt(HealthTrackerFragment.KEY_STATE, state);
@@ -58,5 +61,7 @@ public class HealthTrackerTabAdapter extends FragmentPagerAdapter {
     public void resetAdapter(ArrayList<String> currentHealth, ArrayList<String> pastHealth) {
         this.currentHealth = currentHealth;
         this.pastHealth = pastHealth;
+        currentTab.resetAdapter(currentHealth);
+        pastTab.resetAdapter(pastHealth);
     }
 }

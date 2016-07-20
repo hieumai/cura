@@ -61,9 +61,15 @@ public class HealthTrackerFragment extends Fragment implements Toolbar.OnMenuIte
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void resetAdapter(ArrayList<String> currentHealth, ArrayList<String> pastHealth) {
+    private void resetAdapter() {
+        if (adapter == null) {
+            return;
+        }
+        List<HealthEntity> entities = ((PatientUserEntity) (CurrentUserProfile.getInstance().getEntity())).getHealthEntities();
+        getDataFromListAll(entities);
         adapter.resetAdapter(currentHealth, pastHealth);
         adapter.notifyDataSetChanged();
+
     }
 
     private ArrayList<String> getNameList(List<HealthEntity> list) {
@@ -116,5 +122,11 @@ public class HealthTrackerFragment extends Fragment implements Toolbar.OnMenuIte
             startActivity(intent);
         }
         return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        resetAdapter();
     }
 }

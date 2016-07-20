@@ -13,13 +13,12 @@ public class Settings {
     public static final String GET_ALL_DEGREE = "/degree/getAll";
     public static final String CREATE_DOCTOR_API = "/user/createDoctor";
     public static final String SEARCH_DOCTOR_API = "/search/searchDoctor";
-
-
     public static final String GET_ALL_CONDITION = "/condition/getAll";
     public static final String GET_ALL_SYMPTOM = "/symptom/getAll";
     public static final String GET_ASSOCIATED_CONDITION = "/condition/getAssociatedCondition";
     public static final String GET_ASSOCIATED_SYMPTOM = "/symptom/getAssociatedSymptom";
     public static final String GET_SPECIALITY_CONDITION = "/speciality/getByCondition";
     public static final String GET_APPT = "/appt/getBookAppts";
+    public static final String UPDATE_PATIENT_HEALTH = "/user/updatePatientHealth";
     public static final String CREATE_APPT = "/appt/createAppts";
 }

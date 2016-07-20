@@ -2,7 +2,9 @@ package com.kms.cura.view.activity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,8 +16,11 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.UserController;
 import com.kms.cura.entity.HealthEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.utils.CurrentUserProfile;
@@ -28,6 +33,7 @@ import java.util.List;
 
 public class PatientHealthDetailActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener, View.OnClickListener, DialogInterface.OnClickListener {
 
+    private static final long MILIS_DAY = 24 * 60 * 60 * 1000;
     private ArrayList<HealthEntity> curHealthEntities, pastHealthEntities;
     private HealthEntity healthEntity;
     public static final String STATE = "state";
@@ -39,7 +45,8 @@ public class PatientHealthDetailActivity extends AppCompatActivity implements To
     private EditText edtComment;
     private Toolbar toolbar;
     private int startDay, startMonth, startYear, endYear, endMonth, endDay;
-    private boolean endDateSet = false;
+    private boolean endDateSet = false, repeatUpdate = false, curToPast = false;
+    private ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +59,6 @@ public class PatientHealthDetailActivity extends AppCompatActivity implements To
         initEditView();
         setDataOnView(healthEntity);
         setUpToolbar();
-
     }
 
     private void initDate() {
@@ -280,7 +286,7 @@ public class PatientHealthDetailActivity extends AppCompatActivity implements To
     }
 
     private Date toDateSQL(int year, int month, int day) {
-        Calendar calendar = cloneCalendar(year, month - 1, day);
+        Calendar calendar = cloneCalendar(year, month, day);
         return new Date(calendar.getTimeInMillis());
     }
 
@@ -320,19 +326,124 @@ public class PatientHealthDetailActivity extends AppCompatActivity implements To
     }
 
     private void pressDoneButton() {
+        boolean cur = !healthEntity.isPastHealth();
         healthEntity.setComment(edtComment.getText().toString());
         healthEntity.setStartDate(toDateSQL(startYear, startMonth, startDay));
         if (endDateSet) {
             healthEntity.setEndDate(toDateSQL(endYear, endMonth, endDay));
         }
+        if (cur && healthEntity.isPastHealth()) {
+            curToPast = true;
+        }
         setDataOnView(healthEntity);
-        changeMode();
-        // make change in database and refresh CurrentUser
-        // ...
+        if (checkExist(healthEntity)) {
+            createDialog(getString(R.string.duplicateHealth)).show();
+        } else {
+            changeMode();
+            updateHealth();
+            repeatUpdate = true;
+            if (curToPast) {
+                curToPast = false;
+            }
+        }
+    }
+
+    private boolean checkExist(HealthEntity healthEntity) {
+        int count = 0;
+        for (int i = 0; i < pastHealthEntities.size(); ++i) {
+            if (healthEntity.getName().equals(pastHealthEntities.get(i).getName()) &&
+                    compareDate(healthEntity.getStartDate(), pastHealthEntities.get(i).getStartDate()) &&
+                    compareDate(healthEntity.getEndDate(), pastHealthEntities.get(i).getEndDate())) {
+                count += 1;
+            }
+        }
+
+        for (int i = 0; i < curHealthEntities.size(); ++i) {
+            if (healthEntity.getName().equals(pastHealthEntities.get(i).getName()) &&
+                    healthEntity.getStartDate().equals(pastHealthEntities.get(i).getStartDate())) {
+                count += 1;
+            }
+        }
+        if (count == 1 && curToPast) {
+            return true;
+        }
+
+        if (count == 2) {
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
         dialog.dismiss();
+    }
+
+    public void removeOldHealth() {
+        if (!repeatUpdate) {
+            if (getIntent().getIntExtra(STATE, 0) == HealthTrackerFragment.STATE_CURRENT) {
+                curHealthEntities.remove(getIntent().getIntExtra(KEY_POSITION, 0));
+            } else {
+                pastHealthEntities.remove(getIntent().getIntExtra(KEY_POSITION, 0));
+            }
+        } else {
+            if (healthEntity.isPastHealth()) {
+                pastHealthEntities.remove(pastHealthEntities.size() - 1);
+            } else {
+                curHealthEntities.remove(curHealthEntities.size() - 1);
+            }
+        }
+        if (healthEntity.isPastHealth()) {
+            pastHealthEntities.add(healthEntity);
+        } else {
+            curHealthEntities.add(healthEntity);
+        }
+    }
+
+    public void updateHealth() {
+        removeOldHealth();
+        new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            private ArrayList<HealthEntity> healthEntities = new ArrayList<>();
+
+            @Override
+            protected void onPreExecute() {
+                pDialog = new ProgressDialog(PatientHealthDetailActivity.this);
+                pDialog.setMessage("Updating...");
+                pDialog.setCancelable(false);
+                pDialog.show();
+                healthEntities.addAll(curHealthEntities);
+                healthEntities.addAll(pastHealthEntities);
+            }
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    PatientUserEntity entity = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+                    entity.setHealthEntities(healthEntities);
+                    CurrentUserProfile.getInstance().setData(UserController.updatePatientHealth(entity));
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                if (exception != null) {
+                    ErrorController.showDialog(PatientHealthDetailActivity.this, "Error : " + exception.getMessage());
+                } else {
+                    Toast.makeText(PatientHealthDetailActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }.execute();
+    }
+
+    private boolean compareDate(Date start, Date end) {
+        if (start.toString().equals(end.toString())) {
+            return true;
+        }
+        return false;
     }
 }

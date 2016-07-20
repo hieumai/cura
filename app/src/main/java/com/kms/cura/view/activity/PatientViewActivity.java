@@ -28,7 +28,8 @@ import com.kms.cura.view.fragment.PatientSettingsFragment;
 
 public class PatientViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener {
     private Toolbar patientToolbar;
-    private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment, patientHealthTrachkerFragment, patientAppointmentFragment;
+    private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment, patientAppointmentFragment;
+    private HealthTrackerFragment patientHealthTrachkerFragment;
     static final public String PATIENT = "500";
     public final static String NAVIGATION_KEY = "naviKey";
 
