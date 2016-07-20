@@ -44,7 +44,7 @@ public class PatientProfileFragment extends Fragment {
         } else {
             Date date = entity.getBirth();
             StringBuilder sb = new StringBuilder();
-            sb.append(date.getDay());
+            sb.append(date.getDate());
             sb.append("/");
             sb.append(date.getMonth() + 1);
             sb.append("/");
