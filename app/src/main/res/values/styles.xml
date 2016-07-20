@@ -15,6 +15,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -23,6 +24,25 @@
         <item name="android:textSize">@dimen/docText_18</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="CalendarView" />
+
+    <style name="CalendarView.MonthTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CalendarView.DayOfTheWeek">
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="CalendarView.DayOfTheMonth">
+    <item name="android:textSize">14sp</item>
+    <item name="android:minHeight">@dimen/minDayCellHeight</item>
     </style>
 
 

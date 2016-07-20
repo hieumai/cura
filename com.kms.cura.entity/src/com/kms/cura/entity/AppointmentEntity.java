@@ -10,13 +10,13 @@ import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 
 public class AppointmentEntity {
-	public static int PENDING_STT = 0;
-	public static int ACCEPTED_STT = 1;
-	public static int REJECT_STT = 2;
-	public static int PATIENT_CANCEL_STT = 3;
-	public static int DOCTOR_CANCEL_STT = 4;
-	public static int COMPLETED_STT = 5;
-	public static int INCOMPLETED_STT = 6;
+	public static final int PENDING_STT = 0;
+	public static final int ACCEPTED_STT = 1;
+	public static final int REJECT_STT = 2;
+	public static final int PATIENT_CANCEL_STT = 3;
+	public static final int DOCTOR_CANCEL_STT = 4;
+	public static final int COMPLETED_STT = 5;
+	public static final int INCOMPLETED_STT = 6;
 	public static String PENDING = "PENDING";
 	public static String REJECTED = "REJECTED";
 	public static String CANCEL = "CANCELLED";

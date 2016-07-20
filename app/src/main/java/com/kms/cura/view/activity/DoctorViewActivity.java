@@ -18,8 +18,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.UserController;
-import com.kms.cura.view.fragment.DoctorHomeFragment;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.view.fragment.DoctorAppointmentMonthViewFragment;
 import com.kms.cura.view.fragment.DoctorSettingsFragment;
 import com.kms.cura.view.fragment.DoctorProfileFragment;
 import com.kms.cura.view.fragment.DoctorRequestListFragment;
@@ -27,7 +29,7 @@ import com.kms.cura.view.fragment.MessageListFragment;
 
 public class DoctorViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener, View.OnClickListener {
     private Toolbar doctorToolbar;
-    private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorMessageFragment, doctorRequestListFragment;
+    private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorHealthTrachkerFragment, doctorRequestListFragment, doctorApptView2, doctorMessageFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +121,8 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         if (id == R.id.nav_profile) {
             changeFragment(doctorProfileFragment);
         } else if (id == R.id.nav_appointment) {
-            Toast.makeText(this, "appointment", Toast.LENGTH_SHORT).show();
+            doctorApptView2 = new DoctorAppointmentMonthViewFragment();
+            changeFragment(doctorApptView2);
         } else if (id == R.id.nav_request) {
             changeFragment(doctorRequestListFragment);
         } else if (id == R.id.nav_messages) {

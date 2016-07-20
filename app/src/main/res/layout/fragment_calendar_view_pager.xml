@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.kms.cura.view.CustomCalendarView
+        android:id="@+id/calendar_view"
+        android:layout_weight="2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
+        app:calendarBackgroundColor="@color/colorPrimary"
+        app:calendarTitleTextColor="@color/white"
+        app:currentDayOfMonthColor="@color/white"
+        app:dayOfMonthTextColor="@color/white"
+        app:dayOfWeekTextColor="@color/white"
+        app:selectedDayBackgroundColor="@color/colorPrimaryDark"
+        app:titleLayoutBackgroundColor="@color/colorPrimary"
+        app:weekLayoutBackgroundColor="@color/colorPrimary">
+    </com.kms.cura.view.CustomCalendarView>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/docText_16"
+        android:padding="10sp"
+        android:id="@+id/txtDate"
+        android:textStyle="bold"
+        tools:text ="Sunday, June 22"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:id="@+id/lvApptList"></ListView>
+</LinearLayout>
