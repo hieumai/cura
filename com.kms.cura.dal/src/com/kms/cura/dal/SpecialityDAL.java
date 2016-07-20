@@ -33,4 +33,5 @@ public class SpecialityDAL extends EntityDAL {
 		SpecialityDatabaseHelper dbh = new SpecialityDatabaseHelper();
 		return dbh.querySpecialityByCondition(entity);
 	}
+	
 }

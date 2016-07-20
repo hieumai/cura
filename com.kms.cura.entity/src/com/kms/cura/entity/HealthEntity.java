@@ -66,4 +66,10 @@ public class HealthEntity extends Entity {
             return condition.getName();
         return symptom.getName();
     }
+    
+    public String getId() {
+    	if (isCondition())
+    		return condition.getId();
+    	return symptom.getId();
+    }
 }

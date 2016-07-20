@@ -3,7 +3,9 @@ package com.kms.cura.view.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -18,10 +20,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.UserController;
 import com.kms.cura.entity.ConditionEntity;
 import com.kms.cura.entity.HealthEntity;
 import com.kms.cura.entity.SymptomEntity;
+import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.activity.ConditionInfoActivity;
+import com.kms.cura.view.activity.ConditionSymptomSearchActivity;
 import com.kms.cura.view.activity.SymptomInfoActivity;
 
 import java.sql.Date;
@@ -32,17 +39,20 @@ import java.util.Calendar;
  */
 public class AddDialogFragment extends DialogFragment implements DialogInterface.OnClickListener, View.OnClickListener, DialogInterface.OnShowListener {
 
+    private static final long MILIS_DAY  = 24*60*60*1000;
     public static final String TITLE_KEY = "title";
     public static final String TYPE_KEY = "type";
     private TextView tvTitle, tvStartDate, tvEndDate;
     private ImageButton btnStart, btnEnd;
     private int startDay, startMonth, startYear, endDay, endMonth, endYear;
     private Calendar calendar;
-    private boolean startDateSet = false;
     private boolean endDateSet = false;
     private EditText edtComment;
     private AlertDialog dialog;
     private int dialogPositive;
+    private ProgressDialog pDialog;
+    private HealthEntity healthEntity;
+
     public AddDialogFragment() {
     }
 
@@ -54,8 +64,8 @@ public class AddDialogFragment extends DialogFragment implements DialogInterface
         edtComment = (EditText) parent.findViewById(R.id.edtComment);
         setTitle(parent);
         initButton(parent);
-        initTextView(parent);
         setCurrentStartDate();
+        initTextView(parent);
         dialog = builder.create();
         dialog.setOnShowListener(this);
         return dialog;
@@ -72,6 +82,7 @@ public class AddDialogFragment extends DialogFragment implements DialogInterface
     private void initTextView(View parent) {
         tvStartDate = (TextView) parent.findViewById(R.id.tvStartDate);
         tvStartDate.setOnClickListener(this);
+        setSpecificDate(tvStartDate, startDay, startMonth, startYear);
         tvEndDate = (TextView) parent.findViewById(R.id.tvEndDate);
         tvEndDate.setOnClickListener(this);
     }
@@ -91,24 +102,22 @@ public class AddDialogFragment extends DialogFragment implements DialogInterface
     @Override
     public void onClick(DialogInterface dialog, int which) {
         if (which == DialogInterface.BUTTON_NEGATIVE) {
-            dismiss();
+            dialog.dismiss();
         }
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnChooseStartDate || v.getId() == R.id.tvStartDate) {
-           showStartDatePicker();
+            showStartDatePicker();
         } else if (v.getId() == R.id.btnChooseEndDate || v.getId() == R.id.tvEndDate) {
             showEndDatePicker();
         } else if (v.getId() == dialogPositive) {
-            if (startDateSet) {
-                HealthEntity healthEntity = createHealthEntity(getArguments(), toDateSQL(startYear, startMonth, startDay), toDateSQL(endYear, endMonth, endDay));
-                // insert healthEntity to database
-                // ...
-                dismiss();
+            healthEntity = createHealthEntity(getArguments(), toDateSQL(startYear, startMonth, startDay), toDateSQL(endYear, endMonth, endDay));
+            if (checkExist(healthEntity)) {
+                createDialog(getString(R.string.duplicateHealth)).show();
             } else {
-                createDialog(getString(R.string.endDateErrorStart1)).show();
+                addHealthEntityToData();
             }
         }
     }
@@ -119,19 +128,14 @@ public class AddDialogFragment extends DialogFragment implements DialogInterface
     }
 
     private void showEndDatePicker() {
-        if (startDateSet) {
-            Dialog dateDialog = new DatePickerDialog(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT, myEndDateListener, endYear, endMonth - 1, endDay);
-            dateDialog.show();
-        } else {
-            createDialog(getString(R.string.endDateErrorStart1)).show();
-        }
+        Dialog dateDialog = new DatePickerDialog(getActivity(), android.app.AlertDialog.THEME_HOLO_LIGHT, myEndDateListener, endYear, endMonth - 1, endDay);
+        dateDialog.show();
     }
 
     private DatePickerDialog.OnDateSetListener myStartDateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
             if (checkBeforeCurrent(year, month + 1, day)) {
-                startDateSet = true;
                 setSpecificDate(tvStartDate, day, month + 1, year);
                 tvStartDate.setVisibility(View.VISIBLE);
             } else {
@@ -169,7 +173,7 @@ public class AddDialogFragment extends DialogFragment implements DialogInterface
             this.startDay = day;
             this.startMonth = month;
             this.startYear = year;
-        } else if (tv.getId() == R.id.tvEndDate){
+        } else if (tv.getId() == R.id.tvEndDate) {
             this.endDay = day;
             this.endMonth = month;
             this.endYear = year;
@@ -242,6 +246,78 @@ public class AddDialogFragment extends DialogFragment implements DialogInterface
         builder.setTitle(getString(R.string.warning));
         builder.setMessage(message);
         builder.setCancelable(true);
+        builder.setNegativeButton("OK", this);
         return builder.create();
+    }
+
+    private void addHealthEntityToData() {
+        new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            HealthEntity healthEntity;
+
+            @Override
+            protected void onPreExecute() {
+                pDialog = new ProgressDialog(getActivity());
+                pDialog.setMessage("Updating...");
+                pDialog.setCancelable(false);
+                pDialog.show();
+                healthEntity = getHealthEntity();
+            }
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    PatientUserEntity entity = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+                    entity.addHealthEntity(healthEntity);
+                    CurrentUserProfile.getInstance().setData(UserController.updatePatientHealth(entity));
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                if (exception != null) {
+                    ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
+                } else {
+                    Toast.makeText(getActivity(), "Added", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                }
+            }
+        }.execute();
+    }
+
+    private boolean checkExist(HealthEntity healthEntity) {
+        PatientUserEntity entity = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+        for (int i = 0; i < entity.getHealthEntities().size(); ++i) {
+            if (healthEntity.getName().equals(entity.getHealthEntities().get(i).getName())) {
+                if (!healthEntity.isPastHealth() && !entity.getHealthEntities().get(i).isPastHealth()) {
+                    return true;
+                } else if (compareDate(healthEntity.getStartDate(), entity.getHealthEntities().get(i).getStartDate()) &&
+                        compareDate(healthEntity.getEndDate(), entity.getHealthEntities().get(i).getEndDate())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private HealthEntity getHealthEntity() {
+        return healthEntity;
+    }
+
+    private boolean compareDate(Date start, Date end) {
+        if (start == null && end == null) {
+            return true;
+        }
+        if (start == null || end == null) {
+            return false;
+        }
+        if (start.toString().equals(end.toString())) {
+            return true;
+        }
+        return false;
     }
 }

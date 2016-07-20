@@ -121,6 +121,7 @@ public final class UserAPI {
 		}
 
 	}
+	
 	@POST
 	@Path("/updateDoctor")
 	public String updateDoctor(String jsonData) {
@@ -133,5 +134,16 @@ public final class UserAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
-
+	
+	@POST
+	@Path("/updatePatientHealth")
+	public String updatePatientHealth(String jsonData) {
+		PatientUserEntity patientUserEntity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, PatientUserEntity.getPatientUserType());
+		try {
+			PatientUserEntity patient = PatientUserDAL.getInstance().updatePatientHealth(patientUserEntity);
+			return new UserAPIResponse().successResponse(patient);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
 }

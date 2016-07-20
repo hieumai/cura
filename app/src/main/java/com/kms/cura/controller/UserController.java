@@ -10,6 +10,7 @@ import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.WorkingHourEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.UserModel;
 import com.kms.cura.utils.CurrentUserProfile;
@@ -154,5 +155,9 @@ public class UserController {
         if (file.exists()) {
             file.delete();
         }
+    }
+
+    public static PatientUserEntity updatePatientHealth(PatientUserEntity entity) throws Exception {
+        return UserModel.getInstance().updatePatientHealth(entity);
     }
 }

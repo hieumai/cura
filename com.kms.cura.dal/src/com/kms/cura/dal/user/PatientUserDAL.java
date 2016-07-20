@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kms.cura.dal.AppointmentDAL;
-import com.kms.cura.dal.database.DatabaseHelper;
+import com.kms.cura.dal.database.PatientHealthDatabaseHelper;
 import com.kms.cura.dal.database.PatientUserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
-import com.kms.cura.dal.mapping.PatientColumn;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.Entity;
@@ -85,6 +84,17 @@ public class PatientUserDAL extends UserDAL {
 					(PatientUserEntity) databaseHelper.queryPatientByID(String.valueOf(id)));
 		} finally {
 			databaseHelper.closeConnection();
+		}
+	}
+
+	public PatientUserEntity updatePatientHealth(PatientUserEntity patient) throws Exception {
+		PatientHealthDatabaseHelper dbh = new PatientHealthDatabaseHelper();
+		try {
+			dbh.updatePatientHealth(patient);
+			patient.setHealthEntities(dbh.queryHealthByPatientID(patient.getId()));
+			return patient;
+		} finally {
+			dbh.closeConnection();
 		}
 	}
 

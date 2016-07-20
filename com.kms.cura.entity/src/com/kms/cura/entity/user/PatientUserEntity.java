@@ -94,6 +94,10 @@ public class PatientUserEntity extends UserEntity {
 	public void setHealthEntities(List<HealthEntity> healthEntities) {
 		this.healthEntities = healthEntities;
 	}
+
+	public void addHealthEntity(HealthEntity entity) {
+		healthEntities.add(entity);
+	}
 	
 	public List<AppointmentEntity> getAppointmentList() {
 		return appointmentList;
