@@ -6,10 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.kms.cura.dal.AppointmentDAL;
-<<<<<<< HEAD
 import com.kms.cura.dal.database.PatientHealthDatabaseHelper;
-=======
->>>>>>> 4304da4... commit
 import com.kms.cura.dal.database.PatientUserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
 import com.kms.cura.entity.AppointSearchEntity;
@@ -96,7 +93,11 @@ public class PatientUserDAL extends UserDAL {
 		try {
 			dbh.updatePatientHealth(patient);
 			patient.setHealthEntities(dbh.queryHealthByPatientID(patient.getId()));
-			return patient;}
+			return patient;
+		} finally {
+			dbh.closeConnection();
+		}
+	}
 	
 	public PatientUserEntity updatePatient(PatientUserEntity entity)throws ClassNotFoundException, SQLException, IOException {
 		PatientUserDatabaseHelper dbh = new PatientUserDatabaseHelper();

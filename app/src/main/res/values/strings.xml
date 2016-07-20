@@ -63,13 +63,11 @@
     <string name="saved">Saved</string>
 
     <string-array name="Settings">
-        <item>Picture</item>
         <item>Basic Information</item>
         <item>Password</item>
     </string-array>
 
     <string-array name="DoctorSettings">
-        <item>Picture</item>
         <item>Basic Information</item>
         <item>Professional Information</item>
         <item>Password</item>

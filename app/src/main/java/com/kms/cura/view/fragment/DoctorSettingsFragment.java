@@ -19,10 +19,9 @@ import com.kms.cura.view.activity.ProfilePictureActivity;
 
 
 public class DoctorSettingsFragment extends ListFragment implements AdapterView.OnItemClickListener {
-    private static final int PROFILE = 0;
-    private static final int BASIC_SETTINGS = 1;
-    private static final int PROFESSIONAL_INFORMATION = 2;
-    private static final int CHANGE_PASSWORD = 3;
+    private static final int BASIC_SETTINGS = 0;
+    private static final int PROFESSIONAL_INFORMATION = 1;
+    private static final int CHANGE_PASSWORD = 2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,16 +52,13 @@ public class DoctorSettingsFragment extends ListFragment implements AdapterView.
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (position == PROFILE) {
-            changeActivity(ProfilePictureActivity.class);
-        } else if (position == BASIC_SETTINGS) {
+        if (position == BASIC_SETTINGS) {
             changeActivity(DoctorBasicSettingsActivity.class);
-        }else if (position == PROFESSIONAL_INFORMATION) {
+        } else if (position == PROFESSIONAL_INFORMATION) {
             changeActivity(DoctorProfessionalSettingsActivity.class);
         } else if (position == CHANGE_PASSWORD) {
             changeActivity(ChangePasswordActivity.class);
         }
-
     }
 
     private void modifyToolbar() {

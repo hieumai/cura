@@ -146,7 +146,8 @@ public final class UserAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
-
+	
+	@POST
 	@Path("/updatePhoto")
 	public String updatePhoto(String jsonData) {
 		UserEntity user = JsonToEntityConverter.convertJsonStringToEntity(jsonData, UserEntity.getUserEntityType());
