@@ -44,4 +44,6 @@
     <dimen name="messIconSize">60sp</dimen>
     <dimen name="imagebuttonsize">50sp</dimen>
     <dimen name="imageviewSmall">80sp</dimen>
+    <dimen name="widthTag">30sp</dimen>
+    <dimen name="profilePicture">80sp</dimen>
 </resources>

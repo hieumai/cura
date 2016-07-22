@@ -69,7 +69,7 @@
                     android:textColor="@color/white"
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:backgroundTint="@color/colorPrimary"
-                    android:text="@string/sendMessage"/>
+                    android:text="@string/SendMessage"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

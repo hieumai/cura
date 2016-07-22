@@ -34,4 +34,6 @@
     <dimen name="mesHeight">110sp</dimen>
     <dimen name="imageviewSmall">160sp</dimen>
     <dimen name="messIconSize">80sp</dimen>
+    <dimen name="widthTag">40sp</dimen>
+    <dimen name="profilePicture">120sp</dimen>
 </resources>
