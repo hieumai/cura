@@ -2,6 +2,7 @@ package com.kms.cura.view.fragment;
 
 import android.content.Intent;
 import android.app.ProgressDialog;
+import android.animation.ValueAnimator;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,11 +21,14 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.AppointmentController;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.AnimationExecutor;
@@ -38,7 +42,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created by linhtnvo on 7/8/2016.
  */
-public class PatientAppointmentListTabFragment extends Fragment {
+public class PatientAppointmentListTabFragment extends Fragment implements EventHandler {
     public static String APPT_POSITION = "APPT_POSITION";
     private int state;
     private List<AppointmentEntity> apptsList;
@@ -92,6 +96,7 @@ public class PatientAppointmentListTabFragment extends Fragment {
                 task.execute();
             }
         });
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_PATIENT_LIST);
         setupData();
         setupListView(myFragmentView);
         return myFragmentView;
@@ -150,7 +155,33 @@ public class PatientAppointmentListTabFragment extends Fragment {
                 startActivity(toDetails);
             }
         });
+        lvAppts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent toDetails = new Intent(getActivity(), PatientAppointmentDetailsActivity.class);
+                AppointmentEntity entity = apptsList.get(position);
+                List<AppointmentEntity> appts = ((PatientUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
+                toDetails.putExtra(APPT_POSITION, appts.indexOf(entity));
+                startActivity(toDetails);
+            }
+        });
     }
 
 
+    @Override
+    public void handleEvent(String event, Object data) {
+        switch (event){
+            case EventConstant.UPDATE_APPT_PATIENT_LIST:
+                apptsList.clear();
+                apptsList.addAll(getData());
+                adapter.notifyDataSetChanged();
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBroker.getInstance().unRegister(this, EventConstant.UPDATE_APPT_PATIENT_LIST);
+        super.onDestroyView();
+    }
 }

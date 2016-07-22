@@ -1,8 +1,10 @@
 package com.kms.cura.view.activity;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
@@ -19,9 +21,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
+import com.kms.cura.controller.AppointmentController;
+import com.kms.cura.controller.ErrorController;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.event.EventBroker;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.fragment.PatientAppointmentListTabFragment;
@@ -41,6 +47,8 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
     private boolean rated = true;
     public static String PATIENT_POSITION = "PATIENT_POSITION";
     private static String DIALOG = "dialog";
+    private ProgressDialog pDialog;
+    private boolean update = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,11 +210,54 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
     }
 
     @Override
-    public void onClick(DialogInterface dialog, int which) {
+    public void onClick(final DialogInterface dialog, int which) {
         if (which == DialogInterface.BUTTON_POSITIVE) {
-            // Cancel Appointment
+            pDialog = new ProgressDialog(this);
+            pDialog.setMessage(getString(R.string.loading));
+            pDialog.setCancelable(false);
+            dialog.dismiss();
+            showProgressDialog();
+            AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+                private Exception exception = null;
+
+                @Override
+                protected Void doInBackground(Object[] params) {
+                    try {
+                        PatientUserEntity patient = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+                        appointmentEntity.setStatus(AppointmentEntity.PATIENT_CANCEL_STT);
+                        PatientUserEntity patientUserEntity = new PatientUserEntity(patient.getId(),null,null,null,null,null,null,null,null,null);
+                        appointmentEntity.setPatientUserEntity(patientUserEntity);
+                        patient.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, patient));
+                    } catch (Exception e) {
+                        exception = e;
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    if (exception != null) {
+                        ErrorController.showDialog(PatientAppointmentDetailsActivity.this, "Error : " + exception.getMessage());
+                    } else {
+                        hideProgressDialog();
+                        EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_PATIENT_LIST, null);
+                    }
+                    finish();
+                }
+            };
+            task.execute();
         } else {
             dialog.dismiss();
         }
+    }
+
+    private void showProgressDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 }

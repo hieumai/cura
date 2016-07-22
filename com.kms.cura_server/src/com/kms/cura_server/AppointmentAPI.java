@@ -38,4 +38,15 @@ public final class AppointmentAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
+	
+	@POST
+	@Path("/updateAppts")
+	public String updateAppts(String jsonData){
+		AppointmentEntity appointmentEntity = new Gson().fromJson(jsonData, AppointmentEntity.getAppointmentType());
+		try {
+			return new AppointmentAPIResponse().successListApptsResponse(AppointmentDAL.getInstance().updateAppointment(appointmentEntity));
+		} catch (ClassNotFoundException | SQLException | IOException e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
 }

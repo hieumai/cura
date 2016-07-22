@@ -46,7 +46,13 @@ public class AppointmentEntity {
 		this.patientCmt = patientCmt;
 		this.doctorCmt = doctorCmt;
 	}
-
+	
+	public AppointmentEntity copy() {
+		AppointmentEntity appointmentEntity = new AppointmentEntity(this.patientUserEntity, this.doctorUserEntity, 
+				this.facilityEntity, this.apptDay, this.startTime, this.endTime, this.status, this.patientCmt, this.doctorCmt);
+		return appointmentEntity;
+	}
+	
 	public PatientUserEntity getPatientUserEntity() {
 		return patientUserEntity;
 	}

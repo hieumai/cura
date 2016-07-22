@@ -66,4 +66,19 @@ public class AppointmentModel {
         throw new Exception(response.getError());
     }
 
+    public List<AppointmentEntity> updateAppointment(AppointmentEntity appointmentEntity, PatientUserEntity patient) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.UPDATE_APPT);
+        AppointmentModelResponse response = new AppointmentModelResponse(patient);
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                new Gson().toJson(appointmentEntity,AppointmentEntity.getAppointmentType()),response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse());
+        if(!response.isResponseError()) {
+            return response.getAppts();
+        }
+        throw new Exception(response.getError());
+    }
+
 }
