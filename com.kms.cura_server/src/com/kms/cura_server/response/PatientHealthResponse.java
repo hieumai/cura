@@ -8,7 +8,7 @@ import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.HealthEntity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 
-public class PatientHealthResponse  extends APIResponse {
+public class PatientHealthResponse extends APIResponse {
 	@Override
 	public String successResponse(Entity entity) {
 		return null;

@@ -21,6 +21,10 @@ public class PatientUserEntity extends UserEntity {
 	private List<HealthEntity> healthEntities;
 	private List<AppointmentEntity> appointmentList = new ArrayList<>();
 
+	public PatientUserEntity(String id, String name) {
+		super(id, name, null, null);
+	}
+	
 	public PatientUserEntity(UserEntity entity) {
 		super(entity.getId(), entity.getName(), entity.getEmail(), entity.getPassword());
 	}

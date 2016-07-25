@@ -31,6 +31,10 @@ public class DoctorUserEntity extends UserEntity {
     private List<AppointmentEntity> appointmentList = new ArrayList<>();
     public static String MALE = "M";
 
+    public DoctorUserEntity(String id, String name) {
+    	super(id, name, null, null);
+    }
+    
     public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
                             List<SpecialityEntity> speciality, double rating, int experience, double minPrice, double maxPrice,
                             List<WorkingHourEntity> workingTime, String gender, Date birth, String insurance) {
