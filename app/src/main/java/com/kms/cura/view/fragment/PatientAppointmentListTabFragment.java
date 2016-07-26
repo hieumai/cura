@@ -2,9 +2,12 @@ package com.kms.cura.view.fragment;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,9 @@ import java.util.List;
 import java.util.WeakHashMap;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.AppointmentController;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
@@ -40,7 +46,8 @@ public class PatientAppointmentListTabFragment extends Fragment {
     private ExpandableStickyListHeadersListView lvAppts;
     private PatientAppointmentListAdapter adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private WeakHashMap<View,Integer> mOriginalViewHeightPool = new WeakHashMap<View, Integer>();
+    private WeakHashMap<View, Integer> mOriginalViewHeightPool = new WeakHashMap<View, Integer>();
+
     public PatientAppointmentListTabFragment() {
     }
 
@@ -53,8 +60,37 @@ public class PatientAppointmentListTabFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getActivity(),"Refreshing",Toast.LENGTH_LONG).show();
-                mSwipeRefreshLayout.setRefreshing(false);
+                AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+                    private Exception exception = null;
+
+                    @Override
+                    protected Void doInBackground(Object[] params) {
+                        try {
+                            PatientUserEntity patient = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+                            PatientUserEntity patientUserEntity = new PatientUserEntity(patient.getId(),null,null,null,null,null,null,null,null);
+                            AppointmentEntity entity = new AppointmentEntity(patientUserEntity, null, null, null, null, null, -1, null, null);
+                            patient.setAppointmentList(AppointmentController.getAppointment(new AppointSearchEntity(entity)));
+                        } catch (Exception e) {
+                            exception = e;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        if (exception != null) {
+                            ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
+                        } else {
+                            apptsList.clear();
+                            setupData();
+                            adapter = new PatientAppointmentListAdapter(getActivity(), apptsList);
+                            lvAppts.setAdapter(adapter);
+                            lvAppts.setAnimExecutor(new AnimationExecutor(mOriginalViewHeightPool));
+                        }
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                };
+                task.execute();
             }
         });
         setupData();
@@ -64,28 +100,25 @@ public class PatientAppointmentListTabFragment extends Fragment {
 
     private void setupData() {
         Bundle bundle = getArguments();
-        state = bundle.getInt(PatientAppointmentListFragment.KEY_STATE,PatientAppointmentListFragment.STATE_UPCOMING);
+        state = bundle.getInt(PatientAppointmentListFragment.KEY_STATE, PatientAppointmentListFragment.STATE_UPCOMING);
         apptsList = getData();
     }
 
-    public List<AppointmentEntity> getData(){
+    public List<AppointmentEntity> getData() {
         List<AppointmentEntity> appts = new ArrayList<>();
-        if(state == PatientAppointmentListFragment.STATE_PAST){
-            appts.addAll(DataUtils.getPastAppts(((PatientUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList()));
-        }
-        else {
-            appts.addAll(DataUtils.getUpcomingAppts(((PatientUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList()));
+        if (state == PatientAppointmentListFragment.STATE_PAST) {
+            appts.addAll(DataUtils.getPastAppts(((PatientUserEntity) CurrentUserProfile.getInstance().getEntity()).getAppointmentList()));
+        } else {
+            appts.addAll(DataUtils.getUpcomingAppts(((PatientUserEntity) CurrentUserProfile.getInstance().getEntity()).getAppointmentList()));
         }
         Collections.sort(appts, new Comparator<AppointmentEntity>() {
             @Override
             public int compare(AppointmentEntity lhs, AppointmentEntity rhs) {
-                if(lhs.getApptDay().before(rhs.getApptDay())){
+                if (lhs.getApptDay().before(rhs.getApptDay())) {
                     return -1;
-                }
-                else if(lhs.getApptDay().after(rhs.getApptDay())){
+                } else if (lhs.getApptDay().after(rhs.getApptDay())) {
                     return 1;
-                }
-                else{
+                } else {
                     return 0;
                 }
             }
@@ -95,15 +128,15 @@ public class PatientAppointmentListTabFragment extends Fragment {
 
     private void setupListView(View parent) {
         lvAppts = (ExpandableStickyListHeadersListView) parent.findViewById(R.id.lvApptsList);
-        adapter = new PatientAppointmentListAdapter(getActivity(),apptsList);
+        adapter = new PatientAppointmentListAdapter(getActivity(), apptsList);
         lvAppts.setAdapter(adapter);
         lvAppts.setAnimExecutor(new AnimationExecutor(mOriginalViewHeightPool));
         lvAppts.setOnHeaderClickListener(new StickyListHeadersListView.OnHeaderClickListener() {
             @Override
             public void onHeaderClick(StickyListHeadersListView l, View header, int itemPosition, long headerId, boolean currentlySticky) {
-                if(lvAppts.isHeaderCollapsed(headerId)){
+                if (lvAppts.isHeaderCollapsed(headerId)) {
                     lvAppts.expand(headerId);
-                }else {
+                } else {
                     lvAppts.collapse(headerId);
                 }
             }
