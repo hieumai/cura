@@ -2,8 +2,10 @@ package com.kms.cura.entity.user;
 
 import com.google.gson.reflect.TypeToken;
 import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.entity.DayOfTheWeek;
 import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.WorkingHourEntity;
 
@@ -32,9 +34,9 @@ public class DoctorUserEntity extends UserEntity {
     public static String MALE = "M";
 
     public DoctorUserEntity(String id, String name) {
-    	super(id, name, null, null);
+        super(id, name, null, null);
     }
-    
+
     public DoctorUserEntity(String id, String name, String email, String password, String phone, DegreeEntity degree,
                             List<SpecialityEntity> speciality, double rating, int experience, double minPrice, double maxPrice,
                             List<WorkingHourEntity> workingTime, String gender, Date birth, String insurance) {
@@ -181,9 +183,9 @@ public class DoctorUserEntity extends UserEntity {
 		this.insurance = insurance;
 	}
 
-	public List<AppointmentEntity> getAppointmentList() {
-		return appointmentList;
-	}
+    public List<AppointmentEntity> getAppointmentList() {
+        return appointmentList;
+    }
 
 	public void setAppointmentList(List<AppointmentEntity> appointmentList) {
 		this.appointmentList = appointmentList;
@@ -223,5 +225,15 @@ public class DoctorUserEntity extends UserEntity {
 		return new TypeToken<Collection<DoctorUserEntity>>() {
 		}.getType();
 	}
+    public boolean workOn(DayOfTheWeek dayOfTheWeek) {
+        for (WorkingHourEntity hour : this.getWorkingTime()) {
+            for (OpeningHour openingHour : hour.getWorkingTime()) {
+                if (openingHour.getDayOfTheWeek().getCode() == dayOfTheWeek.getCode()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }
