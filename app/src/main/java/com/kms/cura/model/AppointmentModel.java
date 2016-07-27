@@ -7,6 +7,7 @@ import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.model.request.AppointmentModelResponse;
+import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.RequestUtils;
 
 import java.util.List;
@@ -47,7 +48,14 @@ public class AppointmentModel {
         StringBuilder builder = new StringBuilder();
         builder.append(Settings.SERVER_URL);
         builder.append(Settings.GET_APPT);
-        AppointmentModelResponse response = new AppointmentModelResponse(search.getAppointmentEntity().getPatientUserEntity());
+        AppointmentModelResponse response = null;
+        PatientUserEntity entity = search.getAppointmentEntity().getPatientUserEntity();
+        if (entity != null) {
+            response = new AppointmentModelResponse(entity);
+        }
+        else{
+            response = new AppointmentModelResponse(search.getAppointmentEntity().getDoctorUserEntity());
+        }
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
                 new Gson().toJson(search,AppointSearchEntity.getAppointmentSearchType()),response);
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
