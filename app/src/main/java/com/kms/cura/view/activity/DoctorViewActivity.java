@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.kms.cura.R;
@@ -22,10 +23,11 @@ import com.kms.cura.view.fragment.DoctorHomeFragment;
 import com.kms.cura.view.fragment.DoctorSettingsFragment;
 import com.kms.cura.view.fragment.DoctorProfileFragment;
 import com.kms.cura.view.fragment.DoctorRequestListFragment;
+import com.kms.cura.view.fragment.MessageListFragment;
 
-public class DoctorViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener {
+public class DoctorViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener, View.OnClickListener {
     private Toolbar doctorToolbar;
-    private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorHealthTrachkerFragment, doctorRequestListFragment;
+    private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorMessageFragment, doctorRequestListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         doctorProfileFragment = new DoctorProfileFragment();
         doctorSettingsFragment = new DoctorSettingsFragment();
         doctorRequestListFragment = new DoctorRequestListFragment();
+        doctorMessageFragment = new MessageListFragment();
         changeFragment(doctorProfileFragment);
     }
 
@@ -120,7 +123,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         } else if (id == R.id.nav_request) {
             changeFragment(doctorRequestListFragment);
         } else if (id == R.id.nav_messages) {
-            Toast.makeText(this, "message", Toast.LENGTH_SHORT).show();
+            changeFragment(doctorMessageFragment);
         } else if (id == R.id.nav_settings) {
             changeFragment(doctorSettingsFragment);
         } else if (id == R.id.nav_signOut) {
@@ -156,5 +159,11 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         } else if (which == DialogInterface.BUTTON_NEGATIVE) {
             dialog.dismiss();
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.openDrawer(GravityCompat.START);
     }
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/mesHeight"
+        android:padding="@dimen/padding_5"
+        android:id="@+id/layoutMessageList">
+
+        <ImageView
+            android:layout_width="@dimen/messIconSize"
+            android:layout_height="@dimen/messIconSize"
+            android:id="@+id/ivIcon"
+            android:src="@drawable/profile_anon128"
+            android:padding="@dimen/padding_5"
+            android:background="@drawable/border" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/padding_8">
+            <TextView
+                android:id="@+id/tvMesName"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="@dimen/docText_20"
+                android:text="@string/Name"
+                android:textColor="@color/black"
+                android:gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/tvMesLine"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:textSize="@dimen/docText_16"
+                android:text="@string/message"
+                android:maxLines="1"
+                android:gravity="center_vertical"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
