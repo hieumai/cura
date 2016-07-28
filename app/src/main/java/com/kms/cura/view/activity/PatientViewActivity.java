@@ -15,20 +15,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.kms.cura.R;
 import com.kms.cura.controller.UserController;
 import com.kms.cura.entity.ConditionEntity;
 import com.kms.cura.view.fragment.HealthTrackerFragment;
+import com.kms.cura.view.fragment.MessageListFragment;
 import com.kms.cura.view.fragment.PatientAppointmentListFragment;
 import com.kms.cura.view.fragment.PatientHomeFragment;
 import com.kms.cura.view.fragment.PatientProfileFragment;
 import com.kms.cura.view.fragment.PatientSettingsFragment;
 
-public class PatientViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener {
+import java.util.List;
+
+public class PatientViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener, View.OnClickListener {
     private Toolbar patientToolbar;
-    private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment, patientAppointmentFragment;
+    private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment, patientAppointmentFragment, patientMessageFragment;
     private HealthTrackerFragment patientHealthTrachkerFragment;
     static final public String PATIENT = "500";
     public final static String NAVIGATION_KEY = "naviKey";
@@ -50,6 +54,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         patientProfileFragment = new PatientProfileFragment();
         patientHealthTrachkerFragment = new HealthTrackerFragment();
         patientAppointmentFragment = new PatientAppointmentListFragment();
+        patientMessageFragment = new MessageListFragment();
         String navigation = getIntent().getStringExtra(NAVIGATION_KEY);
         if (navigation != null && navigation.equals(ConditionSymptomSearchActivity.TO_HEALTH_TRACKER)) {
             changeFragment(patientHealthTrachkerFragment);
@@ -92,6 +97,12 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for (Fragment fragment : fragments) {
+            if (fragment != null && fragment instanceof MessageListFragment) {
+                ((MessageListFragment) fragment).onBackPressed();
+            }
+        }
     }
 
     @Override
@@ -131,7 +142,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         } else if (id == R.id.nav_health) {
             changeFragment(patientHealthTrachkerFragment);
         } else if (id == R.id.nav_messages) {
-            Toast.makeText(this, "message", Toast.LENGTH_SHORT).show();
+            changeFragment(patientMessageFragment);
         } else if (id == R.id.nav_settings) {
             changeFragment(patientSettingsFragment);
         } else if (id == R.id.nav_signOut) {
@@ -184,4 +195,9 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.openDrawer(GravityCompat.START);
+    }
 }

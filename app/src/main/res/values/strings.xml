@@ -277,4 +277,7 @@
         <item>23:00:00</item>
         <item>23:30:00</item>
     </string-array>
+    <string name="messages">Messages</string>
+    <string name="delete_message">Delete message</string>
+    <string name="delete_message_warning">Are you sure to permanently delete the conversation(s)?</string>
 </resources>

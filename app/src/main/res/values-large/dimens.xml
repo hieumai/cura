@@ -31,4 +31,6 @@
     <dimen name="marginTopProfile">15sp</dimen>
     <dimen name="calendarSize">50sp</dimen>
     <dimen name="scrollHeight">300sp</dimen>
+    <dimen name="mesHeight">110sp</dimen>
+    <dimen name="messIconSize">80sp</dimen>
 </resources>
