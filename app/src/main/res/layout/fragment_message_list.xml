@@ -5,9 +5,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.kms.cura.view.fragment.MessageListFragment">
 
-    <ListView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lvMessageList"
-        android:layout_marginTop="@dimen/padding_8"/>
+        android:layout_marginTop="@dimen/padding_8"
+        android:id="@+id/lvRefreshMessage">
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/lvMessageList" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 </FrameLayout>

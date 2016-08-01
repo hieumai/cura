@@ -21,4 +21,8 @@ public class Settings {
     public static final String GET_APPT = "/appt/getBookAppts";
     public static final String UPDATE_PATIENT_HEALTH = "/user/updatePatientHealth";
     public static final String CREATE_APPT = "/appt/createAppts";
+    public static final String GET_MESSAGE_PATIENT = "/message/getByPatient";
+    public static final String GET_MESSAGE_DOCTOR = "/message/getByDoctor";
+    public static final String DELETE_PATIENT_MESSAGE = "/message/deletePatientMessage";
+    public static final String DELETE_DOCTOR_MESSAGE = "/message/deleteDoctorMessage";
 }
