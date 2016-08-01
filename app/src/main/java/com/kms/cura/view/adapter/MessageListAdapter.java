@@ -98,4 +98,13 @@ public class MessageListAdapter extends BaseAdapter {
     public boolean isSelected(int position) {
         return selected.get(position);
     }
+
+    public void setData(ArrayList<MessageThreadEntity> messageThreadEntities) {
+        this.messageThreadEntities = messageThreadEntities;
+        selected.clear();
+        for (int i = 0; i < messageThreadEntities.size(); ++i) {
+            selected.add(false);
+        }
+    }
+
 }

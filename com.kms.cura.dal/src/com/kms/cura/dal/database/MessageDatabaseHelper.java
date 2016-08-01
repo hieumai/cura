@@ -70,6 +70,7 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		builder.append(patient.getId());
 		builder.append(" and ");
 		builder.append(MessageColumn.PATIENT_AVAILABLE + " = true" );
+		builder.append(" order by " + MessageColumn.TIME_SENT + " DESC");
 		try {
 			stmt = con.prepareStatement(builder.toString());
 			rs = stmt.executeQuery();
@@ -114,6 +115,7 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		builder.append(doctor.getId());
 		builder.append(" and ");
 		builder.append(MessageColumn.DOCTOR_AVAILABLE + " = true" );
+		builder.append(" order by " + MessageColumn.TIME_SENT + " DESC");
 		try {
 			stmt = con.prepareStatement(builder.toString());
 			rs = stmt.executeQuery();

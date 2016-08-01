@@ -86,4 +86,8 @@ public class MessageThreadEntity {
         }
         return -1;
     }
+
+    public int getSize() {
+        return messageEntities.size();
+    }
 }

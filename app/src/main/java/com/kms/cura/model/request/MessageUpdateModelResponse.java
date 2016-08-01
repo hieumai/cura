@@ -1,0 +1,56 @@
+package com.kms.cura.model.request;
+
+import com.android.volley.VolleyError;
+import com.kms.cura.entity.user.UserEntity;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * Created by toanbnguyen on 7/25/2016.
+ */
+public class MessageUpdateModelResponse implements EntityModelResponse {
+
+    private boolean gotResponse;
+    private boolean responseError = false;
+    private String error;
+
+    public MessageUpdateModelResponse() {
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        responseError = true;
+        this.error = error.getMessage();
+        gotResponse = true;
+    }
+
+    @Override
+    public void onResponse(String response) {
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(response);
+            boolean status = jsonObject.getBoolean(UserEntity.STATUS_KEY);
+            if (!status) {
+                error = jsonObject.getString(UserEntity.MESSAGE);
+                responseError = true;
+            }
+        } catch (JSONException e) {
+            responseError = true;
+            error = e.getMessage();
+        }
+        gotResponse = true;
+    }
+
+    public boolean isGotResponse() {
+        return gotResponse;
+    }
+
+    public boolean isResponseError() {
+        return responseError;
+    }
+
+    public String getError() {
+        return error;
+    }
+}
