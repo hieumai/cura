@@ -1,5 +1,6 @@
 package com.kms.cura.view.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,11 +12,16 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.AppointmentController;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.AnimationExecutor;
 import com.kms.cura.view.adapter.DoctorRequestListAdapter;
+import com.kms.cura.view.adapter.PatientAppointmentListAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,8 +52,35 @@ public class DoctorRequestListFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Toast.makeText(getActivity(),"Refreshing",Toast.LENGTH_LONG).show();
-                mSwipeRefreshLayout.setRefreshing(false);
+                AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+                    private Exception exception = null;
+
+                    @Override
+                    protected Void doInBackground(Object[] params) {
+                        try {
+                            DoctorUserEntity doctor = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
+                            DoctorUserEntity doctorUserEntity = new DoctorUserEntity(doctor.getId(),null);
+                            AppointmentEntity entity = new AppointmentEntity(null, doctorUserEntity, null, null, null, null, -1, null, null);
+                            doctor.setAppointmentList(AppointmentController.getAppointment(new AppointSearchEntity(entity)));
+                        } catch (Exception e) {
+                            exception = e;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        if (exception != null) {
+                            ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
+                        } else {
+                            adapter = new DoctorRequestListAdapter(getActivity(),getRequests());
+                            lvRequestList.setAdapter(adapter);
+                            lvRequestList.setAnimExecutor(new AnimationExecutor(mOriginalViewHeightPool));
+                        }
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                };
+                task.execute();
             }
         });
         adapter = new DoctorRequestListAdapter(getActivity(),getRequests());

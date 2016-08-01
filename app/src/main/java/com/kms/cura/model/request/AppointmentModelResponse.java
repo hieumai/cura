@@ -3,6 +3,7 @@ package com.kms.cura.model.request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.AppointmentModel;
@@ -22,11 +23,11 @@ public class AppointmentModelResponse implements EntityModelResponse {
     boolean gotResponse;
     boolean responseError = false;
     String error;
-    PatientUserEntity patient;
+    UserEntity userEntity;
     List<AppointmentEntity> appts;
 
-    public AppointmentModelResponse (PatientUserEntity patientUserEntity){
-        this.patient = patientUserEntity;
+    public AppointmentModelResponse (UserEntity userEntity){
+        this.userEntity = userEntity;
     }
     public List<AppointmentEntity> getAppts() {
         return appts;
@@ -56,7 +57,12 @@ public class AppointmentModelResponse implements EntityModelResponse {
                 for (int i = 0; i < jsonArrayAppts.length(); i++) {
                     AppointmentEntity entity = gson.fromJson(
                             jsonArrayAppts.getJSONObject(i).toString(), AppointmentEntity.class);
-                    entity.setPatientUserEntity(patient);
+                    if (userEntity instanceof  PatientUserEntity) {
+                        entity.setPatientUserEntity((PatientUserEntity) userEntity);
+                    }
+                    else{
+                        entity.setDoctorUserEntity((DoctorUserEntity) userEntity);
+                    }
                     listAppts.add(entity);
                 }
                 appts = new ArrayList<>();
