@@ -283,12 +283,16 @@
     <string name="loading">Loading...</string>
     <string name="deleted">Deleted</string>
     <string name="refreshed">Refreshed</string>
-    <string name="sendMessage">Send Message</string>
     <string name="ViewSchedule">View Schedule </string>
     <string name="Reject">Reject</string>
     <string name="Accept">Accept</string>
     <string name="ExtraComment">Extra Comments :</string>
     <string name="Ok">OK</string>
+    <string name="SendMessage">Send Message</string>
+    <string name="Rate">Rate</string>
+    <string name="CancelAppt">Cancel Appointment</string>
+    <string name="Rated">Rated</string>
+    <string name="CancelApptMsg">Are you sure you want to cancel this appointment?</string>
     <string name="PatientRequest">Patient Request</string>
     <string name="RejectApptMsg">Are you sure you want to reject this request ?</string>
     <string name="DoctorCmt">Leave a message for the patient</string>

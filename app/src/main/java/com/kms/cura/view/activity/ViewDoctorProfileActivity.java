@@ -12,8 +12,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.kms.cura.R;
+import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.json.JsonToEntityConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.fragment.DoctorProfileFragment;
 
 public class ViewDoctorProfileActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
@@ -32,8 +36,14 @@ public class ViewDoctorProfileActivity extends AppCompatActivity implements Tool
     }
 
     private void loadFragment() {
-        data = getIntent().getStringExtra(SearchActivity.DOCTOR_SELECTED);
-        doctorUserEntity = JsonToEntityConverter.convertJsonStringToEntity(data, DoctorUserEntity.getDoctorEntityType());
+        int position = getIntent().getIntExtra(PatientAppointmentDetailsActivity.PATIENT_POSITION, -1);
+        if (position != -1) {
+            doctorUserEntity = ((PatientUserEntity) CurrentUserProfile.getInstance().getEntity()).getAppointmentList().get(position).getDoctorUserEntity();
+            data = EntityToJsonConverter.convertEntityToJson(doctorUserEntity).toString();
+        } else {
+            data = getIntent().getStringExtra(SearchActivity.DOCTOR_SELECTED);
+            doctorUserEntity = JsonToEntityConverter.convertJsonStringToEntity(data, DoctorUserEntity.getDoctorEntityType());
+        }
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.flProfileView, DoctorProfileFragment.newInstance(doctorUserEntity));
         transaction.commit();
