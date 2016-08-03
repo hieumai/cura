@@ -1,5 +1,6 @@
 package com.kms.cura.view.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +11,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.kms.cura.R;
 import com.kms.cura.entity.json.EntityToJsonConverter;
@@ -19,6 +26,7 @@ import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.view.adapter.DoctorListViewAdapter;
 import com.kms.cura.view.adapter.SpinnerHintAdapter;
 import com.kms.cura.view.fragment.PatientHomeFragment;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -38,7 +46,12 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
     private ProgressDialog pDialog;
     private List<DoctorUserEntity> doctors;
     private Intent intent;
-
+    private Button filter;
+    private Dialog dialog;
+    private LinearLayout[] linearLayouts = new LinearLayout[16];
+    private boolean[] buttonState = new boolean[16];
+    private TextView reset;
+    private CheckBox acceptInsurance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -46,6 +59,7 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
         setContentView(R.layout.activity_search);
         intent = getIntent();
         data = intent.getStringExtra(PatientHomeFragment.SEARCH_RESULT);
+        initButton();
         initToolbar();
         initArray();
         lv = (ListView) findViewById(R.id.listView1);
@@ -53,13 +67,18 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent toProfileView = new Intent(SearchActivity.this,ViewDoctorProfileActivity.class);
+                Intent toProfileView = new Intent(SearchActivity.this, ViewDoctorProfileActivity.class);
                 toProfileView.putExtra(DOCTOR_SELECTED, EntityToJsonConverter.convertEntityToJson(doctors.get(position)).toString());
                 startActivity(toProfileView);
             }
         });
         initAdapter();
         initSpinner();
+    }
+
+    private void initButton() {
+        filter = (Button) findViewById(R.id.button_filter);
+        filter.setOnClickListener(this);
     }
 
     private void initToolbar() {
@@ -72,7 +91,113 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
 
     @Override
     public void onClick(View v) {
-        onBackPressed();
+        if (v.getId() == R.id.search_toolbar) {
+            onBackPressed();
+        } else if (v.getId() == R.id.button_filter) {
+            initFilterDialog();
+        } else if (v.getId() == R.id.male) {
+            buttonState[0] = setFilterState(buttonState[0], linearLayouts[0]);
+        } else if (v.getId() == R.id.female) {
+            buttonState[1] = setFilterState(buttonState[1], linearLayouts[1]);
+        } else if (v.getId() == R.id.sunday) {
+            buttonState[2] = setFilterState(buttonState[2], linearLayouts[2]);
+        } else if (v.getId() == R.id.monday) {
+            buttonState[3] = setFilterState(buttonState[3], linearLayouts[3]);
+        } else if (v.getId() == R.id.tuesday) {
+            buttonState[4] = setFilterState(buttonState[4], linearLayouts[4]);
+        } else if (v.getId() == R.id.wednesday) {
+            buttonState[5] = setFilterState(buttonState[5], linearLayouts[5]);
+        } else if (v.getId() == R.id.thursday) {
+            buttonState[6] = setFilterState(buttonState[6], linearLayouts[6]);
+        } else if (v.getId() == R.id.friday) {
+            buttonState[7] = setFilterState(buttonState[7], linearLayouts[7]);
+        } else if (v.getId() == R.id.saturday) {
+            buttonState[8] = setFilterState(buttonState[8], linearLayouts[8]);
+        } else if (v.getId() == R.id.beforeEight) {
+            buttonState[9] = setFilterState(buttonState[9], linearLayouts[9]);
+        } else if (v.getId() == R.id.eightToSix) {
+            buttonState[10] = setFilterState(buttonState[10], linearLayouts[10]);
+        } else if (v.getId() == R.id.afterSix) {
+            buttonState[11] = setFilterState(buttonState[11], linearLayouts[11]);
+        } else if (v.getId() == R.id.less_than_100) {
+            buttonState[12] = setFilterState(buttonState[12], linearLayouts[12]);
+        } else if (v.getId() == R.id.between_100_and_300) {
+            buttonState[13] = setFilterState(buttonState[13], linearLayouts[13]);
+        } else if (v.getId() == R.id.between_301_and_600) {
+            buttonState[14] = setFilterState(buttonState[14], linearLayouts[14]);
+        } else if (v.getId() == R.id.more_than_600) {
+            buttonState[15] = setFilterState(buttonState[15], linearLayouts[15]);
+        } else if (v.getId() == R.id.tvReset) {
+            for (int i = 0; i < 16; i++) {
+                TextView textView = (TextView) linearLayouts[i].getChildAt(0);
+                textView.setTextColor(getResources().getColor(R.color.black));
+
+                buttonState[i] = false;
+                linearLayouts[i].setBackgroundColor(getResources().getColor(R.color.transparent));
+            }
+            acceptInsurance.setChecked(false);
+        } else if (v.getId() == R.id.button_apply) {
+            dialog.dismiss();
+        }
+    }
+
+    private boolean setFilterState(boolean boo, LinearLayout layout) {
+        TextView textView = (TextView) layout.getChildAt(0);
+
+        if (boo == false) {
+            layout.setBackgroundColor(getResources().getColor(R.color.colorAccent3));
+            textView.setTextColor(getResources().getColor(R.color.white));
+            return true;
+        } else {
+            layout.setBackgroundColor(getResources().getColor(R.color.transparent));
+            textView.setTextColor(getResources().getColor(R.color.black));
+            return false;
+        }
+    }
+
+    private void initFilterDialog() {
+        dialog = new Dialog(this, android.R.style.Theme_Holo_Light_NoActionBar_Fullscreen);
+        dialog.setContentView(R.layout.fragment_search_filter);
+        this.dialog.setCancelable(true);
+
+        reset = (TextView) dialog.findViewById(R.id.tvReset);
+        reset.setOnClickListener(this);
+
+        acceptInsurance = (CheckBox) dialog.findViewById(R.id.checkbox_accept_insurance);
+
+        linearLayouts[0] = (LinearLayout) dialog.findViewById(R.id.male);
+        linearLayouts[1] = (LinearLayout) dialog.findViewById(R.id.female);
+        linearLayouts[2] = (LinearLayout) dialog.findViewById(R.id.sunday);
+        linearLayouts[3] = (LinearLayout) dialog.findViewById(R.id.monday);
+        linearLayouts[4] = (LinearLayout) dialog.findViewById(R.id.tuesday);
+        linearLayouts[5] = (LinearLayout) dialog.findViewById(R.id.wednesday);
+        linearLayouts[6] = (LinearLayout) dialog.findViewById(R.id.thursday);
+        linearLayouts[7] = (LinearLayout) dialog.findViewById(R.id.friday);
+        linearLayouts[8] = (LinearLayout) dialog.findViewById(R.id.saturday);
+        linearLayouts[9] = (LinearLayout) dialog.findViewById(R.id.beforeEight);
+        linearLayouts[10] = (LinearLayout) dialog.findViewById(R.id.eightToSix);
+        linearLayouts[11] = (LinearLayout) dialog.findViewById(R.id.afterSix);
+        linearLayouts[12] = (LinearLayout) dialog.findViewById(R.id.less_than_100);
+        linearLayouts[13] = (LinearLayout) dialog.findViewById(R.id.between_100_and_300);
+        linearLayouts[14] = (LinearLayout) dialog.findViewById(R.id.between_301_and_600);
+        linearLayouts[15] = (LinearLayout) dialog.findViewById(R.id.more_than_600);
+
+        for (int i = 0; i < 16; i++) {
+            linearLayouts[i].setOnClickListener(this);
+        }
+
+        ImageButton cancel = (ImageButton) dialog.findViewById(R.id.button_cancel);
+        Button apply = (Button) dialog.findViewById(R.id.button_apply);
+        apply.setOnClickListener(this);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
     }
 
     @Override
@@ -84,7 +209,7 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
 
     private List<DoctorUserEntity> initArray() {
         Gson gson = new Gson();
-        doctors = gson.fromJson( data, DoctorUserEntity.getDoctorEntityListType());
+        doctors = gson.fromJson(data, DoctorUserEntity.getDoctorEntityListType());
         Collections.sort(doctors, new NameComparator());
         return doctors;
     }
