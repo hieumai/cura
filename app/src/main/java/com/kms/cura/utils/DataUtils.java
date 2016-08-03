@@ -4,6 +4,7 @@ import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.Entity;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -79,6 +80,16 @@ public class DataUtils {
         Calendar calendar = Calendar.getInstance();
         java.util.Date date = calendar.getTime();
         return date;
+    }
+
+    public static List<AppointmentEntity> getApptByDate(List<AppointmentEntity> appts, Date date) {
+        List<AppointmentEntity> newList = new ArrayList<>();
+        for (AppointmentEntity entity : appts) {
+            if (Math.abs(date.getTime() - entity.getApptDay().getTime()) < MILISECOND_OF_DAY && entity.getStatus() != AppointmentEntity.PENDING_STT) {
+                newList.add(entity);
+            }
+        }
+        return newList;
     }
 
 

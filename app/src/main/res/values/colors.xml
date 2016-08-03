@@ -20,4 +20,11 @@
     <color name="yellow">#ffaa00</color>
     <color name="light_red">#db817e</color>
     <color name="green">#099913</color>
+
+
+
+    <color name="day_disabled_background_color">#F1F5F8</color>
+    <color name="day_disabled_text_color">#DEDEDE</color>
+    <color name="selected_day_background">#03A7E9</color>
+    <color name="current_day_of_month">#03A7E9</color>
 </resources>

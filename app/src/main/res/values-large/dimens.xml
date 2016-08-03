@@ -36,4 +36,5 @@
     <dimen name="messIconSize">80sp</dimen>
     <dimen name="widthTag">40sp</dimen>
     <dimen name="profilePicture">120sp</dimen>
+    <dimen name="marginTopPager">30sp</dimen>
 </resources>
