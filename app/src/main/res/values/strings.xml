@@ -302,4 +302,21 @@
     <string name="YES">Yes</string>
     <string name="ConflictMsg">This conflicts with another scheduled appointment</string>
     <string name="AcceptApptMsg">Are you sure you want to accept this request ?</string>
+    <string name="s">S</string>
+    <string name="m">M</string>
+    <string name="t">T</string>
+    <string name="w">W</string>
+    <string name="f">F</string>
+    <string name="before_8">Before 8am</string>
+    <string name="between_8_and_6">8am - 6pm</string>
+    <string name="after_6">After 6pm</string>
+    <string name="less_than_100">\u003C 100</string>
+    <string name="between_100_and_300">100 - 300</string>
+    <string name="between_301_and_600">301 - 600</string>
+    <string name="more_than_600">\u003E 600</string>
+    <string name="acceptInsurance">Accept your insurance</string>
+    <string name="apply">Apply</string>
+    <string name="gender_no_cap">Gender</string>
+    <string name="reset">RESET</string>
+    <string name="filter">Filter</string>
 </resources>
