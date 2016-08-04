@@ -2,6 +2,7 @@ package com.kms.cura.view.fragment;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.kms.cura.view.CalendarListener;
 import com.kms.cura.view.CustomCalendarView;
 import com.kms.cura.view.DayDecorator;
 import com.kms.cura.view.DayView;
+import com.kms.cura.view.activity.DoctorAppointmentDetailActivity;
 import com.kms.cura.view.adapter.DoctorAppointmentAdapter;
 
 import java.sql.Date;
@@ -47,6 +49,8 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
     private Date previousDateSelected;
     private String calendarTitle;
     private TextView txtDate;
+    public static String APPT_POSITION = "APPT_POSITION";
+    private DoctorAppointmentAdapter adapter;
     public CalendarView(Context mContext, int currentMonthIndex) {
         this.mContext = mContext;
         this.currentMonthIndex = currentMonthIndex;
@@ -93,7 +97,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         if (date == null) {
             txtDate.setVisibility(View.INVISIBLE);
             previousDateSelected = null;
-            DoctorAppointmentAdapter adapter = new DoctorAppointmentAdapter(mContext, new ArrayList<AppointmentEntity>());
+            adapter = new DoctorAppointmentAdapter(mContext, new ArrayList<AppointmentEntity>());
             lvApptList.setAdapter(adapter);
             return;
         }
@@ -101,7 +105,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         txtDate.setText(getSelectedDate(date));
         Date selectedDay = new Date(date.getTime());
         if (previousDateSelected != null && (Math.abs(previousDateSelected.getTime()-selectedDay.getTime()) < DataUtils.MILISECOND_OF_DAY)) {
-            DoctorAppointmentAdapter adapter = new DoctorAppointmentAdapter(mContext, new ArrayList<AppointmentEntity>());
+            adapter = new DoctorAppointmentAdapter(mContext, new ArrayList<AppointmentEntity>());
             lvApptList.setAdapter(adapter);
             previousDateSelected = null;
             txtDate.setVisibility(View.INVISIBLE);
@@ -109,7 +113,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         }
         previousDateSelected = new Date(date.getTime());
         List<AppointmentEntity> apptByDate = DataUtils.getApptByDate(appts, selectedDay);
-        DoctorAppointmentAdapter adapter = new DoctorAppointmentAdapter(mContext, apptByDate);
+        adapter = new DoctorAppointmentAdapter(mContext, apptByDate);
         lvApptList.setAdapter(adapter);
     }
 
@@ -117,8 +121,6 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         String dayOftheWeek = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault());
-        SimpleDateFormat date_format = new SimpleDateFormat("dd/mm/yyyy");
-        String dateString = date_format.format(date);
         StringBuilder builder = new StringBuilder();
         builder.append(dayOftheWeek);
         builder.append(", ");
@@ -138,7 +140,10 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+        List<AppointmentEntity> entityList = ((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
+        Intent toApptDetail = new Intent(mContext, DoctorAppointmentDetailActivity.class);
+        toApptDetail.putExtra(APPT_POSITION, entityList.indexOf(adapter.getListAppts().get(position)));
+        mContext.startActivity(toApptDetail);
     }
 
     private class ColorDecorator implements DayDecorator {

@@ -178,7 +178,10 @@
                 android:layout_marginLeft="10sp"
                 android:id="@+id/txtApptFacility"
                 android:textColor="@color/black"
-                android:textSize="@dimen/docText_18"/>
+                android:paddingRight="10sp"
+                android:background="?android:attr/selectableItemBackground"
+                android:textSize="@dimen/docText_18"
+                />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -270,6 +273,7 @@
             android:textSize="@dimen/docText_16"
             android:padding="5sp"
             android:id="@+id/btnCompleteAppt"
+            android:visibility="gone"
             android:background="@drawable/background_material_btn_green"/>
     </LinearLayout>
 </LinearLayout>

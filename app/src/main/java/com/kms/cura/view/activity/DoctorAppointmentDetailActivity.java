@@ -2,9 +2,12 @@ package com.kms.cura.view.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,16 +17,18 @@ import android.widget.TextView;
 import com.kms.cura.R;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
+import com.kms.cura.view.fragment.CalendarView;
 import com.kms.cura.view.fragment.PatientAppointmentListTabFragment;
 
 import java.sql.Date;
 import java.sql.Time;
 
 public class DoctorAppointmentDetailActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener{
-    private Button btnTag, btnSendMessage, btnCancel;
+    private Button btnTag, btnSendMessage, btnCancel, btnComplete;
     private ImageView btnBack;
     private LinearLayout lbExtraComment;
     private ImageView ivPatientPicture;
@@ -44,7 +49,7 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
         lbExtraComment = (LinearLayout) findViewById(R.id.lbExtraComment);
         ivPatientPicture = (ImageView) findViewById(R.id.ivPatientPicture);
         ivPatientPicture.setOnClickListener(this);
-        txtPatientName = loadTextView(R.id.txtPatientName, appointmentEntity.getDoctorUserEntity().getName());
+        txtPatientName = loadTextView(R.id.txtPatientName, appointmentEntity.getPatientUserEntity().getName());
         txtPatientName.setOnClickListener(this);
         txtApptDate = loadTextView(R.id.txtAppDay, getApptDate(appointmentEntity.getApptDay()));
         txtApptTime = loadTextView(R.id.txtApptTime, getApptTime(appointmentEntity.getStartTime(), appointmentEntity.getEndTime()));
@@ -67,11 +72,11 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
     }
 
     private AppointmentEntity loadData() {
-        position = getIntent().getIntExtra(PatientAppointmentListTabFragment.APPT_POSITION, -1);
+        position = getIntent().getIntExtra(CalendarView.APPT_POSITION, -1);
         if (position == -1) {
             return null;
         }
-        AppointmentEntity entity = ((PatientUserEntity) (CurrentUserProfile.getInstance().getEntity())).getAppointmentList().get(position);
+        AppointmentEntity entity = ((DoctorUserEntity) (CurrentUserProfile.getInstance().getEntity())).getAppointmentList().get(position);
         return entity;
     }
 
@@ -87,9 +92,14 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
         btnSendMessage = (Button) initButton(R.id.btnSendMessage);
         btnCancel = (Button) initButton(R.id.btnCancel);
         int status = appointmentEntity.getStatus();
-        if (status == AppointmentEntity.INCOMPLETED_STT || status == AppointmentEntity.ACCEPTED_STT) {
+        if (status == AppointmentEntity.INCOMPLETED_STT) {
+            btnComplete = (Button) initButton(R.id.btnCompleteAppt);
+            btnComplete.setVisibility(View.VISIBLE);
             btnCancel.setText(getResources().getString(R.string.CancelAppt));
-        } else {
+        } else if (status == AppointmentEntity.ACCEPTED_STT){
+            btnCancel.setText(getResources().getString(R.string.CancelAppt));
+        }
+        else {
             btnCancel.setVisibility(View.GONE);
         }
     }

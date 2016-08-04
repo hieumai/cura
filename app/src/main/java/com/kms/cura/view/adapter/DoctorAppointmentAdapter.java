@@ -88,4 +88,8 @@ public class DoctorAppointmentAdapter extends BaseAdapter {
         TextView txtStartTime, txtEndTime, txtPatientName;
         ImageView status;
     }
+
+    public List<AppointmentEntity> getListAppts() {
+        return listAppts;
+    }
 }
