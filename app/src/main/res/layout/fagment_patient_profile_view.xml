@@ -19,7 +19,6 @@
             android:layout_width="@dimen/imageviewSize"
             android:layout_height="@dimen/imageviewSize"
             android:id="@+id/ivAccountAvatar"
-            android:background="@drawable/profile_anon128"
             android:layout_gravity="center_horizontal"/>
             <TextView
                 android:layout_width="wrap_content"

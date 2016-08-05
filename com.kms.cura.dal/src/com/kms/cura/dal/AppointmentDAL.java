@@ -1,5 +1,6 @@
 package com.kms.cura.dal;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class AppointmentDAL {
 	}
 
 	public List<AppointmentEntity> getAppointment(AppointSearchEntity criteria, PatientUserEntity patientUserEntity,
-			DoctorUserEntity doctorUserEntity) throws ClassNotFoundException, SQLException {
+			DoctorUserEntity doctorUserEntity) throws ClassNotFoundException, SQLException, IOException {
 		AppointmentDatabaseHelper appointmentDatabaseHelper = new AppointmentDatabaseHelper();
 		try {
 			return appointmentDatabaseHelper.getAppointment(criteria, patientUserEntity, doctorUserEntity);
@@ -34,7 +35,7 @@ public class AppointmentDAL {
 	}
 
 	public List<AppointmentEntity> bookAppointment(AppointmentEntity entity)
-			throws ClassNotFoundException, SQLException {
+			throws ClassNotFoundException, SQLException, IOException {
 		AppointmentDatabaseHelper dbh = new AppointmentDatabaseHelper();
 		try {
 			return dbh.bookAppointment(entity);

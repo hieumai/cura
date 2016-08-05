@@ -1,5 +1,6 @@
 package com.kms.cura.dal;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ConditionDAL extends EntityDAL {
 		return _instance;
 	}
 
-	public List<Entity> getAll() throws ClassNotFoundException, SQLException {
+	public List<Entity> getAll() throws ClassNotFoundException, SQLException, IOException {
 		return new ConditionDatabaseHelper().queryAll();
 	}
 

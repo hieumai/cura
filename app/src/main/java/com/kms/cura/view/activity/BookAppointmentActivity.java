@@ -284,8 +284,8 @@ public class BookAppointmentActivity extends AppCompatActivity implements View.O
         Time startTime = Time.valueOf(selectedStartTime);
         Time endTime = Time.valueOf(selectedEndTime);
         final PatientUserEntity patient = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
-        PatientUserEntity patientUserEntity = new PatientUserEntity(patient.getId(),null,null,null,null,null,null,null,null);
-        DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(),null,null,null,null,null,null,null,null,null);
+        PatientUserEntity patientUserEntity = new PatientUserEntity(patient.getId(),null,null,null,null,null,null,null,null,null);
+        DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(),null,null,null,null,null,null,null,null,null,null);
         final AppointmentEntity entity = new AppointmentEntity(patientUserEntity,
                 doctor, selectedFacility, selectedDate, startTime, endTime, AppointmentEntity.PENDING_STT, cmt, null);
         pDialog = new ProgressDialog(this);

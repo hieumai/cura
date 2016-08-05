@@ -1,5 +1,6 @@
 package com.kms.cura_server;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.List;
@@ -26,7 +27,7 @@ public class SearchAPI {
 					.searchDoctorFunction((DoctorSearchEntity) JsonToEntityConverter.convertJsonStringToEntity(jsonData,
 							getDoctorSearchEntityType()));
 			return new UserAPIResponse().successResponse(doctors);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}

@@ -1,5 +1,6 @@
 package com.kms.cura_server;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class DegreeAPI {
 		try {
 			List<Entity> degree = DegreeDAL.getInstance().getAll();
 			return new DegreeAPIResponse().successResponse(degree);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}

@@ -11,7 +11,6 @@ import com.kms.cura.model.request.DoctorModelResponse;
 import com.kms.cura.model.request.LoginUserModelResponse;
 import com.kms.cura.model.request.PatientModelResponse;
 import com.kms.cura.model.request.RegisterModelResponse;
-import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.RequestUtils;
 
 public class UserModel extends EntityModel {
@@ -83,14 +82,54 @@ public class UserModel extends EntityModel {
         StringBuilder builder = new StringBuilder();
         builder.append(Settings.SERVER_URL);
         builder.append(Settings.UPDATE_PATIENT_HEALTH);
-        PatientModelResponse response =  new PatientModelResponse();
+        PatientModelResponse response = new PatientModelResponse();
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
                 EntityToJsonConverter.convertEntityToJson(entity).toString(), response);
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
-        while (!response.isGotResponse());
-        if(!response.isResponseError()) {
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
             return response.getUpdatedPatient();
         }
         throw new Exception(response.getError());
+    }
+
+    public UserEntity savePhoto(UserEntity entity) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.UPDATE_PROFILE_PHOTO);
+        PatientModelResponse response = new PatientModelResponse();
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                EntityToJsonConverter.convertEntityToJson(entity).toString(), response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
+            return response.getUpdatedPatient();
+        }
+        throw new Exception(response.getError());
+    }
+
+    public PatientUserEntity updatePatient(PatientUserEntity patient) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.UPDATE_PATIENT);
+        PatientModelResponse response = new PatientModelResponse();
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                EntityToJsonConverter.convertEntityToJson(patient).toString(), response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
+            return response.getUpdatedPatient();
+        }
+        throw new Exception(response.getError());
+    }
+
+    public void updatePassword(UserEntity user) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.UPDATE_PASSWORD);
+        DoctorModelResponse doctorResponse = new DoctorModelResponse();
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                EntityToJsonConverter.convertEntityToJson(user).toString(), doctorResponse);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
     }
 }

@@ -1,5 +1,6 @@
 package com.kms.cura_server;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.ws.rs.POST;
@@ -22,7 +23,7 @@ public final class AppointmentAPI {
 		AppointSearchEntity appointSearchEntity = new Gson().fromJson(jsonData, AppointSearchEntity.getAppointmentSearchType());
 		try {
 			return new AppointmentAPIResponse().successListApptsResponse(AppointmentDAL.getInstance().getAppointment(appointSearchEntity,null,null));
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
@@ -33,7 +34,7 @@ public final class AppointmentAPI {
 		AppointmentEntity appointmentEntity = new Gson().fromJson(jsonData, AppointmentEntity.getAppointmentType());
 		try {
 			return new AppointmentAPIResponse().successListApptsResponse(AppointmentDAL.getInstance().bookAppointment(appointmentEntity));
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}

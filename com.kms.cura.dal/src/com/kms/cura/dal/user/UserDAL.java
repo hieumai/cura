@@ -1,12 +1,15 @@
 package com.kms.cura.dal.user;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
 import com.kms.cura.dal.EntityDAL;
 import com.kms.cura.dal.database.DatabaseHelper;
+import com.kms.cura.dal.database.UserDatabaseHelper;
 import com.kms.cura.dal.mapping.UserColumn;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.user.UserEntity;
 
 public class UserDAL extends EntityDAL {
 	private static UserDAL _instance;
@@ -22,7 +25,25 @@ public class UserDAL extends EntityDAL {
 		return _instance;
 	}
 
-	public List<Entity> getAll(DatabaseHelper dbh) throws ClassNotFoundException, SQLException {
+	public List<Entity> getAll(DatabaseHelper dbh) throws ClassNotFoundException, SQLException, IOException {
 		return super.getAll(UserColumn.TABLE_NAME, dbh);
+	}
+
+	public void updatePhoto(UserEntity user) throws ClassNotFoundException, SQLException, IOException {
+		UserDatabaseHelper dbh = new UserDatabaseHelper();
+		try {
+			dbh.updateProfile(user);
+		} finally {
+			dbh.closeConnection();
+		}
+	}
+
+	public void updatePassword(UserEntity user) throws ClassNotFoundException, SQLException, IOException {
+		UserDatabaseHelper dbh = new UserDatabaseHelper();
+		try {
+			dbh.updatePassword(user);
+		} finally {
+			dbh.closeConnection();
+		}
 	}
 }

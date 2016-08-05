@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:windowSoftInputMode="adjustPan"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:windowSoftInputMode="adjustPan">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/view">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/basic_settings_toolbar"
@@ -22,82 +23,119 @@
 
     <include
         android:id="@+id/include"
-        android:layout_marginTop="50sp"
         layout="@layout/fragment_settings_basic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/spinner_60"
-        android:orientation="horizontal"
-        android:padding="5sp"
         android:id="@+id/linearLayout3"
-        android:layout_below="@+id/include"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_50"
         android:layout_alignLeft="@+id/linearLayout2"
-        android:layout_alignStart="@+id/linearLayout2">
+        android:layout_alignStart="@+id/linearLayout2"
+        android:layout_below="@+id/include"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5sp">
 
         <TextView
-            android:layout_width="100sp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_8"
             android:fontFamily="sans-serif"
-            android:paddingBottom="2sp"
+            android:paddingLeft="@dimen/padding_5"
             android:text="@string/city"
-            android:textColor="@color/black"
+            android:textColor="@color/material_grey_600"
+            android:textIsSelectable="true"
             android:textSize="@dimen/docText_18" />
 
         <EditText
             android:id="@+id/editText_settings_city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/transparent"
             android:fontFamily="sans-serif"
-            android:gravity="center"
+            android:gravity="end"
             android:maxLines="1"
+            android:paddingRight="10dp"
             android:singleLine="true"
             android:textSize="@dimen/docText_18" />
     </LinearLayout>
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/spinner_60"
+        android:layout_height="1dp"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/grey"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_50"
+        android:layout_below="@+id/linearLayout3"
+        android:layout_marginLeft="20sp"
+        android:gravity="start"
         android:orientation="horizontal"
         android:padding="5sp"
-        android:weightSum="1"
-        android:layout_marginLeft="20sp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/linearLayout3">
+        android:weightSum="1">
 
         <TextView
+            android:layout_width="150sp"
             android:layout_height="wrap_content"
-            android:layout_width="100sp"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif"
+            android:paddingLeft="@dimen/padding_5"
             android:text="@string/insurance"
-            android:fontFamily="sans-serif"
-            android:textSize="@dimen/docText_18"
-            android:textColor="@color/black"
-            android:layout_gravity="center"/>
+            android:textColor="@color/material_grey_600"
+            android:textSize="@dimen/docText_18" />
 
-        <Spinner
-            android:id="@+id/spnInsurance_Settings"
-            android:layout_width="@dimen/spinner_150"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="@dimen/spinner_50"
-            android:layout_weight="1.10"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:textColor="@color/black" />
+            android:gravity="end">
+
+            <Spinner
+                android:id="@+id/spnInsurance_Settings"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/spinner_40"
+                android:layout_gravity="end"
+                android:layout_marginRight="20sp"
+                android:fontFamily="sans-serif"
+                android:gravity="end|center"
+                android:paddingRight="5dp"
+                android:textColor="@color/black"
+                android:textDirection="rtl" />
+        </LinearLayout>
+
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/linearLayout2"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/grey"></LinearLayout>
+
     <Button
+        android:id="@+id/button_settings_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/button_settings_save"
+        android:layout_gravity="end"
+        android:layout_marginRight="30sp"
+        android:layout_marginTop="@dimen/padding_16"
+        android:background="@android:drawable/editbox_background_normal"
+        android:backgroundTint="@color/colorPrimaryDark"
         android:text="@string/save"
         android:textColor="@color/white"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
-        android:background="@color/colorPrimary" />
-</RelativeLayout>
+        android:textSize="@dimen/docText_18"
+        android:paddingLeft="@dimen/padding_16"
+        android:paddingRight="@dimen/padding_16"
+        android:paddingTop="@dimen/padding_8"
+        android:paddingBottom="@dimen/padding_8"/>
+
+</LinearLayout>
