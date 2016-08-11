@@ -59,7 +59,8 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 		} finally {
 			facilityDatabaseHelper.closeConnection();
 		}
-		return new AppointmentEntity(patient, doctor, facility,
+		return new AppointmentEntity(resultSet.getString(AppointmentColumn.APPT_ID.getColumnName()),
+				patient, doctor, facility,
 				resultSet.getDate(AppointmentColumn.APPT_DAY.getColumnName()),
 				resultSet.getTime(AppointmentColumn.START_TIME.getColumnName()),
 				resultSet.getTime(AppointmentColumn.END_TIME.getColumnName()),
@@ -107,6 +108,9 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 			return null;
 		}
 		Map<String, Object> columnValueMap = new LinkedHashMap<String, Object>();
+		if (entity.getId() != null){
+			columnValueMap.put(AppointmentColumn.APPT_ID.getColumnName(), entity.getId());
+		}
 		if (entity.getPatientUserEntity() != null) {
 			columnValueMap.put(AppointmentColumn.PATIENT_ID.getColumnName(), entity.getPatientUserEntity().getId());
 		}
@@ -143,7 +147,7 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 		try {
 			con.setAutoCommit(false);
 			createAppointment(entity);
-			AppointmentEntity search = new AppointmentEntity(entity.getPatientUserEntity(), null, null, null, null,
+			AppointmentEntity search = new AppointmentEntity(null, entity.getPatientUserEntity(), null, null, null, null,
 					null, -1,null, null);
 			patientAppts = getAppointment(new AppointSearchEntity(search), entity.getPatientUserEntity(), null);
 			con.commit();

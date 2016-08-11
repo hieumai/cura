@@ -31,10 +31,10 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		PatientUserEntity patient = new PatientUserEntity(resultSet.getString(MessageColumn.PATIENT_ID.getColumnName()),
 				resultSet.getString(PATIENT_NAME));
 		if (resultSet.getBoolean(MessageColumn.SENT_BY_DOCTOR.getColumnName())) {
-			return new MessageEntity(doctor, patient, resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
+			return new MessageEntity(resultSet.getString(MessageColumn.MSG_ID.getColumnName()), doctor, patient, resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
 					resultSet.getString(MessageColumn.MESSAGE.getColumnName()));
 		} else {
-			return new MessageEntity(patient, doctor, resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
+			return new MessageEntity(resultSet.getString(MessageColumn.MSG_ID.getColumnName()), patient, doctor, resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
 					resultSet.getString(MessageColumn.MESSAGE.getColumnName()));
 		}
 	}
@@ -45,6 +45,7 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		StringBuilder builder = new StringBuilder();
 		List<MessageEntity> messageEntities = new ArrayList<>();
 		builder.append("select ");
+		builder.append(MessageColumn.MSG_ID.getColumnName() + ", ");
 		builder.append(MessageColumn.PATIENT_ID + ", ");
 		builder.append(MessageColumn.DOCTOR_ID + ", ");
 		builder.append(MessageColumn.SENT_BY_DOCTOR + ", ");
@@ -90,6 +91,7 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		StringBuilder builder = new StringBuilder();
 		List<MessageEntity> messageEntities = new ArrayList<>();
 		builder.append("select ");
+		builder.append(MessageColumn.MSG_ID.getColumnName() + ", ");
 		builder.append(MessageColumn.PATIENT_ID + ", ");
 		builder.append(MessageColumn.DOCTOR_ID + ", ");
 		builder.append(MessageColumn.SENT_BY_DOCTOR + ", ");

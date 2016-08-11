@@ -3,6 +3,7 @@ package com.kms.cura.model.request;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.kms.cura.entity.MessageEntity;
+import com.kms.cura.entity.json.JsonToEntityConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
@@ -48,7 +49,7 @@ public class MessageModelResponse implements EntityModelResponse {
                 JSONArray jsonArray = jsonObject.getJSONArray(MessageEntity.MESSAGE_LIST);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject object = jsonArray.getJSONObject(i);
-                    MessageEntity entity = gson.fromJson(object.toString(), MessageEntity.class);
+                    MessageEntity entity = JsonToEntityConverter.convertJsonStringToEntity(object.toString(), MessageEntity.class);
                     UserEntity sender, receiver;
                     JSONObject jSonReceiver = object.getJSONObject(MessageEntity.RECEIVER);
                     JSONObject jSonSender = object.getJSONObject(MessageEntity.SENDER);
