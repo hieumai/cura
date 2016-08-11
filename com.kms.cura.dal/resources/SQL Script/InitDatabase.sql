@@ -179,6 +179,7 @@ CREATE TABLE Users (
 	id INT UNIQUE NOT NULL AUTO_INCREMENT,
 	email VARCHAR(50) UNIQUE,
     password VARCHAR(30),
+	imagePath VARCHAR(200),
     PRIMARY KEY (id)
 	);
     
