@@ -25,6 +25,7 @@ import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.fragment.PatientAppointmentListTabFragment;
+import com.kms.cura.view.fragment.RateDoctorDialogFragment;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -39,6 +40,7 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
     private int position;
     private boolean rated = true;
     public static String PATIENT_POSITION = "PATIENT_POSITION";
+    private static String DIALOG = "dialog";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,8 +175,11 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
                 showDialogCancel();
                 return;
             }
-            lbRated.setVisibility(View.VISIBLE);
-            btnCancelorRate.setVisibility(View.GONE);
+            RateDoctorDialogFragment rateDoctorDialogFragment = new RateDoctorDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt(RateDoctorDialogFragment.APPT_POSITION, position);
+            rateDoctorDialogFragment.setArguments(bundle);
+            rateDoctorDialogFragment.show(getFragmentManager(),DIALOG);
         } else if (id == R.id.btnBack) {
             finish();
         } else if (id == R.id.txtDoctorName || id == R.id.ivPatientPicture) {
