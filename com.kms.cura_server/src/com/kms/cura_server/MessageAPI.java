@@ -8,7 +8,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import org.json.JSONObject;
-
 import com.kms.cura.dal.MessageDAL;
 import com.kms.cura.entity.MessageEntity;
 import com.kms.cura.entity.json.JsonToEntityConverter;
@@ -23,7 +22,8 @@ public class MessageAPI {
 	@POST
 	@Path("/getByPatient")
 	public String getByPatient(String jsonData) {
-		PatientUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, PatientUserEntity.getPatientUserType());
+		PatientUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData,
+				PatientUserEntity.getPatientUserType());
 		try {
 			List<MessageEntity> messageEntities = MessageDAL.getInstance().getMessageForPatient(entity);
 			return new MessageAPIResponse().successMessageResponse(messageEntities);
@@ -31,11 +31,12 @@ public class MessageAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
-	
+
 	@POST
 	@Path("/getByDoctor")
 	public String getByDoctor(String jsonData) {
-		DoctorUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, DoctorUserEntity.getDoctorEntityType());
+		DoctorUserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData,
+				DoctorUserEntity.getDoctorEntityType());
 		try {
 			List<MessageEntity> messageEntities = MessageDAL.getInstance().getMessageForDoctor(entity);
 			return new MessageAPIResponse().successMessageResponse(messageEntities);
@@ -43,7 +44,7 @@ public class MessageAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
-	
+
 	@POST
 	@Path("/deletePatientMessage")
 	public String deleteMessage(String jsonData) {
@@ -69,7 +70,7 @@ public class MessageAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
-	
+
 	@POST
 	@Path("/deleteDoctorMessage")
 	public String deleteDoctorMessage(String jsonData) {
@@ -89,6 +90,19 @@ public class MessageAPI {
 		entity.setReceiver(receiver);
 		try {
 			MessageDAL.getInstance().deleteDoctorMessage(entity);
+			return new MessageAPIResponse().successUpdateMessageResponse();
+		} catch (ClassNotFoundException | SQLException e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+
+	@POST
+	@Path("/insertMessage")
+	public String insertDoctorMessage(String jsonData) {
+		MessageEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, MessageEntity.class);
+		JSONObject jsonObject = new JSONObject(jsonData);
+		try {
+			MessageDAL.getInstance().insertMessage(entity, jsonObject.getBoolean(MessageEntity.SENT_BY_DOCTOR));
 			return new MessageAPIResponse().successUpdateMessageResponse();
 		} catch (ClassNotFoundException | SQLException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());

@@ -30,4 +30,5 @@ public class Settings {
     public static final String GET_MESSAGE_DOCTOR = "/message/getByDoctor";
     public static final String DELETE_PATIENT_MESSAGE = "/message/deletePatientMessage";
     public static final String DELETE_DOCTOR_MESSAGE = "/message/deleteDoctorMessage";
+    public static final String INSERT_MESSAGE = "/message/insertMessage";
 }

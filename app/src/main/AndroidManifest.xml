@@ -89,6 +89,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.AppointmentRequestDeatailActivity"></activity>
+        <activity android:name=".view.activity.NewMessageActivity"></activity>
         <activity android:name=".view.activity.PatientAppointmentDetailsActivity" />
         <activity
             android:name=".view.activity.MessageThreadActivity"
