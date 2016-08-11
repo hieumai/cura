@@ -1,5 +1,6 @@
 package com.kms.cura.dal.database;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,27 +20,33 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 	// ambiguous columns' name
 	private final static String DOCTOR_NAME = "doctor_name";
 	private final static String PATIENT_NAME = "patient_name";
-	
+
 	public MessageDatabaseHelper() throws ClassNotFoundException, SQLException {
 		super();
 	}
 
 	@Override
-	protected MessageEntity getEntityFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException {
-		DoctorUserEntity doctor = new DoctorUserEntity(resultSet.getString(MessageColumn.DOCTOR_ID.getColumnName()),
-				resultSet.getString(DOCTOR_NAME));
-		PatientUserEntity patient = new PatientUserEntity(resultSet.getString(MessageColumn.PATIENT_ID.getColumnName()),
-				resultSet.getString(PATIENT_NAME));
-		if (resultSet.getBoolean(MessageColumn.SENT_BY_DOCTOR.getColumnName())) {
-			return new MessageEntity(doctor, patient, resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
-					resultSet.getString(MessageColumn.MESSAGE.getColumnName()));
-		} else {
-			return new MessageEntity(patient, doctor, resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
-					resultSet.getString(MessageColumn.MESSAGE.getColumnName()));
+	protected MessageEntity getEntityFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException, IOException {
+		DoctorUserDatabaseHelper doctorUserDatabaseHelper = new DoctorUserDatabaseHelper();
+		PatientUserDatabaseHelper patientUserDatabaseHelper = new PatientUserDatabaseHelper();
+		try {
+			DoctorUserEntity doctor = doctorUserDatabaseHelper.queryDoctorByID(resultSet.getString(MessageColumn.DOCTOR_ID.getColumnName()));
+			PatientUserEntity patient = patientUserDatabaseHelper.queryPatientByID(resultSet.getString(MessageColumn.PATIENT_ID.getColumnName()));
+			if (resultSet.getBoolean(MessageColumn.SENT_BY_DOCTOR.getColumnName())) {
+				return new MessageEntity(doctor, patient, resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
+						resultSet.getString(MessageColumn.MESSAGE.getColumnName()));
+			} else {
+				return new MessageEntity(patient, doctor, resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
+						resultSet.getString(MessageColumn.MESSAGE.getColumnName()));
+			}
+		} finally {
+			doctorUserDatabaseHelper.closeConnection();
+			patientUserDatabaseHelper.closeConnection();
 		}
 	}
 
-	public List<MessageEntity> queryMessageByPatient(PatientUserEntity patient) throws SQLException, ClassNotFoundException {
+	public List<MessageEntity> queryMessageByPatient(PatientUserEntity patient)
+			throws SQLException, ClassNotFoundException, IOException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		StringBuilder builder = new StringBuilder();
@@ -69,7 +76,7 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		builder.append(" = ");
 		builder.append(patient.getId());
 		builder.append(" and ");
-		builder.append(MessageColumn.PATIENT_AVAILABLE + " = true" );
+		builder.append(MessageColumn.PATIENT_AVAILABLE + " = true");
 		builder.append(" order by " + MessageColumn.TIME_SENT + " DESC");
 		try {
 			stmt = con.prepareStatement(builder.toString());
@@ -80,11 +87,17 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 			}
 			return messageEntities;
 		} finally {
-			stmt.close();
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
 	}
 
-	public List<MessageEntity> queryMessageByDoctor(DoctorUserEntity doctor) throws SQLException, ClassNotFoundException {
+	public List<MessageEntity> queryMessageByDoctor(DoctorUserEntity doctor)
+			throws SQLException, ClassNotFoundException, IOException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		StringBuilder builder = new StringBuilder();
@@ -114,7 +127,7 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		builder.append(" = ");
 		builder.append(doctor.getId());
 		builder.append(" and ");
-		builder.append(MessageColumn.DOCTOR_AVAILABLE + " = true" );
+		builder.append(MessageColumn.DOCTOR_AVAILABLE + " = true");
 		builder.append(" order by " + MessageColumn.TIME_SENT + " DESC");
 		try {
 			stmt = con.prepareStatement(builder.toString());
@@ -125,7 +138,12 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 			}
 			return messageEntities;
 		} finally {
-			stmt.close();
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
 	}
 
@@ -163,10 +181,12 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 			}
 			throw e;
 		} finally {
-			stmt.close();
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
 	}
-	
+
 	public void deleteDoctorMessage(MessageEntity entity) throws SQLException {
 		PreparedStatement stmt = null;
 		StringBuilder builder = new StringBuilder();
@@ -201,7 +221,9 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 			}
 			throw e;
 		} finally {
-			stmt.close();
+			if (stmt != null) {
+				stmt.close();
+			}
 		}
 	}
 }

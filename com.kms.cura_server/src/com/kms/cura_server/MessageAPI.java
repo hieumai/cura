@@ -1,5 +1,6 @@
 package com.kms.cura_server;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class MessageAPI {
 		try {
 			List<MessageEntity> messageEntities = MessageDAL.getInstance().getMessageForPatient(entity);
 			return new MessageAPIResponse().successMessageResponse(messageEntities);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
@@ -38,7 +39,7 @@ public class MessageAPI {
 		try {
 			List<MessageEntity> messageEntities = MessageDAL.getInstance().getMessageForDoctor(entity);
 			return new MessageAPIResponse().successMessageResponse(messageEntities);
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
@@ -58,8 +59,9 @@ public class MessageAPI {
 			sender = (PatientUserEntity) JsonToEntityConverter.convertJsonStringToEntity(jSonSender.toString(), PatientUserEntity.getPatientUserType());
 			receiver = (DoctorUserEntity) JsonToEntityConverter.convertJsonStringToEntity(jSonReceiver.toString(), DoctorUserEntity.getDoctorEntityType());
         }
-		entity.setSender(sender);
+		entity.setSender(sender);		
 		entity.setReceiver(receiver);
+        
 		try {
 			MessageDAL.getInstance().deletePatientMessage(entity);
 			return new MessageAPIResponse().successUpdateMessageResponse();

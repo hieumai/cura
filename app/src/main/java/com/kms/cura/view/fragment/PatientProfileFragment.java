@@ -10,15 +10,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kms.cura.R;
+import com.kms.cura.entity.json.JsonToEntityConverter;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
+import com.kms.cura.view.activity.ViewPatientProfileActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 public class PatientProfileFragment extends Fragment {
+
     private TextView txtName, txtGender, txtDOB, txtLocation, txtInsurance, txtHealthConcerns;
     private ImageView profile;
     private UserEntity user;
@@ -35,12 +38,18 @@ public class PatientProfileFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         user = CurrentUserProfile.getInstance().getEntity();
-        loadData();
+        loadData(getActivity().getIntent().getStringExtra(ViewPatientProfileActivity.PATIENT_KEY));
+
     }
 
-    public void loadData() {
-        PatientUserEntity entity = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+    public void loadData(String key) {
+        PatientUserEntity entity = (PatientUserEntity) user;
         DataUtils.loadProfile(entity, (ImageView) getActivity().findViewById(R.id.ivAccountAvatar),this.getContext());
+        if (key == null) {
+            entity = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+        } else {
+            entity = JsonToEntityConverter.convertJsonStringToEntity(key, PatientUserEntity.getPatientUserType());
+        }
         txtName = loadText(DataUtils.showUnicode(entity.getName()), R.id.txtName);
         txtGender = loadText(getGender(entity), R.id.txtGender, R.id.ivGender);
         if (entity.getBirth() == null) {
