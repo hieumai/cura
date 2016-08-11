@@ -10,7 +10,6 @@ import java.util.List;
 import com.kms.cura.dal.mapping.DoctorColumn;
 import com.kms.cura.dal.mapping.MessageColumn;
 import com.kms.cura.dal.mapping.PatientColumn;
-import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.MessageEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
@@ -173,7 +172,6 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 			stmt = con.prepareStatement(builder.toString());
 			stmt.executeUpdate();
 			con.commit();
-			con.setAutoCommit(true);
 		} catch (SQLException e) {
 			if (con != null) {
 				System.err.print("Transaction is being rolled back");
@@ -181,6 +179,7 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 			}
 			throw e;
 		} finally {
+			con.setAutoCommit(true);
 			if (stmt != null) {
 				stmt.close();
 			}
@@ -213,7 +212,6 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 			stmt = con.prepareStatement(builder.toString());
 			stmt.executeUpdate();
 			con.commit();
-			con.setAutoCommit(true);
 		} catch (SQLException e) {
 			if (con != null) {
 				System.err.print("Transaction is being rolled back");
@@ -221,6 +219,42 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 			}
 			throw e;
 		} finally {
+			con.setAutoCommit(true);
+			stmt.close();
+		}
+	}
+
+	public void insertMessage(MessageEntity entity, boolean sentByDoctor) throws SQLException {
+		PreparedStatement stmt = null;
+		StringBuilder builder = new StringBuilder();
+		builder.append("insert into ");
+		builder.append(MessageColumn.TABLE_NAME);
+		builder.append(" values (");
+		if (sentByDoctor) {
+			builder.append(entity.getReceiver().getId() + ", ");
+			builder.append(entity.getSender().getId() + ", ");
+			builder.append("true, ");
+		} else {
+			builder.append(entity.getSender().getId() + ", ");
+			builder.append(entity.getReceiver().getId() + ", ");
+			builder.append("false, ");
+		}
+		builder.append("'" + entity.getTimeSent().toString() + "', ");
+		builder.append("'" + entity.getMessage() + "', ");
+		builder.append("true, true)");
+		try {
+			con.setAutoCommit(false);
+			stmt = con.prepareStatement(builder.toString());
+			stmt.executeUpdate();
+			con.commit();
+		} catch (SQLException e) {
+			if (con != null) {
+				System.err.print("Transaction is being rolled back");
+				con.rollback();
+			}
+			throw e;
+		} finally {
+			con.setAutoCommit(true);
 			if (stmt != null) {
 				stmt.close();
 			}

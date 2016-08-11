@@ -32,4 +32,8 @@ public class MessageController {
         }
         return null;
     }
+
+    static public boolean insertMessage(MessageEntity entity) throws Exception {
+        return MessageModel.getInstance().insertMessage(entity);
+    }
 }

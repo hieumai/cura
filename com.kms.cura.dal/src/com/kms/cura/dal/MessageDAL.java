@@ -11,7 +11,8 @@ import com.kms.cura.entity.user.PatientUserEntity;
 public class MessageDAL extends EntityDAL {
 	private static MessageDAL _instance;
 
-	private MessageDAL() {}
+	private MessageDAL() {
+	}
 
 	public static MessageDAL getInstance() {
 		if (_instance == null) {
@@ -37,7 +38,7 @@ public class MessageDAL extends EntityDAL {
 			dbh.closeConnection();
 		}
 	}
-	
+
 	public void deletePatientMessage(MessageEntity entity) throws SQLException, ClassNotFoundException {
 		MessageDatabaseHelper dbh = new MessageDatabaseHelper();
 		try {
@@ -46,11 +47,20 @@ public class MessageDAL extends EntityDAL {
 			dbh.closeConnection();
 		}
 	}
-	
+
 	public void deleteDoctorMessage(MessageEntity entity) throws SQLException, ClassNotFoundException {
 		MessageDatabaseHelper dbh = new MessageDatabaseHelper();
 		try {
 			dbh.deleteDoctorMessage(entity);
+		} finally {
+			dbh.closeConnection();
+		}
+	}
+
+	public void insertMessage(MessageEntity entity, boolean sentByDoctor) throws ClassNotFoundException, SQLException {
+		MessageDatabaseHelper dbh = new MessageDatabaseHelper();
+		try {
+			dbh.insertMessage(entity, sentByDoctor);
 		} finally {
 			dbh.closeConnection();
 		}

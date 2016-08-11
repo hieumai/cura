@@ -30,5 +30,6 @@
     <string name="endDateErrorStart1">Please input start date</string>
     <string name="endDateErrorCurrent">End date can\'t be after current date</string>
     <string name="duplicateHealth">Same condition or symptom info is already exist</string>
+    <string name="message_blank">Please input a message</string>
     <string name="wrongPassword">Wrong password!</string>
 </resources>

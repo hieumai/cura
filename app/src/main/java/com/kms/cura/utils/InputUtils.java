@@ -32,4 +32,8 @@ public class InputUtils {
         String regex = "(" + oneWord + ")+( " + oneWord + ")*";
         return (Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE).matcher(text).matches());
     }
+
+    public static String covertValidStringForSQL(String note) {
+        return note.replace("\'", "\\\'");
+    }
 }

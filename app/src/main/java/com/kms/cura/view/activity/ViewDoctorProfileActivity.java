@@ -5,10 +5,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.kms.cura.R;
@@ -74,6 +72,12 @@ public class ViewDoctorProfileActivity extends AppCompatActivity implements Tool
             toBookAppts.putExtra(SearchActivity.DOCTOR_SELECTED, data);
             ViewDoctorProfileActivity.this.startActivity(toBookAppts);
             return true;
+        } else if (id == R.id.message_action) {
+            Intent intent = new Intent(this, NewMessageActivity.class);
+            intent.putExtra(NewMessageActivity.KEY_SENDER, NewMessageActivity.KEY_PATIENT);
+            intent.putExtra(NewMessageActivity.KEY_RECEIVER_ID, doctorUserEntity.getId());
+            intent.putExtra(NewMessageActivity.KEY_RECEIVER_NAME, doctorUserEntity.getName());
+            startActivity(intent);
         }
         return false;
     }

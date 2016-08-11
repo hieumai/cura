@@ -67,12 +67,25 @@ public class MessageModel {
         }
         JsonElement element = EntityToJsonConverter.convertEntityToJson(entity);
         JsonObject object = (JsonObject) element;
-        if (entity.isSenderDoctor()){
-            object.addProperty(MessageEntity.SENT_BY_DOCTOR, true);
+        object.addProperty(MessageEntity.SENT_BY_DOCTOR, entity.isSenderDoctor());
+        MessageUpdateModelResponse response = new MessageUpdateModelResponse();
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                object.toString(), response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
+            return true;
         }
-        else{
-            object.addProperty(MessageEntity.SENT_BY_DOCTOR, false);
-        }
+        throw new Exception(response.getError());
+    }
+
+    public boolean insertMessage(MessageEntity entity) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.INSERT_MESSAGE);
+        JsonElement element = EntityToJsonConverter.convertEntityToJson(entity);
+        JsonObject object = (JsonObject) element;
+        object.addProperty(MessageEntity.SENT_BY_DOCTOR, entity.isSenderDoctor());
         MessageUpdateModelResponse response = new MessageUpdateModelResponse();
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
                 object.toString(), response);
