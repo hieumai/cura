@@ -14,6 +14,7 @@ import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 
@@ -157,6 +158,7 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 					null, null, -1, null, null);
 			patientAppts = getAppointment(new AppointSearchEntity(search), entity.getPatientUserEntity(), null);
 			con.commit();
+			createNewAppointmentNotification(patientAppts, entity);
 			return patientAppts;
 		} catch (SQLException e) {
 			if (con != null) {
@@ -215,5 +217,42 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 			}
 		}
 	}
-
+	
+	private void createNewAppointmentNotification(List<AppointmentEntity> patientAppts, AppointmentEntity entity){
+		NotificationDatabaseHelper databaseHelper = null;
+		try {
+			databaseHelper = new NotificationDatabaseHelper();
+			for (AppointmentEntity appointmentEntity : patientAppts) {
+				if (appointmentEntity.equals(entity)) {
+					databaseHelper.createNotification(appointmentEntity.getId(),
+							appointmentEntity.getDoctorUserEntity().getId(), NotificationEntity.APPT_NOTI_TYPE, NotificationEntity.NEW_APPT);
+				}
+			}
+		} catch (ClassNotFoundException | SQLException e) {
+			
+		}
+		finally {
+			try {
+				databaseHelper.closeConnection();
+			} catch (SQLException e) {
+			}
+		}
+	}
+	
+	private void createUpdateAppointmentNotification(String id, String userID){
+		NotificationDatabaseHelper databaseHelper = null;
+		try {
+			databaseHelper = new NotificationDatabaseHelper();
+			databaseHelper.createNotification(id, userID, NotificationEntity.APPT_NOTI_TYPE, NotificationEntity.APPT_UPDATE_STT);
+		} catch (ClassNotFoundException | SQLException e) {
+			
+		}
+		finally {
+			try {
+				databaseHelper.closeConnection();
+			} catch (SQLException e) {
+			}
+		}
+	}
+	
 }

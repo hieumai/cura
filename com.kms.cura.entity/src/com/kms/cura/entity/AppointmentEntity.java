@@ -3,6 +3,7 @@ package com.kms.cura.entity;
 import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
@@ -56,7 +57,16 @@ public class AppointmentEntity {
 				this.facilityEntity, this.apptDay, this.startTime, this.endTime, this.status, this.patientCmt, this.doctorCmt);
 		return appointmentEntity;
 	}
-	
+
+	@Override
+	public boolean equals(Object arg0) {
+		// TODO Auto-generated method stub
+		AppointmentEntity src = (AppointmentEntity) arg0;
+		return (this.doctorUserEntity.getId() == src.getDoctorUserEntity().getId() && this.patientUserEntity.getId() == src.getPatientUserEntity().getId() &&
+				isSameDay(this.apptDay, src.getApptDay()) && this.startTime.equals(src.getStartTime()) && this.endTime.equals(src.getEndTime()) && this.status == src.getStatus());
+	}
+
+
 	public String getId() {
 		return id;
 	}
@@ -165,5 +175,15 @@ public class AppointmentEntity {
 			return INCOMPLETE;
 		}
 		return null;
+	}
+	
+	private boolean isSameDay(Date d1, Date d2){
+		Calendar c1 = Calendar.getInstance();
+		c1.setTime(d1);
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(d2);
+		return (c1.get(Calendar.ERA) == c2.get(Calendar.ERA) &&
+                c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) &&
+                c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR));
 	}
 }
