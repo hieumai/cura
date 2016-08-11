@@ -21,6 +21,7 @@ import com.kms.cura.R;
 import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.UserController;
 import com.kms.cura.event.EventBroker;
+import com.kms.cura.view.MultipleChoiceBackPress;
 import com.kms.cura.view.fragment.DoctorAppointmentMonthViewFragment;
 import com.kms.cura.view.fragment.DoctorSettingsFragment;
 import com.kms.cura.view.fragment.DoctorProfileFragment;
@@ -28,6 +29,7 @@ import com.kms.cura.view.fragment.DoctorRequestListFragment;
 import com.kms.cura.view.fragment.MessageListFragment;
 
 public class DoctorViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener, View.OnClickListener {
+    public static final String NAVIGATION_KEY = "navi_key";
     private Toolbar doctorToolbar;
     private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorHealthTrachkerFragment, doctorRequestListFragment, doctorApptView2, doctorMessageFragment;
 
@@ -39,6 +41,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         initDrawer();
         initNavigationView();
         initFragments();
+        navigate(getIntent().getStringExtra(NAVIGATION_KEY));
     }
 
     private void initFragments() {
@@ -46,7 +49,6 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         doctorSettingsFragment = new DoctorSettingsFragment();
         doctorRequestListFragment = new DoctorRequestListFragment();
         doctorMessageFragment = new MessageListFragment();
-        changeFragment(doctorProfileFragment);
     }
 
     private void changeFragment(Fragment newFragment) {
@@ -168,5 +170,17 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
     public void onClick(View v) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.openDrawer(GravityCompat.START);
+    }
+
+    private void navigate(String key) {
+        if (key != null) {
+            switch (key) {
+                case MessageThreadActivity.TO_MESSAGE:
+                    changeFragment(doctorMessageFragment);
+                    break;
+            }
+        } else {
+            changeFragment(doctorProfileFragment);
+        }
     }
 }

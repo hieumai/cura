@@ -86,7 +86,7 @@ public class MessageModelResponse implements EntityModelResponse {
     public boolean isResponseError() {
         return responseError;
     }
-
+    
     public String getError() {
         return error;
     }

@@ -2,6 +2,7 @@ package com.kms.cura.view.fragment;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.kms.cura.entity.MessageEntity;
 import com.kms.cura.entity.MessageThreadEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.MultipleChoiceBackPress;
+import com.kms.cura.view.activity.MessageThreadActivity;
 import com.kms.cura.view.adapter.MessageListAdapter;
 
 import java.util.ArrayList;
@@ -41,6 +43,7 @@ public class MessageListFragment extends Fragment implements AdapterView.OnItemC
     private boolean multiMode = false;
     private Drawable naviIcon;
     private SwipeRefreshLayout refreshLayout;
+    public static String RELOAD = "reload";
 
     public MessageListFragment() {
     }
@@ -133,7 +136,9 @@ public class MessageListFragment extends Fragment implements AdapterView.OnItemC
                 modifyToolbar(adapter.getSelectedCount() + " selected");
             }
         } else {
-            Toast.makeText(getActivity(), "" + messageThreadEntities.get(position).getSize(), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getActivity(), MessageThreadActivity.class);
+            intent.putExtra(MessageThreadEntity.CONVERSATION, messageThreadEntities.get(position).getConversationName(CurrentUserProfile.getInstance().getEntity()));
+            startActivity(intent);
         }
     }
 
@@ -165,7 +170,7 @@ public class MessageListFragment extends Fragment implements AdapterView.OnItemC
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.btnDeleteMessage) {
-            createDialog(getString(R.string.delete_message_warning)).show();
+            createDialog(getString(R.string.delete_thread_warning)).show();
         }
         return false;
     }

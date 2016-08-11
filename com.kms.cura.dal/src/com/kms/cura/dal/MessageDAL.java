@@ -1,5 +1,6 @@
 package com.kms.cura.dal;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import com.kms.cura.dal.database.MessageDatabaseHelper;
@@ -19,7 +20,7 @@ public class MessageDAL extends EntityDAL {
 		return _instance;
 	}
 
-	public List<MessageEntity> getMessageForPatient(PatientUserEntity patient) throws ClassNotFoundException, SQLException {
+	public List<MessageEntity> getMessageForPatient(PatientUserEntity patient) throws ClassNotFoundException, SQLException, IOException {
 		MessageDatabaseHelper dbh = new MessageDatabaseHelper();
 		try {
 			return dbh.queryMessageByPatient(patient);
@@ -28,7 +29,7 @@ public class MessageDAL extends EntityDAL {
 		}
 	}
 
-	public List<MessageEntity> getMessageForDoctor(DoctorUserEntity doctor) throws ClassNotFoundException, SQLException {
+	public List<MessageEntity> getMessageForDoctor(DoctorUserEntity doctor) throws ClassNotFoundException, SQLException, IOException {
 		MessageDatabaseHelper dbh = new MessageDatabaseHelper();
 		try {
 			return dbh.queryMessageByDoctor(doctor);

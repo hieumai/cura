@@ -189,6 +189,9 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
                 case PatientSignUpActivity.FROM_PATIENT_REGISTER:
                     changeFragment(patientProfileFragment);
                     break;
+                case MessageThreadActivity.TO_MESSAGE:
+                    changeFragment(patientMessageFragment);
+                    break;
             }
         } else {
             changeFragment(patientHomeFragment);

@@ -11,7 +11,9 @@ import java.util.List;
  * Created by toanbnguyen on 7/20/2016.
  */
 public class MessageThreadEntity {
+
     private ArrayList<MessageEntity> messageEntities;
+    public static final String CONVERSATION = "conversation";
 
     public MessageThreadEntity() {
         this.messageEntities = new ArrayList<>();
@@ -89,5 +91,9 @@ public class MessageThreadEntity {
 
     public int getSize() {
         return messageEntities.size();
+    }
+
+    public ArrayList<MessageEntity> getMessageEntities() {
+        return messageEntities;
     }
 }
