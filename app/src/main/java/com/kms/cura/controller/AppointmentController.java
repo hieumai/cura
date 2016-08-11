@@ -18,4 +18,8 @@ public class AppointmentController {
     public static List<AppointmentEntity> getAppointment(AppointSearchEntity entity) throws Exception {
         return AppointmentModel.getInstance().getAppointment(entity);
     }
+
+    public static List<AppointmentEntity> updateAppointment(AppointmentEntity appointmentEntity, PatientUserEntity patient) throws Exception{
+        return AppointmentModel.getInstance().updateAppointment(appointmentEntity, patient);
+    }
 }

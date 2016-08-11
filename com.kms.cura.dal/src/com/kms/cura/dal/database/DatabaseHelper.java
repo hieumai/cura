@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -155,6 +156,31 @@ public abstract class DatabaseHelper {
 		setPreparedStatementValue(valueMap, stmt);
 		return stmt;
 	}
+	
+	protected PreparedStatement createUpdatePreparedStatement(Map<String, Object> valueMap, String databaseName, String columnUpdate, Object valueUpdate) throws SQLException {
+		StringBuilder updateString = new StringBuilder();
+		updateString.append("UPDATE ");
+		updateString.append(databaseName + " SET ");
+		updateString.append(columnUpdate + " = ? WHERE ");
+		boolean isFirst = true;
+		for (Entry<String, Object> entry : valueMap.entrySet()) {
+			if (isFirst) {
+				isFirst = false;
+			} else {
+				updateString.append(" AND ");
+			}
+			updateString.append(entry.getKey());
+			updateString.append(" = ");
+			updateString.append("?");
+		}
+		PreparedStatement stmt = con.prepareStatement(updateString.toString());
+		Map<String, Object> map = new LinkedHashMap<>();
+		map.put(columnUpdate, valueUpdate);
+		map.putAll(valueMap);
+		setPreparedStatementValue(map, stmt);
+		return stmt;
+	}
+	
 	
 	protected PreparedStatement createSelectWherePreparedStatement(Map<String, Object> valueMap, String databaseName) throws SQLException {
 		StringBuilder whereString = new StringBuilder("SELECT * FROM ");

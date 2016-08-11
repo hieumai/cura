@@ -19,4 +19,5 @@ public interface EventConstant {
     public static final String TYPE_DOCTOR = "TYPE_DOCTOR";
 
     public static final String CHANGE_FRAGMENT = "CHANGE_FRAGMENT";
+    public static final String UPDATE_APPT_PATIENT_LIST = "UPDATE_APPT_PATIENT_LIST";
 }
