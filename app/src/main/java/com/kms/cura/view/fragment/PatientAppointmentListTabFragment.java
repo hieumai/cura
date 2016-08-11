@@ -67,7 +67,7 @@ public class PatientAppointmentListTabFragment extends Fragment {
                         try {
                             PatientUserEntity patient = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
                             PatientUserEntity patientUserEntity = new PatientUserEntity(patient.getId(),null,null,null,null,null,null,null,null,null);
-                            AppointmentEntity entity = new AppointmentEntity(patientUserEntity, null, null, null, null, null, -1, null, null);
+                            AppointmentEntity entity = new AppointmentEntity(null,patientUserEntity, null, null, null, null, null, -1, null, null);
                             patient.setAppointmentList(AppointmentController.getAppointment(new AppointSearchEntity(entity)));
                         } catch (Exception e) {
                             exception = e;

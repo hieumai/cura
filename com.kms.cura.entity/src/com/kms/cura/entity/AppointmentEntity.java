@@ -24,6 +24,7 @@ public class AppointmentEntity {
 	public static String INCOMPLETE = "INCOMPLETE";
 	public static String ACCEPTED = "ACCEPTED";
 	public static String APPTS_LIST = "appts_list";
+	private String id;
 	private PatientUserEntity patientUserEntity;
 	private DoctorUserEntity doctorUserEntity;
 	private FacilityEntity facilityEntity;
@@ -33,9 +34,11 @@ public class AppointmentEntity {
 	private int status = -1;
 	private String patientCmt;
 	private String doctorCmt;
-	
-	public AppointmentEntity(PatientUserEntity patientUserEntity, DoctorUserEntity doctorUserEntity, FacilityEntity facilityEntity, Date apptDay,
-			Time startTime, Time endTime, int status, String patientCmt, String doctorCmt) {
+
+	public AppointmentEntity(String id, PatientUserEntity patientUserEntity, DoctorUserEntity doctorUserEntity,
+			FacilityEntity facilityEntity, Date apptDay, Time startTime, Time endTime, int status, String patientCmt,
+			String doctorCmt) {
+		this.id = id;
 		this.patientUserEntity = patientUserEntity;
 		this.doctorUserEntity = doctorUserEntity;
 		this.facilityEntity = facilityEntity;
@@ -45,6 +48,14 @@ public class AppointmentEntity {
 		this.status = status;
 		this.patientCmt = patientCmt;
 		this.doctorCmt = doctorCmt;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public PatientUserEntity getPatientUserEntity() {
@@ -94,7 +105,7 @@ public class AppointmentEntity {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	
+
 	public FacilityEntity getFacilityEntity() {
 		return facilityEntity;
 	}
@@ -104,13 +115,13 @@ public class AppointmentEntity {
 	}
 
 	public static Type getAppointmentType() {
-        return new TypeToken<AppointmentEntity>() {
-        }.getType();
-    }
+		return new TypeToken<AppointmentEntity>() {
+		}.getType();
+	}
 
 	public static Type getAppointmentListType() {
-		 return new TypeToken<List<AppointmentEntity>>() {
-	        }.getType();
+		return new TypeToken<List<AppointmentEntity>>() {
+		}.getType();
 	}
 
 	public String getPatientCmt() {
@@ -128,25 +139,23 @@ public class AppointmentEntity {
 	public void setDoctorCmt(String doctorCmt) {
 		this.doctorCmt = doctorCmt;
 	}
-	
-	
 
-	public String getStatusName(){
-		switch (status){
-			case 0:
-				return PENDING;
-			case 1:
-				return ACCEPTED;
-			case 2:
-				return REJECTED;
-			case 3:
-				return CANCEL;
-			case 4:
-				return CANCEL;
-			case 5:
-				return COMPLETED;
-			case 6:
-				return INCOMPLETE;
+	public String getStatusName() {
+		switch (status) {
+		case 0:
+			return PENDING;
+		case 1:
+			return ACCEPTED;
+		case 2:
+			return REJECTED;
+		case 3:
+			return CANCEL;
+		case 4:
+			return CANCEL;
+		case 5:
+			return COMPLETED;
+		case 6:
+			return INCOMPLETE;
 		}
 		return null;
 	}
