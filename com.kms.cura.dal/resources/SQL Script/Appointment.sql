@@ -1,6 +1,7 @@
 USE cura;
 
 CREATE TABLE Appointments (
+	id INT NOT NULL AUTO_INCREMENT,
 	doctor_id INT NOT NULL,
     patient_id INT NOT NULL,
     facility_id INT NOT NULL,
@@ -12,7 +13,8 @@ CREATE TABLE Appointments (
     doctor_cmt text,
     FOREIGN KEY (doctor_id) REFERENCES doctor_facilities (doctor_id),
     FOREIGN KEY (patient_id) REFERENCES patient (user_id),
-    FOREIGN KEY (facility_id) REFERENCES doctor_facilities (facility_id)
+    FOREIGN KEY (facility_id) REFERENCES doctor_facilities (facility_id),
+    PRIMARY KEY (id)
 );
 
 INSERT INTO Appointments (doctor_id, patient_id, facility_id, appt_day, start_time, end_time, current_status) VALUES (3, 2, 8, 20160830, '13:00:00', '14:00:00', 0);

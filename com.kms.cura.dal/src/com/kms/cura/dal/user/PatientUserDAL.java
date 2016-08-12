@@ -49,7 +49,7 @@ public class PatientUserDAL extends UserDAL {
 		if (patientUserEntity == null) {
 			return null;
 		}
-		AppointmentEntity entity = new AppointmentEntity(patientUserEntity, null, null, null, null, null, -1,null,null);
+		AppointmentEntity entity = new AppointmentEntity(null, patientUserEntity, null, null, null, null, null, -1,null,null);
 		AppointSearchEntity criteria = new AppointSearchEntity(entity);
 		List<AppointmentEntity> list = AppointmentDAL.getInstance().getAppointment(criteria, patientUserEntity, null);
 		patientUserEntity.addAllAppointmentList(list);
