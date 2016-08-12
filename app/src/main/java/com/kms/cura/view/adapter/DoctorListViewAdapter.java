@@ -4,35 +4,30 @@ package com.kms.cura.view.adapter;
  * Created by duyhnguyen on 6/14/2016.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
+import android.widget.ArrayAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kms.cura.R;
 import com.kms.cura.entity.SpecialityEntity;
-import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
-import com.kms.cura.entity.user.UserEntity;
 
-public class DoctorListViewAdapter extends BaseAdapter {
+import java.util.List;
+
+public class DoctorListViewAdapter extends ArrayAdapter {
     List<DoctorUserEntity> result;
     Context context;
     int[] imageId;
     private static LayoutInflater inflater = null;
 
     public DoctorListViewAdapter(Activity activity, List<DoctorUserEntity> users) {
+        super(activity, android.R.layout.simple_list_item_1);
         result = users;
         context = activity;
         inflater = (LayoutInflater) context.
