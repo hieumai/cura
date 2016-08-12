@@ -10,6 +10,7 @@ import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 
 public class AppointmentEntity {
+	public static final String UPDATE_TYPE = "update_type";
 	public static final int PENDING_STT = 0;
 	public static final int ACCEPTED_STT = 1;
 	public static final int REJECT_STT = 2;

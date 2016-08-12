@@ -94,12 +94,25 @@ public class DataUtils {
 
     public static List<AppointmentEntity> getApptByDate(List<AppointmentEntity> appts, Date date) {
         List<AppointmentEntity> newList = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
         for (AppointmentEntity entity : appts) {
-            if (Math.abs(date.getTime() - entity.getApptDay().getTime()) < MILISECOND_OF_DAY && entity.getStatus() != AppointmentEntity.PENDING_STT) {
+            Calendar compareCalendar = (Calendar) calendar.clone();
+            compareCalendar.setTime(entity.getApptDay());
+            if (isSameDay(calendar, compareCalendar)) {
                 newList.add(entity);
             }
         }
         return newList;
+    }
+
+    private static boolean isSameDay (Calendar cal1, Calendar cal2){
+        if (cal1 == null || cal2 == null) {
+            return false;
+        }
+        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
     }
 
     public static void loadProfile(UserEntity user, ImageView profile, Context context) {
@@ -111,6 +124,18 @@ public class DataUtils {
         } else {
             profile.setImageResource(R.drawable.profile_anon128);
         }
+    }
+
+    public static List<AppointmentEntity> getDoctorAppt(List<AppointmentEntity> appts){
+        List<AppointmentEntity> entities = new ArrayList<>();
+        for (AppointmentEntity entity : appts){
+            int status = entity.getStatus();
+            if (status !=  AppointmentEntity.PENDING_STT && status != AppointmentEntity.PATIENT_CANCEL_STT
+                    && status != AppointmentEntity.REJECT_STT ){
+                entities.add(entity);
+            }
+        }
+        return entities;
     }
 
 }

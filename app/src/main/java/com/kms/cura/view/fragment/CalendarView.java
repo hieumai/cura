@@ -16,8 +16,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.CalendarListener;
@@ -38,7 +41,7 @@ import java.util.Locale;
 /**
  * Created by linhtnvo on 7/26/2016.
  */
-public class CalendarView implements CalendarListener, AdapterView.OnItemClickListener{
+public class CalendarView implements CalendarListener, AdapterView.OnItemClickListener, EventHandler{
     private Context mContext;
     private CustomCalendarView calendarView;
     private int currentMonthIndex;
@@ -66,6 +69,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         setData();
         root.setTag(currentIndex);
         root.setTag(R.string.calendarTitle, calendarTitle);
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_DOCTOR_LIST);
         return root;
     }
 
@@ -84,7 +88,9 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         appts = ((DoctorUserEntity) CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
         listApptDay = new ArrayList<>();
         for (AppointmentEntity entity : appts) {
-            if (entity.getStatus() != AppointmentEntity.PENDING_STT && !listApptDay.contains(entity.getApptDay())) {
+            int status = entity.getStatus();
+            if (status !=  AppointmentEntity.PENDING_STT && status != AppointmentEntity.PATIENT_CANCEL_STT
+                    && status != AppointmentEntity.REJECT_STT  && !listApptDay.contains(entity.getApptDay())) {
                 listApptDay.add(entity.getApptDay());
             }
         }
@@ -113,7 +119,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         }
         previousDateSelected = new Date(date.getTime());
         List<AppointmentEntity> apptByDate = DataUtils.getApptByDate(appts, selectedDay);
-        adapter = new DoctorAppointmentAdapter(mContext, apptByDate);
+        adapter = new DoctorAppointmentAdapter(mContext, DataUtils.getDoctorAppt(apptByDate));
         lvApptList.setAdapter(adapter);
     }
 
@@ -145,6 +151,20 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         toApptDetail.putExtra(APPT_POSITION, entityList.indexOf(adapter.getListAppts().get(position)));
         mContext.startActivity(toApptDetail);
     }
+
+    @Override
+    public void handleEvent(String event, Object data) {
+        switch (event){
+            case EventConstant.UPDATE_APPT_DOCTOR_LIST:
+                appts.clear();
+                setData();
+                if (adapter != null){
+                    adapter.notifyDataSetChanged();
+                }
+                break;
+        }
+    }
+
 
     private class ColorDecorator implements DayDecorator {
 

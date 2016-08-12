@@ -227,7 +227,7 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
                         appointmentEntity.setStatus(AppointmentEntity.PATIENT_CANCEL_STT);
                         PatientUserEntity patientUserEntity = new PatientUserEntity(patient.getId(),null,null,null,null,null,null,null,null,null);
                         appointmentEntity.setPatientUserEntity(patientUserEntity);
-                        patient.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, patient));
+                        patient.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, patient, true));
                     } catch (Exception e) {
                         exception = e;
                     }

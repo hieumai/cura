@@ -182,18 +182,26 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 
     }
 
-    public List<AppointmentEntity> updateAppointment(AppointmentEntity entity) throws SQLException, ClassNotFoundException, IOException {
-        List<AppointmentEntity> patientAppts;
+    public List<AppointmentEntity> updateAppointment(AppointmentEntity entity, boolean patient) throws SQLException, ClassNotFoundException, IOException {
+        List<AppointmentEntity> listAppts = null;
+        AppointmentEntity search = null;
         PreparedStatement stmt = null;
         try {
             con.setAutoCommit(false);
             stmt = getUpdateAppointmentQuery(entity);
             stmt.executeUpdate();
-            AppointmentEntity search = new AppointmentEntity(null, entity.getPatientUserEntity(), null, null, null, null,
+            if (patient){
+            	search = new AppointmentEntity(entity.getPatientUserEntity(), null, null, null, null,
                     null, -1, null, null);
-            patientAppts = getAppointment(new AppointSearchEntity(search), entity.getPatientUserEntity(), null);
+            	listAppts = getAppointment(new AppointSearchEntity(search), entity.getPatientUserEntity(), null);
+            }
+            else{
+            	search = new AppointmentEntity(null, entity.getDoctorUserEntity(), null, null, null,
+                        null, -1, null, null);
+            	listAppts = getAppointment(new AppointSearchEntity(search), null, entity.getDoctorUserEntity());
+            }
             con.commit();
-            return patientAppts;
+            return listAppts;
         } catch (SQLException e) {
             if (con != null) {
                 System.err.print("Transaction is being rolled back");
