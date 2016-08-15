@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingEnd="10sp"
+    android:paddingRight="10sp"
+    android:gravity="right|end">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnToday"
+        android:textColor="@color/white"
+        android:textSize="@dimen/docText_16"
+        android:layout_marginRight="10sp"
+        android:text="@string/Today"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5sp"
+        android:textSize="@dimen/docText_16"
+        android:id="@+id/btnMonthView"
+        android:textColor="@color/white"
+        android:text="@string/MonthView"/>
+</LinearLayout>

@@ -68,7 +68,8 @@ public class CustomCalendarView extends LinearLayout {
     private static int MAXIMUM_DAYVIEW = 42;
     private static float NUMBER_DAY_PER_WEEK = 7.0f;
     private static int MAXIMUM_DAY_VISIBLE = 36;
-    private int black, white, dayDisableBackground, dayDisableText, curentDay;
+    private int black, white, curentDay;
+    private Date selectedDayNotHaveAppt;
 
     public CustomCalendarView(Context mContext) {
         this(mContext, null);
@@ -396,9 +397,6 @@ public class CustomCalendarView extends LinearLayout {
     }
 
 
-    private void storeLastValues(Date currentDate) {
-        lastSelectedDay = currentDate;
-    }
 
     public void setCalendarListener(CalendarListener calendarListener) {
         this.calendarListener = calendarListener;
@@ -407,7 +405,6 @@ public class CustomCalendarView extends LinearLayout {
     private OnClickListener onDayOfMonthClickListener = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            // Extract day selected
             ViewGroup dayOfMonthContainer = (ViewGroup) view;
             String tagId = (String) dayOfMonthContainer.getTag();
             tagId = tagId.substring(DAY_OF_MONTH_CONTAINER.length(), tagId.length());
@@ -417,14 +414,13 @@ public class CustomCalendarView extends LinearLayout {
             calendar.setFirstDayOfWeek(getFirstDayOfWeek());
             calendar.setTime(currentCalendar.getTime());
             calendar.set(Calendar.DAY_OF_MONTH, Integer.valueOf(dayOfMonthText.getText().toString()));
-            //Set the current day color
-            //markDayAsCurrentDay(currentCalendar);
             if (calendar == null) {
                 return;
             }
             if (apptDayNumber.contains(Integer.parseInt(tagId))) {
                 calendarListener.onDateSelected(calendar.getTime());
             } else {
+                selectedDayNotHaveAppt = calendar.getTime();
                 calendarListener.onDateSelected(null);
             }
         }
@@ -432,17 +428,41 @@ public class CustomCalendarView extends LinearLayout {
 
     private void colorSelectedDay(DayView dayOfMonthText, String tagID) {
         int id = Integer.parseInt(tagID);
-        if (id == previousSelected) {
-            unColorThePriviousSelected();
-            previousSelected = 0;
-            return;
-        }
         if (previousSelected != 0) {
             unColorThePriviousSelected();
         }
         previousSelected = id;
         dayOfMonthText.setOnSelected(true);
         dayOfMonthText.invalidate();
+    }
+
+    public void colorSelectedDay(java.sql.Date selectedDate) {
+        Calendar calendar = (Calendar) currentCalendar.clone();
+        calendar.setTime(selectedDate);
+        DayView dayOfMonth = getDayOfMonthText(calendar);
+        String tagId = (String) ((ViewGroup)dayOfMonth.getParent()).getTag();
+        tagId = tagId.substring(DAY_OF_MONTH_CONTAINER.length(), tagId.length());
+        int id = Integer.parseInt(tagId);
+        if (previousSelected != 0) {
+            unColorThePriviousSelected();
+        }
+        previousSelected = id;
+        dayOfMonth.setOnSelected(true);
+        dayOfMonth.invalidate();
+        calendar.setFirstDayOfWeek(getFirstDayOfWeek());
+        if (calendar == null) {
+            return;
+        }
+        if (apptDayNumber.contains(Integer.parseInt(tagId))) {
+            calendarListener.onDateSelected(calendar.getTime());
+        } else {
+            selectedDayNotHaveAppt = calendar.getTime();
+            calendarListener.onDateSelected(null);
+        }
+    }
+
+    public Date getSelectedDayNotHaveAppt() {
+        return selectedDayNotHaveAppt;
     }
 
     public void unColorThePriviousSelected() {
@@ -510,4 +530,5 @@ public class CustomCalendarView extends LinearLayout {
     public void setCurrentMonthIndex(int currentMonthIndex) {
         this.currentMonthIndex = currentMonthIndex;
     }
+
 }
