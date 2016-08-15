@@ -24,6 +24,14 @@ public class MessageEntity extends Entity {
 		this.message = message;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		MessageEntity src = (MessageEntity) obj;
+		return (this.sender.getId().equals(src.getSender().getId())
+				&& this.receiver.getId().equals(src.getReceiver().getId()) && this.timeSent.equals(src.getTimeSent())
+				&& this.message.equals(src.getMessage()));
+	}
+
 	public UserEntity getSender() {
 		return sender;
 	}

@@ -54,16 +54,25 @@ public class NotificationDatabaseHelper extends DatabaseHelper {
 		StringBuilder builder = new StringBuilder();
 		builder.append("INSERT INTO ");
 		builder.append(tableName);
-		builder.append(" VALUES ");
-		if (notiType == null) {
-			builder.append("(?, ?, ?");
+		builder.append(" (");
+		builder.append(NotificationColumn.USER_ID.getColumnName());
+		builder.append(", ");
+		builder.append(NotificationColumn.REF_ID.getColumnName());
+		builder.append(", ");
+		builder.append(NotificationColumn.STATUS.getColumnName());
+		if (notiType != null) {
+			builder.append(", ");
+			builder.append(NotificationColumn.APPT_NOTI_TYPE.getColumnName());
+			builder.append(") VALUES (?, ?, ?, ?)");
 		}
-		builder.append("(?, ?, ?, ?");
+		else{
+			builder.append(") VALUES (?, ?, ?)");
+		}
 		try {
 			con.setAutoCommit(false);
 			stmt = con.prepareStatement(builder.toString());
-			stmt.setString(1, userID);
-			stmt.setString(2, refID);
+			stmt.setInt(1, Integer.parseInt(userID));
+			stmt.setInt(2, Integer.parseInt(refID));
 			stmt.setBoolean(3, false);
 			if (notiType != null){
 				stmt.setString(4, notiType);
