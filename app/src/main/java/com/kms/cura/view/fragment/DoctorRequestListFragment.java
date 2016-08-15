@@ -72,7 +72,7 @@ public class DoctorRequestListFragment extends Fragment implements AdapterView.O
                         try {
                             DoctorUserEntity doctor = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
                             DoctorUserEntity doctorUserEntity = new DoctorUserEntity(doctor.getId(),null);
-                            AppointmentEntity entity = new AppointmentEntity(null, doctorUserEntity, null, null, null, null, -1, null, null);
+                            AppointmentEntity entity = new AppointmentEntity(null,null, doctorUserEntity, null, null, null, null, -1, null, null);
                             doctor.setAppointmentList(AppointmentController.getAppointment(new AppointSearchEntity(entity)));
                         } catch (Exception e) {
                             exception = e;

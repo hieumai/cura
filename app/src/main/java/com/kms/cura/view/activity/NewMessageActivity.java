@@ -99,7 +99,7 @@ public class NewMessageActivity extends AppCompatActivity implements Toolbar.OnM
                 break;
         }
         Timestamp timestamp = new Timestamp(Calendar.getInstance().getTimeInMillis());
-        return new MessageEntity(sender, receiver, timestamp, InputUtils.covertValidStringForSQL(message));
+        return new MessageEntity(null, sender, receiver, timestamp, InputUtils.covertValidStringForSQL(message));
     }
 
     private void sendMessage(final MessageEntity entity) {

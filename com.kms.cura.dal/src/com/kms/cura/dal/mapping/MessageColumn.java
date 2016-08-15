@@ -1,7 +1,7 @@
 package com.kms.cura.dal.mapping;
 
 public enum MessageColumn {
-	PATIENT_ID("patient_id"), DOCTOR_ID("doctor_id"), SENT_BY_DOCTOR("sent_by_doctor"), TIME_SENT("time_sent"), 
+	MSG_ID("id"),PATIENT_ID("patient_id"), DOCTOR_ID("doctor_id"), SENT_BY_DOCTOR("sent_by_doctor"), TIME_SENT("time_sent"), 
 		MESSAGE("message"), PATIENT_AVAILABLE("patient_available"), DOCTOR_AVAILABLE("doctor_available");
 	
 	String columnName;
