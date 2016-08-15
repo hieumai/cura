@@ -20,7 +20,7 @@ public class AppointmentController {
         return AppointmentModel.getInstance().getAppointment(entity);
     }
 
-    public static List<AppointmentEntity> updateAppointment(AppointmentEntity appointmentEntity, UserEntity entity, boolean patient) throws Exception{
-        return AppointmentModel.getInstance().updateAppointment(appointmentEntity, entity, patient);
+    public static List<AppointmentEntity> updateAppointment(AppointmentEntity appointmentEntity, UserEntity entity) throws Exception{
+        return AppointmentModel.getInstance().updateAppointment(appointmentEntity, entity);
     }
 }

@@ -1,13 +1,11 @@
 package com.kms.cura.view.fragment;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ActionMenuView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,10 +29,8 @@ import com.kms.cura.view.activity.DoctorAppointmentDetailActivity;
 import com.kms.cura.view.adapter.DoctorAppointmentAdapter;
 
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -119,7 +115,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         }
         previousDateSelected = new Date(date.getTime());
         List<AppointmentEntity> apptByDate = DataUtils.getApptByDate(appts, selectedDay);
-        adapter = new DoctorAppointmentAdapter(mContext, DataUtils.getDoctorAppt(apptByDate));
+        adapter = new DoctorAppointmentAdapter(mContext, DataUtils.getAllDoctorAvailableAppt(apptByDate));
         lvApptList.setAdapter(adapter);
     }
 

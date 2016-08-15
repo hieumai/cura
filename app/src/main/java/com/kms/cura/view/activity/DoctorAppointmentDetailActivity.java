@@ -198,7 +198,7 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
                     appointmentEntity.setStatus(AppointmentEntity.COMPLETED_STT);
                     DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(),null,null,null,null,null,null,null,null,null);
                     appointmentEntity.setDoctorUserEntity(doctor);
-                    doctorUserEntity.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, doctorUserEntity, false));
+                    doctorUserEntity.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, doctorUserEntity));
                 } catch (Exception e) {
                     exception = e;
                 }
@@ -235,7 +235,7 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
                     appointmentEntity.setStatus(AppointmentEntity.DOCTOR_CANCEL_STT);
                     DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(),null,null,null,null,null,null,null,null,null);
                     appointmentEntity.setDoctorUserEntity(doctor);
-                    doctorUserEntity.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, doctorUserEntity, false));
+                    doctorUserEntity.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, doctorUserEntity));
                 } catch (Exception e) {
                     exception = e;
                 }

@@ -126,7 +126,7 @@ public class DataUtils {
         }
     }
 
-    public static List<AppointmentEntity> getDoctorAppt(List<AppointmentEntity> appts){
+    public static List<AppointmentEntity> getAllDoctorAvailableAppt(List<AppointmentEntity> appts){
         List<AppointmentEntity> entities = new ArrayList<>();
         for (AppointmentEntity entity : appts){
             int status = entity.getStatus();

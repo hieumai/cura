@@ -69,14 +69,14 @@ public class AppointmentModel {
         throw new Exception(response.getError());
     }
 
-    public List<AppointmentEntity> updateAppointment(AppointmentEntity appointmentEntity, UserEntity entity, boolean patient) throws Exception {
+    public List<AppointmentEntity> updateAppointment(AppointmentEntity appointmentEntity, UserEntity entity) throws Exception {
         StringBuilder builder = new StringBuilder();
         builder.append(Settings.SERVER_URL);
         builder.append(Settings.UPDATE_APPT);
         AppointmentModelResponse response = new AppointmentModelResponse(entity);
         String apptUpdate = new Gson().toJson(appointmentEntity,AppointmentEntity.getAppointmentType());
         JSONObject jsonObject = new JSONObject(apptUpdate);
-        jsonObject.put(AppointmentEntity.UPDATE_TYPE, patient);
+        jsonObject.put(AppointmentEntity.UPDATE_TYPE, entity instanceof PatientUserEntity);
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
                 jsonObject.toString(),response);
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
