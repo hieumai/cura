@@ -47,6 +47,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
     private Date previousDateSelected;
     private String calendarTitle;
     private TextView txtDate;
+    private Date selectedDay;
     public CalendarView(Context mContext, int currentMonthIndex) {
         this.mContext = mContext;
         this.currentMonthIndex = currentMonthIndex;
@@ -91,6 +92,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
     @Override
     public void onDateSelected(java.util.Date date) {
         if (date == null) {
+            selectedDay = new Date(calendarView.getSelectedDayNotHaveAppt().getTime());
             txtDate.setVisibility(View.INVISIBLE);
             previousDateSelected = null;
             DoctorAppointmentAdapter adapter = new DoctorAppointmentAdapter(mContext, new ArrayList<AppointmentEntity>());
@@ -99,14 +101,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         }
         txtDate.setVisibility(View.VISIBLE);
         txtDate.setText(getSelectedDate(date));
-        Date selectedDay = new Date(date.getTime());
-        if (previousDateSelected != null && (Math.abs(previousDateSelected.getTime()-selectedDay.getTime()) < DataUtils.MILISECOND_OF_DAY)) {
-            DoctorAppointmentAdapter adapter = new DoctorAppointmentAdapter(mContext, new ArrayList<AppointmentEntity>());
-            lvApptList.setAdapter(adapter);
-            previousDateSelected = null;
-            txtDate.setVisibility(View.INVISIBLE);
-            return;
-        }
+        selectedDay = new Date(date.getTime());
         previousDateSelected = new Date(date.getTime());
         List<AppointmentEntity> apptByDate = DataUtils.getApptByDate(appts, selectedDay);
         DoctorAppointmentAdapter adapter = new DoctorAppointmentAdapter(mContext, apptByDate);
@@ -174,6 +169,11 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         previousDateSelected = null;
     }
 
+    public Date getSelectedDay() {
+        return selectedDay;
+    }
 
-
+    public void colorSelectedDayFromDayView(Date selectedDay){
+        calendarView.colorSelectedDay(selectedDay);
+    }
 }

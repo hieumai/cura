@@ -15,12 +15,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.kms.cura.R;
-import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.UserController;
-import com.kms.cura.event.EventBroker;
+import com.kms.cura.view.fragment.DoctorApptDayVIewFragment;
 import com.kms.cura.view.MultipleChoiceBackPress;
 import com.kms.cura.view.fragment.DoctorAppointmentMonthViewFragment;
 import com.kms.cura.view.fragment.DoctorSettingsFragment;
@@ -31,7 +29,7 @@ import com.kms.cura.view.fragment.MessageListFragment;
 public class DoctorViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener, View.OnClickListener {
     public static final String NAVIGATION_KEY = "navi_key";
     private Toolbar doctorToolbar;
-    private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorHealthTrachkerFragment, doctorRequestListFragment, doctorApptView2, doctorMessageFragment;
+    private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorMessageFragment, doctorRequestListFragment, doctorApptDayViewFragment, doctorApptView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +47,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         doctorSettingsFragment = new DoctorSettingsFragment();
         doctorRequestListFragment = new DoctorRequestListFragment();
         doctorMessageFragment = new MessageListFragment();
+        doctorApptDayViewFragment = new DoctorApptDayVIewFragment();
     }
 
     private void changeFragment(Fragment newFragment) {
