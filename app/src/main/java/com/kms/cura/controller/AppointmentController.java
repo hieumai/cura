@@ -3,6 +3,7 @@ package com.kms.cura.controller;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.AppointmentModel;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class AppointmentController {
         return AppointmentModel.getInstance().getAppointment(entity);
     }
 
-    public static List<AppointmentEntity> updateAppointment(AppointmentEntity appointmentEntity, PatientUserEntity patient) throws Exception{
-        return AppointmentModel.getInstance().updateAppointment(appointmentEntity, patient);
+    public static List<AppointmentEntity> updateAppointment(AppointmentEntity appointmentEntity, UserEntity entity) throws Exception{
+        return AppointmentModel.getInstance().updateAppointment(appointmentEntity, entity);
     }
 }

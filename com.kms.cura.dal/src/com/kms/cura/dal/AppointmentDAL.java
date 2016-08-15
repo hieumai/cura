@@ -44,10 +44,10 @@ public class AppointmentDAL {
         }
     }
 
-    public List<AppointmentEntity> updateAppointment(AppointmentEntity entity) throws ClassNotFoundException, SQLException, IOException {
+    public List<AppointmentEntity> updateAppointment(AppointmentEntity entity, boolean patient) throws ClassNotFoundException, SQLException, IOException {
         AppointmentDatabaseHelper dbh = new AppointmentDatabaseHelper();
         try {
-            return dbh.updateAppointment(entity);
+            return dbh.updateAppointment(entity, patient);
         } finally {
             dbh.closeConnection();
         }

@@ -310,8 +310,10 @@
     <string name="ConflictMsg">This conflicts with another scheduled appointment</string>
     <string name="AcceptApptMsg">Are you sure you want to accept this request ?</string>
     <string name="RateThisDoctor">Rate This Doctor</string>
+    <string name="CompleteAppt">Complete Appointment</string>
     <string name="Submit">Summit</string>
     <string name="s">S</string>
+    <string name="CompleteApptMsg">Are you sure you want to complete this appointment ?</string>
     <string name="m">M</string>
     <string name="t">T</string>
     <string name="w">W</string>
