@@ -1,14 +1,18 @@
 package com.kms.cura.model;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.request.AppointmentModelResponse;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.RequestUtils;
+
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -36,6 +40,8 @@ public class AppointmentModel {
         AppointmentModelResponse response = new AppointmentModelResponse(patient);
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
                 new Gson().toJson(entity,AppointmentEntity.getAppointmentType()),response);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
         while (!response.isGotResponse());
         if(!response.isResponseError()) {
@@ -66,13 +72,18 @@ public class AppointmentModel {
         throw new Exception(response.getError());
     }
 
-    public List<AppointmentEntity> updateAppointment(AppointmentEntity appointmentEntity, PatientUserEntity patient) throws Exception {
+    public List<AppointmentEntity> updateAppointment(AppointmentEntity appointmentEntity, UserEntity entity) throws Exception {
         StringBuilder builder = new StringBuilder();
         builder.append(Settings.SERVER_URL);
         builder.append(Settings.UPDATE_APPT);
-        AppointmentModelResponse response = new AppointmentModelResponse(patient);
+        AppointmentModelResponse response = new AppointmentModelResponse(entity);
+        String apptUpdate = new Gson().toJson(appointmentEntity,AppointmentEntity.getAppointmentType());
+        JSONObject jsonObject = new JSONObject(apptUpdate);
+        jsonObject.put(AppointmentEntity.UPDATE_TYPE, entity instanceof PatientUserEntity);
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
-                new Gson().toJson(appointmentEntity,AppointmentEntity.getAppointmentType()),response);
+                jsonObject.toString(),response);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
         while (!response.isGotResponse());
         if(!response.isResponseError()) {

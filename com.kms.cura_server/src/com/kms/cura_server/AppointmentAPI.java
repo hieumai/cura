@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.kms.cura.dal.AppointmentDAL;
@@ -42,9 +43,11 @@ public final class AppointmentAPI {
 	@POST
 	@Path("/updateAppts")
 	public String updateAppts(String jsonData){
+		JSONObject jsonObject = new JSONObject(jsonData);
+		boolean patient = jsonObject.getBoolean(AppointmentEntity.UPDATE_TYPE);
 		AppointmentEntity appointmentEntity = new Gson().fromJson(jsonData, AppointmentEntity.getAppointmentType());
 		try {
-			return new AppointmentAPIResponse().successListApptsResponse(AppointmentDAL.getInstance().updateAppointment(appointmentEntity));
+			return new AppointmentAPIResponse().successListApptsResponse(AppointmentDAL.getInstance().updateAppointment(appointmentEntity, patient));
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
