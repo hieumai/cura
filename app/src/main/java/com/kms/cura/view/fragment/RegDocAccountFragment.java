@@ -88,7 +88,6 @@ public class RegDocAccountFragment extends Fragment implements View.OnClickListe
         btnRegister.setOnClickListener(this);
         btnBack = (ImageButton) myFragmentView.findViewById(R.id.btnRegisterBack);
         btnBack.setOnClickListener(this);
-
         edittedPwd = false;
         edittedRePwd = false;
         reformData();
@@ -212,8 +211,7 @@ public class RegDocAccountFragment extends Fragment implements View.OnClickListe
             edittedPwd = false;
             return false;
         }
-        edittedPwd = true;
-        if (!checkPwd() && edittedPwd) {
+        if (!checkPwd()) {
             edtPwd.setError(getString(R.string.pwd_error));
             return false;
         }
@@ -243,13 +241,11 @@ public class RegDocAccountFragment extends Fragment implements View.OnClickListe
             return false;
         }
         edittedRePwd = true;
-        if (edittedRePwd) {
-            if (!checkRePwd()) {
-                edtRePwd.setError(getString(R.string.repwd_error));
-                return false;
-            }
-            edtRePwd.setError(null);
+        if (!checkRePwd()) {
+            edtRePwd.setError(getString(R.string.repwd_error));
+            return false;
         }
+        edtRePwd.setError(null);
         return true;
     }
 
@@ -257,7 +253,7 @@ public class RegDocAccountFragment extends Fragment implements View.OnClickListe
     public void handleEvent(String event, Object data) {
         switch (event) {
             case EventConstant.REGISTER_SUCCESS:
-                UserController.saveLoginInfo(getActivity(),edtEmail.getText().toString(),edtPwd.getText().toString());
+                UserController.saveLoginInfo(getActivity(), edtEmail.getText().toString(), edtPwd.getText().toString());
                 Intent toDoctor = new Intent(getActivity(), DoctorViewActivity.class);
                 startActivity(toDoctor);
                 unregisterEvent();
@@ -274,7 +270,7 @@ public class RegDocAccountFragment extends Fragment implements View.OnClickListe
                 }
                 break;
             case EventConstant.INTERNAL_ERROR:
-                if(data == null){
+                if (data == null) {
                     data = "";
                 }
                 ErrorController.showDialog(getActivity(), getResources().getString(R.string.InternalError) + " :" + data);

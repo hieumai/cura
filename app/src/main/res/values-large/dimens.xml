@@ -19,6 +19,8 @@
     <dimen name="image">400sp</dimen>
     <dimen name="arrow_60">120sp</dimen>
     <dimen name="margin_10">60sp</dimen>
+    <dimen name="margin_20">40sp</dimen>
+    <dimen name="margin_40">80sp</dimen>
     <dimen name="padding_5">15sp</dimen>
     <dimen name="padding_8">16sp</dimen>
     <dimen name="padding_16">32sp</dimen>
