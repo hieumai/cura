@@ -19,6 +19,7 @@ import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.fragment.DoctorProfileFragment;
 
 public class ViewDoctorProfileActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
+
     private DoctorUserEntity doctorUserEntity;
     private Bundle bundle;
     private ImageView btnBack;

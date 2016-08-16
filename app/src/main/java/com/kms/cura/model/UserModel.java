@@ -3,6 +3,7 @@ package com.kms.cura.model;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.kms.cura.entity.DoctorSearchEntity;
+import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
@@ -12,6 +13,8 @@ import com.kms.cura.model.request.LoginUserModelResponse;
 import com.kms.cura.model.request.PatientModelResponse;
 import com.kms.cura.model.request.RegisterModelResponse;
 import com.kms.cura.utils.RequestUtils;
+
+import java.util.List;
 
 public class UserModel extends EntityModel {
     private static UserModel instance;
@@ -130,6 +133,16 @@ public class UserModel extends EntityModel {
         DoctorModelResponse doctorResponse = new DoctorModelResponse();
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
                 EntityToJsonConverter.convertEntityToJson(user).toString(), doctorResponse);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+    }
+    
+    public void getDoctorByFacility(FacilityEntity facilityEntity) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.GET_DOCTOR_BY_FACILITY);
+        DoctorModelResponse response =  new DoctorModelResponse();
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                EntityToJsonConverter.convertEntityToJson(facilityEntity).toString(), response);
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
     }
 }

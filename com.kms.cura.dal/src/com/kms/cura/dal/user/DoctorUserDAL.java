@@ -12,6 +12,7 @@ import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.DoctorSearchEntity;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 
@@ -105,6 +106,16 @@ public class DoctorUserDAL extends UserDAL {
 			}
 			return doctors;
 		} finally {
+			dbh.closeConnection();
+		}
+	}
+	
+	public List<DoctorUserEntity> getDoctorByFacility(FacilityEntity facilityEntity) throws ClassNotFoundException, SQLException, IOException {
+		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
+		try {
+			return dbh.queryDoctorByFacility(facilityEntity);
+		}
+		finally{
 			dbh.closeConnection();
 		}
 	}

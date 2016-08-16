@@ -312,6 +312,7 @@
     <string name="title_activity_maps">Map</string>
     <string name="load_map">Waiting for Google Map…</string>
     <string name="detail">…more</string>
+    <string name="doctor_list">Doctors List</string>
     <string name="opening_hours">Opening hours</string>
     <string name="RateThisDoctor">Rate This Doctor</string>
     <string name="MonthView">Month View</string>
