@@ -12,14 +12,17 @@ public class FacilityEntity extends Entity {
 	private String phone;
 	private String city;
 	private List<OpeningHour> openingHours;
+	private double latitude, longitude;
 
 	public FacilityEntity(String id, String name, String address, String phone, String city,
-			List<OpeningHour> openingHours) {
+			List<OpeningHour> openingHours, double latitude, double longtitude) {
 		super(id, name);
 		this.address = address;
 		this.phone = phone;
 		this.city = city;
 		this.openingHours = openingHours;
+		this.latitude = latitude;
+		this.longitude = longtitude;
 	}
 
 	public String getCity() {
@@ -74,6 +77,12 @@ public class FacilityEntity extends Entity {
     	}
     	return workingTime;
     }
-	
-	
+
+	public double getLongitude() {
+		return longitude;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
 }

@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kms.cura.view.activity.FacilityInfoActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/mapLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3.5">
+
+            <FrameLayout
+                android:id="@+id/flFacilityMap"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/btnFacilityBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_8"
+                    android:background="@drawable/toolbar_back"
+                    android:backgroundTint="@color/black" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/dimLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.2"
+                android:background="@color/black"></FrameLayout>
+        </RelativeLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <LinearLayout
+                android:id="@+id/facilityLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.design.widget.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/tbFacilityInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="?attr/colorPrimary"
+                        app:contentInsetStart="0dp">
+
+                        <TextView
+                            android:id="@+id/tvFacilityName"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="left|center"
+                            android:paddingLeft="@dimen/padding_16"
+                            android:text="@string/Facility"
+                            android:textAllCaps="true"
+                            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/docText_20" />
+                    </android.support.v7.widget.Toolbar>
+                </android.support.design.widget.AppBarLayout>
+
+                <android.support.v4.widget.NestedScrollView
+                    android:id="@+id/svFacility"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/padding_16">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/location_pin"
+                                android:backgroundTint="@color/colorPrimary" />
+
+                            <TextView
+                                android:id="@+id/tvLocation"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/padding_16"
+                                android:gravity="center|start"
+                                android:text="@string/Location"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/docText_18" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/padding_8"
+                            android:paddingLeft="@dimen/padding_16">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/phone"
+                                android:backgroundTint="@color/colorPrimary" />
+
+                            <TextView
+                                android:id="@+id/tvPhone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/padding_16"
+                                android:gravity="center|start"
+                                android:text="@string/phone"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/docText_18" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:paddingLeft="@dimen/padding_16"
+                            android:paddingTop="@dimen/padding_16">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:background="@drawable/time"
+                                android:backgroundTint="@color/colorPrimary" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/padding_16"
+                                android:gravity="center|start"
+                                android:text="@string/opening_hours"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/docText_18" />
+                        </LinearLayout>
+
+
+                        <ListView
+                            android:id="@+id/lvWorkingTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/scrollHeight"
+                            android:layout_marginLeft="@dimen/icon_32"
+                            android:layout_marginTop="@dimen/padding_5"
+                            android:divider="@null"
+                            android:paddingLeft="@dimen/padding_32">
+
+                        </ListView>
+
+
+                    </LinearLayout>
+
+                </android.support.v4.widget.NestedScrollView>
+
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/dimLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0.2"
+                android:background="@color/black"></FrameLayout>
+
+            <LinearLayout
+                android:id="@+id/floatingMenuLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:gravity="bottom|center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/floatingMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:orientation="vertical"
+                    android:paddingRight="8sp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvCall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@color/white"
+                            android:elevation="4sp"
+                            android:gravity="center"
+                            android:paddingBottom="5sp"
+                            android:paddingLeft="@dimen/padding_8"
+                            android:paddingRight="@dimen/padding_8"
+                            android:paddingTop="5sp"
+                            android:text="Call"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/fbCall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom|center"
+                            android:layout_margin="@dimen/fab_margin"
+                            android:src="@drawable/phone_white"
+                            app:backgroundTint="@color/colorPrimary"
+                            app:fabSize="mini" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvDoctorList"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@color/white"
+                            android:elevation="4sp"
+                            android:gravity="center"
+                            android:paddingBottom="5sp"
+                            android:paddingLeft="@dimen/padding_8"
+                            android:paddingRight="@dimen/padding_8"
+                            android:paddingTop="5sp"
+                            android:text="Doctors List"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/fbDoctor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_margin="@dimen/fab_margin"
+                            android:src="@drawable/menu_doctor"
+                            app:backgroundTint="@color/colorPrimary"
+                            app:fabSize="mini" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvDirection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:background="@color/white"
+                            android:elevation="4sp"
+                            android:gravity="center"
+                            android:paddingBottom="5sp"
+                            android:paddingLeft="@dimen/padding_8"
+                            android:paddingRight="@dimen/padding_8"
+                            android:paddingTop="5sp"
+                            android:text="Direction"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:id="@+id/fbDirection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:layout_margin="@dimen/fab_margin"
+                            android:src="@drawable/navigation"
+                            app:backgroundTint="@color/colorPrimary"
+                            app:fabSize="mini" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fbMenu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="@dimen/fab_margin"
+                    android:src="@drawable/floating_list"
+                    app:backgroundTint="@color/colorPrimary" />
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
+

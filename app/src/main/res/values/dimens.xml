@@ -72,4 +72,6 @@
     <dimen name="minDayCellHeight">40dp</dimen>
     <dimen name="marginTopPager">20sp</dimen>
     <dimen name="btnUpload">200sp</dimen>
+    <dimen name="padding_32">32sp</dimen>
+    <dimen name="icon_32">32sp</dimen>
 </resources>

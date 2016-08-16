@@ -38,4 +38,5 @@
     <dimen name="profilePicture">120sp</dimen>
     <dimen name="marginTopPager">30sp</dimen>
     <dimen name="btnUpload">280sp</dimen>
+    <dimen name="padding_32">64sp</dimen>
 </resources>
