@@ -23,6 +23,7 @@
     <dimen name="arrow_60">60sp</dimen>
     <dimen name="margin_10">10sp</dimen>
     <dimen name="margin_20">20sp</dimen>
+    <dimen name="margin_40">40sp</dimen>
     <dimen name="padding_5">5sp</dimen>
     <dimen name="padding_8">8sp</dimen>
     <dimen name="padding_16">16sp</dimen>

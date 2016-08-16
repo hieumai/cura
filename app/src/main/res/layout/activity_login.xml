@@ -98,7 +98,7 @@
         android:text="@string/no_account"
         android:id="@+id/textView_LoginUI_NoAccount"
         android:textSize="27sp"
-        android:layout_below="@+id/button_LoginUI_ForgotPassword"
+        android:layout_below="@+id/btnForgotPassword"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp" />
 
@@ -118,7 +118,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/forgot_password"
-        android:id="@+id/button_LoginUI_ForgotPassword"
+        android:id="@+id/btnForgotPassword"
         android:layout_below="@+id/button_LoginUI_Login"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"

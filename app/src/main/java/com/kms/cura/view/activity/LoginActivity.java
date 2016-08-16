@@ -1,11 +1,9 @@
 package com.kms.cura.view.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -90,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     }
 
     private void initPasswordButton() {
-        forgotPasswordButton = initButton(R.id.button_LoginUI_ForgotPassword);
+        forgotPasswordButton = initButton(R.id.btnForgotPassword);
         forgotPasswordButton.setPaintFlags(forgotPasswordButton.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         forgotPasswordButton.setOnClickListener(this);
     }
@@ -159,8 +157,8 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
             startActivity(intent);
         } else if (v.getId() == R.id.button_LoginUI_Login) {
             UserController.userLogin(email.getText().toString(), password.getText().toString());
-        } else {
-            Intent intent = new Intent(this, BookAppointmentActivity.class);
+        } else if (v.getId() == R.id.btnForgotPassword){
+            Intent intent = new Intent(this, ForgotPasswordActivity.class);
             startActivity(intent);
         }
     }
