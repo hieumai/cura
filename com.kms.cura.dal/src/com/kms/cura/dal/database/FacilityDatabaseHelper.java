@@ -36,7 +36,9 @@ public class FacilityDatabaseHelper extends DatabaseHelper {
 					resultSet.getString(FacilityColumn.NAME.getColumnName()),
 					resultSet.getString(FacilityColumn.ADDRESS.getColumnName()),
 					resultSet.getString(FacilityColumn.PHONE.getColumnName()),
-					resultSet.getString(FacilityColumn.CITY.getColumnName()), openingHours);
+					resultSet.getString(FacilityColumn.CITY.getColumnName()), openingHours,
+					resultSet.getDouble(FacilityColumn.LATITUDE.getColumnName()), 
+					resultSet.getDouble(FacilityColumn.LONGITUDE.getColumnName()));
 			return facility;
 		} finally {
 			if (resultSet.isAfterLast()) {

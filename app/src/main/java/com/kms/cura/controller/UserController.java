@@ -65,7 +65,7 @@ public class UserController {
     }
 
     public static void doctorSearch(String name, String city, ArrayList<String> specialities) {
-        FacilityEntity facility = new FacilityEntity(null, null, null, null, city, null);
+        FacilityEntity facility = new FacilityEntity(null, null, null, null, city, null, 0, 0);
         List<WorkingHourEntity> workingHourEntities = new ArrayList<WorkingHourEntity>();
         WorkingHourEntity workingHourEntity = new WorkingHourEntity(facility);
         workingHourEntities.add(workingHourEntity);

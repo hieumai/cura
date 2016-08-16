@@ -286,7 +286,7 @@
     <string name="Today">Today</string>
     <string name="DayView">Day View</string>
     <string name="calendarTitle">calendarTitle</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="new_message_warning">Are you sure to send this message?</string>
     <string name="reply">Reply</string>
     <string name="deleted">Deleted</string>
@@ -309,6 +309,10 @@
     <string name="YES">Yes</string>
     <string name="ConflictMsg">This conflicts with another scheduled appointment</string>
     <string name="AcceptApptMsg">Are you sure you want to accept this request ?</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="load_map">Waiting for Google Map…</string>
+    <string name="detail">…more</string>
+    <string name="opening_hours">Opening hours</string>
     <string name="RateThisDoctor">Rate This Doctor</string>
     <string name="MonthView">Month View</string>
     <string name="Submit">Summit</string>

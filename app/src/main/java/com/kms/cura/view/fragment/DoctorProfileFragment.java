@@ -1,6 +1,7 @@
 package com.kms.cura.view.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,9 +21,11 @@ import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.WorkingHourEntity;
+import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
+import com.kms.cura.view.activity.FacilityInfoActivity;
 import com.kms.cura.view.adapter.WorkingHourExpandableAdapter;
 
 import java.util.ArrayList;
@@ -152,7 +155,7 @@ public class DoctorProfileFragment extends Fragment {
     }
 
 
-    class ViewHolder {
+    class ViewHolder implements View.OnClickListener {
         private TextView txtFacilityName, txtFacilityAddress, txtFacilityPhoneNumber;
         private LinearLayout layoutFacilityTime;
         private View root = null;
@@ -171,11 +174,20 @@ public class DoctorProfileFragment extends Fragment {
 
         public void loadFacility() {
             txtFacilityName = loadText(entity.getName(), R.id.txtDoctorFacilityName);
+            txtFacilityName.setOnClickListener(this);
             txtFacilityAddress = loadText(DataUtils.showUnicode(entity.getAddress()), R.id.txtDoctorFacilityAddress);
             txtFacilityPhoneNumber = loadText(entity.getPhone(), R.id.txtDoctorFacilityPhoneNumber);
+            TextView detail = (TextView) root.findViewById(R.id.btnFacilityDetail);
+            detail.setOnClickListener(this);
         }
 
 
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getActivity(), FacilityInfoActivity.class);
+            intent.putExtra(FacilityInfoActivity.FACILITY_KEY, EntityToJsonConverter.convertEntityToJson(entity).toString());
+            startActivity(intent);
+        }
     }
 
 
