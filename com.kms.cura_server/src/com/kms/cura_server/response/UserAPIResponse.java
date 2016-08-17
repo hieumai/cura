@@ -82,4 +82,19 @@ public class UserAPIResponse extends APIResponse {
 		jsonObject.addProperty(Entity.STATUS_KEY, true);
 		return jsonObject.toString();
 	}
+	
+	public String successResponseWithBoolean(Boolean b, String tag) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty(tag, b);
+		jsonObject.addProperty(Entity.STATUS_KEY, true);
+		return jsonObject.toString();
+	}
+	
+	public String successResponseWithString(String text, String tag) {
+		JsonObject jsonObject = new JsonObject();
+		jsonObject.addProperty(tag, text);
+		jsonObject.addProperty(Entity.STATUS_KEY, true);
+		return jsonObject.toString();
+	}
+	
 }

@@ -1,5 +1,7 @@
 package com.kms.cura.view.fragment;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -11,7 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.UserController;
 import com.kms.cura.utils.InputUtils;
+import com.kms.cura.view.activity.ForgotPasswordActivity;
 
 public class ForgotPassworkStepOneFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
@@ -40,14 +45,13 @@ public class ForgotPassworkStepOneFragment extends Fragment implements View.OnCl
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnNext) {
-            Fragment fragment = new ForgotPasswordStepTwoFragment();
-            getFragmentManager().beginTransaction().replace(R.id.fragmentHolder, fragment, ForgotPasswordStepTwoFragment.STEP2_TAG).commit();
+            checkEmailAsyncTask().execute();
         } if (v.getId() == R.id.btnForgotBack) {
             getActivity().finish();
         }
     }
 
-    private boolean checkEmail() {
+    private boolean checkEmailValid() {
         String email = edtEmail.getText().toString();
         return InputUtils.isEmailValid(email);
     }
@@ -59,7 +63,7 @@ public class ForgotPassworkStepOneFragment extends Fragment implements View.OnCl
             return false;
         }
         edittedEmail = true;
-        if (!checkEmail()) {
+        if (!checkEmailValid()) {
             edtEmail.setError(getString(R.string.email_error));
             return false;
         }
@@ -85,5 +89,87 @@ public class ForgotPassworkStepOneFragment extends Fragment implements View.OnCl
     @Override
     public void afterTextChanged(Editable s) {
 
+    }
+
+    private AsyncTask<Object, Void, Void> checkEmailAsyncTask() {
+        return new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            private ProgressDialog pDialog;
+            private boolean exist;
+
+            @Override
+            protected void onPreExecute() {
+                pDialog = new ProgressDialog(getActivity());
+                pDialog.setMessage(getString(R.string.check_mail));
+                pDialog.setCancelable(false);
+                pDialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    exist = UserController.checkEmailExist(edtEmail.getText().toString());
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                if (exception != null) {
+                    ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
+                } else {
+                    if (!exist) {
+                        ErrorController.showDialog(getActivity(), getString(R.string.email_not_exist));
+                    } else {
+                        sendCodeAsynctask().execute();
+                    }
+                }
+            }
+        };
+    }
+
+    private AsyncTask<Object, Void, Void> sendCodeAsynctask() {
+        return new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            private ProgressDialog pDialog;
+            private String id, email;
+
+            @Override
+            protected void onPreExecute() {
+                pDialog = new ProgressDialog(getActivity());
+                pDialog.setMessage(getString(R.string.sending_code));
+                pDialog.setCancelable(false);
+                pDialog.show();
+                email = edtEmail.getText().toString();
+            }
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    id = UserController.sendResetCode(email);
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                if (exception != null) {
+                    ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
+                } else {
+                    Fragment fragment = new ForgotPasswordStepTwoFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ForgotPasswordActivity.USER_ID, id);
+                    bundle.putString(ForgotPasswordActivity.USER_EMAIL, email);
+                    fragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.fragmentHolder, fragment, ForgotPasswordStepTwoFragment.STEP2_TAG).commit();
+                }
+            }
+        };
     }
 }

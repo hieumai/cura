@@ -10,6 +10,8 @@ import com.kms.cura.view.fragment.ForgotPassworkStepOneFragment;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
 
+    public static String USER_ID = "userID";
+    public static String USER_EMAIL = "userEmail";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

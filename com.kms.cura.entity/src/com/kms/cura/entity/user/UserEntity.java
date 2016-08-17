@@ -12,6 +12,13 @@ public class UserEntity extends Entity {
 	private String email;
 	private String password;
 	private ImageEntity imageEntity;
+	public static final String EMAIL = "email";
+	public static final String ID = "id";
+	public static final String CODE = "code";
+	public static final String CODE_INVALID = "invalid code";
+	public static final String CODE_EXPIRED = "expired code";
+	public static final String CODE_VALID = "valid code";
+	public static final String STRING_RESPONSE = "string response";
 
 	public UserEntity(String id, String name, String email, String password) {
 		super(id, name);

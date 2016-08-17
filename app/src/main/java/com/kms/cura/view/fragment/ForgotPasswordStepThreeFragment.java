@@ -9,9 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.UserController;
+import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.utils.InputUtils;
+import com.kms.cura.view.activity.ForgotPasswordActivity;
 
 public class ForgotPasswordStepThreeFragment extends Fragment implements TextWatcher, View.OnClickListener {
 
@@ -26,7 +30,6 @@ public class ForgotPasswordStepThreeFragment extends Fragment implements TextWat
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View parent = inflater.inflate(R.layout.fragment_forgot_password_step_three, container, false);
         btnDone = (Button) parent.findViewById(R.id.btnDone);
         btnDone.setOnClickListener(this);
@@ -82,7 +85,7 @@ public class ForgotPasswordStepThreeFragment extends Fragment implements TextWat
             edittedRePwd = false;
             return false;
         }
-        edittedRePwd = true;
+        edittedRePwd = true;    
         if (!checkRePwd()) {
             edtRePwd.setError(getString(R.string.repwd_error));
             return false;
@@ -108,6 +111,13 @@ public class ForgotPasswordStepThreeFragment extends Fragment implements TextWat
 
     @Override
     public void onClick(View v) {
-        getActivity().finish();
+        if (v.getId() == R.id.btnDone) {
+            UserEntity userEntity = new UserEntity(getArguments().getString(ForgotPasswordActivity.USER_ID), null, getArguments().getString(ForgotPasswordActivity.USER_EMAIL), edtPwd.getText().toString());
+            UserController.updatePassword(userEntity);
+            Toast.makeText(getActivity(), R.string.password_changed, Toast.LENGTH_SHORT).show();
+            getActivity().finish();
+        } if (v.getId() == R.id.btnForgotBack) {
+            getActivity().finish();
+        }
     }
 }

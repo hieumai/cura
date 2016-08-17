@@ -34,4 +34,7 @@
     <string name="wrongPassword">Wrong password!</string>
     <string name="location_error">Cannot find address on map</string>
     <string name="call_error">Call function is not available on this device</string>
+    <string name="email_not_exist">Email does not exist</string>
+    <string name="code_invalid">The code doesn\'t exist</string>
+    <string name="code_expired">The code has expired, please request another</string>
 </resources>

@@ -1,16 +1,21 @@
 package com.kms.cura_server;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import org.json.JSONObject;
+
 import com.google.gson.JsonElement;
 import com.kms.cura.dal.database.UserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
+import com.kms.cura.dal.mapping.PasswordCodeColumn;
 import com.kms.cura.dal.user.DoctorUserDAL;
 import com.kms.cura.dal.user.PatientUserDAL;
 import com.kms.cura.dal.user.UserDAL;
@@ -194,7 +199,6 @@ public final class UserAPI {
 		try {
 			UserDAL.getInstance().updatePassword(user);
 			return getUserWithType(user);
-
 		} catch (Exception e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
@@ -211,5 +215,43 @@ public final class UserAPI {
 		}
 		return APIResponse.unsuccessResponse("Can not retrive user information");
 
+	}
+	
+	@POST
+	@Path("/checkEmailExist")
+	public String checkEmailExist(String jsonData) {
+		JSONObject jsonObject = new JSONObject(jsonData);
+		String email = jsonObject.getString(UserEntity.EMAIL);
+		try {
+			return new UserAPIResponse().successResponseWithBoolean(UserDAL.getInstance().checkEmailExist(email), UserEntity.EMAIL);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+	
+	@POST
+	@Path("/sendCode")
+	public String sendCode(String jsonData) {
+		JSONObject jsonObject = new JSONObject(jsonData);
+		String email = jsonObject.getString(UserEntity.EMAIL);
+		try {
+			String userID = UserDAL.getInstance().sendCode(email);
+			return new UserAPIResponse().successResponseWithString(userID, UserEntity.STRING_RESPONSE);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+	
+	@POST
+	@Path("/checkCode")
+	public String checkCode(String jsonData) {
+		JSONObject jsonObject = new JSONObject(jsonData);
+		String userID = jsonObject.getString(UserEntity.ID);
+		String code = jsonObject.getString(UserEntity.CODE);
+		try {
+			return new UserAPIResponse().successResponseWithString (UserDAL.getInstance().checkCode(userID, code), UserEntity.STRING_RESPONSE);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
 	}
 }

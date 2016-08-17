@@ -1,20 +1,26 @@
 package com.kms.cura.model;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.kms.cura.entity.DoctorSearchEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
+import com.kms.cura.model.request.CheckExistModelResponse;
 import com.kms.cura.model.request.DoctorModelResponse;
 import com.kms.cura.model.request.LoginUserModelResponse;
+import com.kms.cura.model.request.PasswordCodeModelResponse;
 import com.kms.cura.model.request.PatientModelResponse;
 import com.kms.cura.model.request.RegisterModelResponse;
 import com.kms.cura.utils.RequestUtils;
 
 import java.util.List;
+import org.json.JSONObject;
 
 public class UserModel extends EntityModel {
     private static UserModel instance;
@@ -144,5 +150,59 @@ public class UserModel extends EntityModel {
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
                 EntityToJsonConverter.convertEntityToJson(facilityEntity).toString(), response);
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+    }
+
+    public boolean checkEmailExist(String email) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.CHECK_EMAIL);
+        CheckExistModelResponse response = new CheckExistModelResponse();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(UserEntity.EMAIL, email);
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                jsonObject.toString(), response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
+            return response.getResponseBoolean();
+        }
+        throw new Exception(response.getError());
+    }
+
+    public String sendResetCode(String email) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.SEND_CODE);
+        PasswordCodeModelResponse response = new PasswordCodeModelResponse();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(UserEntity.EMAIL, email);
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                jsonObject.toString(), response);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
+            return response.getResponseString();
+        }
+        throw new Exception(response.getError());
+    }
+
+    public String checkCode(String userID, String code) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.CHECK_CODE);
+        PasswordCodeModelResponse response = new PasswordCodeModelResponse();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(UserEntity.ID, userID);
+        jsonObject.addProperty(UserEntity.CODE, code);
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                jsonObject.toString(), response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
+            return response.getResponseString();
+        }
+        throw new Exception(response.getError());
     }
 }
