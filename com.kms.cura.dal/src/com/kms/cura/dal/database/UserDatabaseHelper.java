@@ -76,9 +76,8 @@ public class UserDatabaseHelper extends DatabaseHelper {
 			stmt.setString(1, entity.getEmail());
 			rs = stmt.executeQuery();
 			con.commit();
-			UserDatabaseHelper dbh = new UserDatabaseHelper();
 			rs.next();
-			return dbh.getEntityFromResultSet(rs);
+			return getEntityFromResultSet(rs);
 		} catch (SQLException e) {
 			if (con != null) {
 				System.err.print("Transaction is being rolled back");

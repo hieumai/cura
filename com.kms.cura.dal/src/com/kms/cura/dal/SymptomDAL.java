@@ -26,13 +26,26 @@ public class SymptomDAL extends EntityDAL {
 	}
 
 	public List<Entity> getAll() throws ClassNotFoundException, SQLException, IOException {
-		return super.getAll(SymptomColumn.TABLE_NAME, new SymptomDatabaseHelper());
+		SymptomDatabaseHelper dbh = null;
+		try{
+			dbh = new SymptomDatabaseHelper();
+			return super.getAll(SymptomColumn.TABLE_NAME, dbh);
+		}
+		finally{
+			dbh.closeConnection();
+		}
 	}
 	
 	
 	public List<SymptomEntity> getAssociatedSymptom(ConditionEntity entity)
 			throws SQLException, ClassNotFoundException {
-		SymptomDatabaseHelper dbh = new SymptomDatabaseHelper();
-		return dbh.queryAssociatedSymptom(entity);
+		SymptomDatabaseHelper dbh = null;
+		try{
+			dbh = new SymptomDatabaseHelper();
+			return dbh.queryAssociatedSymptom(entity);
+		}
+		finally{
+			dbh.closeConnection();
+		}
 	}
 }

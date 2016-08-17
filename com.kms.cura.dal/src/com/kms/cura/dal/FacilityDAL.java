@@ -23,6 +23,13 @@ public class FacilityDAL extends EntityDAL {
 	}
 
 	public List<Entity> getAll() throws ClassNotFoundException, SQLException, IOException {
-		return super.getAll(FacilityColumn.TABLE_NAME, new FacilityDatabaseHelper());
+		FacilityDatabaseHelper dbh = new FacilityDatabaseHelper();
+		try{
+			dbh = new FacilityDatabaseHelper();
+			return super.getAll(FacilityColumn.TABLE_NAME, dbh);
+		}
+		finally{
+			dbh.closeConnection();
+		}
 	}
 }

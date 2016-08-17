@@ -23,7 +23,14 @@ public class DegreeDAL extends EntityDAL {
 	}
 
 	public List<Entity> getAll() throws ClassNotFoundException, SQLException, IOException {
-		return super.getAll(DegreeColumn.TABLE_NAME, new DegreeDatabaseHelper());
+		DegreeDatabaseHelper dbh =null;
+		try{
+			dbh = new DegreeDatabaseHelper();
+			return super.getAll(DegreeColumn.TABLE_NAME, dbh);
+		}
+		finally{
+			dbh.closeConnection();
+		}
 	}
 
 }

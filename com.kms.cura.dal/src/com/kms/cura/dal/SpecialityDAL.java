@@ -26,13 +26,25 @@ public class SpecialityDAL extends EntityDAL {
 	}
 
 	public List<Entity> getAll() throws ClassNotFoundException, SQLException, IOException {
-		return super.getAll(SpecialityColumn.TABLE_NAME, new SpecialityDatabaseHelper());
+		SpecialityDatabaseHelper dbh = new SpecialityDatabaseHelper();
+		try{
+			return super.getAll(SpecialityColumn.TABLE_NAME, dbh);
+		}
+		finally{
+			dbh.closeConnection();
+		}
 	}
 	
 	
 	public List<SpecialityEntity> getByCondition(ConditionEntity entity) throws ClassNotFoundException, SQLException {
-		SpecialityDatabaseHelper dbh = new SpecialityDatabaseHelper();
-		return dbh.querySpecialityByCondition(entity);
+		SpecialityDatabaseHelper dbh = null;
+		try{
+			dbh = new SpecialityDatabaseHelper();
+			return dbh.querySpecialityByCondition(entity);
+		}
+		finally{
+			dbh.closeConnection();
+		}
 	}
 	
 }

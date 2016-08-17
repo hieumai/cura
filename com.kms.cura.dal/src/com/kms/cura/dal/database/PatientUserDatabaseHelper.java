@@ -161,8 +161,14 @@ public class PatientUserDatabaseHelper extends UserDatabaseHelper {
 				resultSet.getString(PatientColumn.LOCATION.getColumnName()),
 				resultSet.getString(PatientColumn.INSURANCE.getColumnName()),
 				resultSet.getString(PatientColumn.HEALTH_CONCERN.getColumnName()), path);
-		PatientHealthDatabaseHelper healthDbh = new PatientHealthDatabaseHelper();
-		patient.setHealthEntities(new ArrayList<>(healthDbh.queryHealthByPatientID(patient.getId())));
+		PatientHealthDatabaseHelper healthDbh = null;
+		try{
+			healthDbh = new PatientHealthDatabaseHelper();
+			patient.setHealthEntities(new ArrayList<>(healthDbh.queryHealthByPatientID(patient.getId())));
+		}
+		finally{
+			healthDbh.closeConnection();
+		}
 		return patient;
 	}
 
