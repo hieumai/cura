@@ -25,12 +25,25 @@ public class ConditionDAL extends EntityDAL {
 	}
 
 	public List<Entity> getAll() throws ClassNotFoundException, SQLException, IOException {
-		return new ConditionDatabaseHelper().queryAll();
+		ConditionDatabaseHelper dbh = null;
+		try{
+			dbh = new ConditionDatabaseHelper();
+			return dbh.queryAll();
+		}
+		finally{
+			dbh.closeConnection();
+		}
 	}
 
 	public List<ConditionEntity> getAssociatedCondition(SymptomEntity entity)
 			throws SQLException, ClassNotFoundException {
-		ConditionDatabaseHelper dbh = new ConditionDatabaseHelper();
-		return dbh.queryAssociatedCondition(entity);
+		ConditionDatabaseHelper dbh = null;
+		try{
+			dbh = new ConditionDatabaseHelper();
+			return dbh.queryAssociatedCondition(entity);
+		}
+		finally{
+			dbh.closeConnection();
+		}
 	}
 }

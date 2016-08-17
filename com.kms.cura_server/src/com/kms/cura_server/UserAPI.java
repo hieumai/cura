@@ -33,7 +33,7 @@ public final class UserAPI {
 	@Path("/getAllUser")
 	public String getAllUser() {
 		try {
-			List<Entity> users = UserDAL.getInstance().getAll(new UserDatabaseHelper());
+			List<Entity> users = UserDAL.getInstance().getAll();
 			JsonElement element = EntityToJsonConverter.convertEntityListToJson(users);
 			return element.toString();
 		} catch (ClassNotFoundException | SQLException | IOException e) {
@@ -45,7 +45,7 @@ public final class UserAPI {
 	@Path("/getAllAdmin")
 	public String getAllUserAdmin() {
 		try {
-			List<Entity> users = UserDAL.getInstance().getAll(new UserDatabaseHelper());
+			List<Entity> users = UserDAL.getInstance().getAll();
 			JsonElement element = EntityToJsonConverter.convertEntityListToJson(users);
 			return element.toString();
 		} catch (ClassNotFoundException | SQLException | IOException e) {

@@ -25,8 +25,15 @@ public class UserDAL extends EntityDAL {
 		return _instance;
 	}
 
-	public List<Entity> getAll(DatabaseHelper dbh) throws ClassNotFoundException, SQLException, IOException {
-		return super.getAll(UserColumn.TABLE_NAME, dbh);
+	public List<Entity> getAll() throws ClassNotFoundException, SQLException, IOException {
+		UserDatabaseHelper dbh = null;
+		try{
+			dbh = new UserDatabaseHelper();
+			return super.getAll(UserColumn.TABLE_NAME, dbh);
+		}
+		finally{
+			dbh.closeConnection();
+		}
 	}
 
 	public void updatePhoto(UserEntity user) throws ClassNotFoundException, SQLException, IOException {
