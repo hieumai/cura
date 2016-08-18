@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -100,7 +101,7 @@ public class CalendarPagerAdapter extends PagerAdapter {
     // The app should call this to add pages; not used by ViewPager.
     public int addView (CalendarView v, int position)
     {
-        calendarViews.add(v);
+        calendarViews.add(position, v);
         views.add (position, v.createView());
         return position;
     }
@@ -170,5 +171,13 @@ public class CalendarPagerAdapter extends PagerAdapter {
 
     public void colorTheSelectedDayFromDayView(Date selected, int position){
         calendarViews.get(position).colorSelectedDayFromDayView(selected);
+    }
+
+    public void unClickabaleView (int position){
+        calendarViews.get(position).unEnableEveryday();
+    }
+
+    public void setClickable (int position){
+        calendarViews.get(position).enableEveryday();;
     }
 }
