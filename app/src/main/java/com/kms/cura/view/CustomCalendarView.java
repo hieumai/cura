@@ -70,6 +70,7 @@ public class CustomCalendarView extends LinearLayout {
     private static int MAXIMUM_DAY_VISIBLE = 36;
     private int black, white, curentDay;
     private Date selectedDayNotHaveAppt;
+    private List<ViewGroup> dayViewGroups = new ArrayList<>();
 
     public CustomCalendarView(Context mContext) {
         this(mContext, null);
@@ -123,13 +124,13 @@ public class CustomCalendarView extends LinearLayout {
         refreshCalendar(currentCalendar);
     }
 
-    public void changeMonthCalendar(){
+    public void changeMonthCalendar() {
         currentCalendar = Calendar.getInstance(Locale.getDefault());
         currentCalendar.add(Calendar.MONTH, currentMonthIndex);
         refreshCalendar(currentCalendar);
     }
 
-    public int getCurrentMonthIndex(){
+    public int getCurrentMonthIndex() {
         return this.currentMonthIndex;
     }
 
@@ -147,7 +148,7 @@ public class CustomCalendarView extends LinearLayout {
         textTitle = builder.toString();
     }
 
-    public String getTextTitle(){
+    public String getTextTitle() {
         return this.textTitle;
     }
 
@@ -198,6 +199,7 @@ public class CustomCalendarView extends LinearLayout {
 
         DayView dayView;
         ViewGroup dayOfMonthContainer;
+        dayViewGroups.clear();
         for (int i = 1; i < MAXIMUM_DAYVIEW + 1; i++) {
             dayOfMonthContainer = (ViewGroup) view.findViewWithTag(DAY_OF_MONTH_CONTAINER + i);
             dayView = (DayView) view.findViewWithTag(DAY_OF_MONTH_TEXT + i);
@@ -208,7 +210,7 @@ public class CustomCalendarView extends LinearLayout {
             dayOfMonthContainer.setOnClickListener(null);
             dayView.bind(startCalendar.getTime(), getDecorators());
             dayView.setVisibility(View.VISIBLE);
-            if (dayView.isOnDraw()){
+            if (dayView.isOnDraw()) {
                 dayView.setOnDraw(false);
             }
             if (null != getCustomTypeface()) {
@@ -221,6 +223,7 @@ public class CustomCalendarView extends LinearLayout {
                 dayView.setTextColor(dayOfWeekTextColor);
                 //Set the current day color
                 markDayAsCurrentDay(startCalendar);
+                dayViewGroups.add(dayOfMonthContainer);
 
             } else {
                 if (!isOverflowDateVisible()) {
@@ -243,6 +246,24 @@ public class CustomCalendarView extends LinearLayout {
             weekRow.setVisibility(GONE);
         } else {
             weekRow.setVisibility(VISIBLE);
+        }
+    }
+
+    public void unEnableEveryday() {
+        if (dayViewGroups == null || dayViewGroups.isEmpty()) {
+            return;
+        }
+        for (ViewGroup viewGroup : dayViewGroups) {
+            viewGroup.setOnClickListener(null);
+        }
+    }
+
+    public void enableEveryday() {
+        if (dayViewGroups == null || dayViewGroups.isEmpty()) {
+            return;
+        }
+        for (ViewGroup day : dayViewGroups){
+            day.setOnClickListener(onDayOfMonthClickListener);
         }
     }
 
@@ -397,7 +418,6 @@ public class CustomCalendarView extends LinearLayout {
     }
 
 
-
     public void setCalendarListener(CalendarListener calendarListener) {
         this.calendarListener = calendarListener;
     }
@@ -440,7 +460,7 @@ public class CustomCalendarView extends LinearLayout {
         Calendar calendar = (Calendar) currentCalendar.clone();
         calendar.setTime(selectedDate);
         DayView dayOfMonth = getDayOfMonthText(calendar);
-        String tagId = (String) ((ViewGroup)dayOfMonth.getParent()).getTag();
+        String tagId = (String) ((ViewGroup) dayOfMonth.getParent()).getTag();
         tagId = tagId.substring(DAY_OF_MONTH_CONTAINER.length(), tagId.length());
         int id = Integer.parseInt(tagId);
         if (previousSelected != 0) {
@@ -466,7 +486,7 @@ public class CustomCalendarView extends LinearLayout {
     }
 
     public void unColorThePriviousSelected() {
-        if (previousSelected == 0){
+        if (previousSelected == 0) {
             return;
         }
         String previousSelect = String.valueOf(previousSelected);

@@ -156,7 +156,12 @@ public class DoctorAppointmentMonthViewFragment extends Fragment implements View
 
     @Override
     public void onPageSelected(int position) {
-        adapter.clearAlltheContent(currentPos);
+        int pos = dateInPage.get(currentPos);
+        if (pos >= 0) {
+            adapter.clearAlltheContent(pos);
+        } else {
+            adapter.clearAlltheContent(currentPos);
+        }
         if (currentPos == position) {
             if (currentPos - 1 == 0) {
                 vpCalendar.setCurrentItem(currentPos + 1);
@@ -176,7 +181,6 @@ public class DoctorAppointmentMonthViewFragment extends Fragment implements View
             createDateAtFirst();
         }
         vpCalendar.setCurrentItem(currentPos);
-
     }
 
     private void createDateAtLast() {

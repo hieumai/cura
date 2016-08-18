@@ -2,6 +2,7 @@ package com.kms.cura.view;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -14,9 +15,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.CurrentUserProfile;
+import com.kms.cura.view.activity.DoctorAppointmentDetailActivity;
+import com.kms.cura.view.fragment.CalendarView;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -29,7 +35,7 @@ import java.util.Locale;
 /**
  * Created by linhtnvo on 8/2/2016.
  */
-public class DoctorApptDayVIew implements View.OnClickListener{
+public class DoctorApptDayVIew implements View.OnClickListener, EventHandler{
     public static long MILISECOND_OF_DAY = 86400000;
     private static int MIN_TIME_SPAN = 30;
     private static long MILISECOND = 60000;
@@ -55,6 +61,7 @@ public class DoctorApptDayVIew implements View.OnClickListener{
     public View createView(){
         inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View root = inflater.inflate(R.layout.day_view_layout, null);
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_DOCTOR_LIST);
         layoutDayView = (LinearLayout) root.findViewById(R.id.layoutDayView);
         scrollView = (ScrollView) root.findViewById(R.id.scrollview);
         getData();
@@ -220,6 +227,10 @@ public class DoctorApptDayVIew implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        int position = (int) v.getTag();
+        Intent toApptDetail = new Intent(mContext, DoctorAppointmentDetailActivity.class);
+        toApptDetail.putExtra(CalendarView.APPT_POSITION, position);
+        mContext.startActivity(toApptDetail);
     }
 
     private List<AppointmentEntity> getApptByDate(List<AppointmentEntity> appts, Date date){
@@ -234,5 +245,22 @@ public class DoctorApptDayVIew implements View.OnClickListener{
 
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public void handleEvent(String event, Object data) {
+        switch (event){
+            case EventConstant.UPDATE_APPT_DOCTOR_LIST:
+                int position = (int) data;
+                AppointmentEntity appointment = ((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList().get(position);
+                for (View v : viewList){
+                    if (v.getTag() != null) {
+                        if ((int) v.getTag() == position) {
+                            v.setBackgroundColor(colorTheAppt(appointment));
+                        }
+                    }
+                }
+                break;
+        }
     }
 }

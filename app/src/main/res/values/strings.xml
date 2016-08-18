@@ -315,8 +315,10 @@
     <string name="opening_hours">Opening hours</string>
     <string name="RateThisDoctor">Rate This Doctor</string>
     <string name="MonthView">Month View</string>
+    <string name="CompleteAppt">Complete Appointment</string>
     <string name="Submit">Summit</string>
     <string name="s">S</string>
+    <string name="CompleteApptMsg">Are you sure you want to complete this appointment ?</string>
     <string name="m">M</string>
     <string name="t">T</string>
     <string name="w">W</string>
@@ -348,4 +350,5 @@
     <string name="reset">RESET</string>
     <string name="filter">Filter</string>
     <string name="no_result">No results, try changing your search criteria</string>
+    <string name="errorLoadingApptDetail">Can not load the appointment detail</string>
 </resources>

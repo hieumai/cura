@@ -61,6 +61,7 @@ public class DoctorAppointmentAdapter extends BaseAdapter {
 
     private ImageView loadStatus(View root, int status) {
         ImageView imageView = (ImageView) root.findViewById(R.id.ivStatus);
+        imageView.setVisibility(View.VISIBLE);
         switch (status) {
             case AppointmentEntity.COMPLETED_STT:
                 imageView.setBackgroundResource(R.drawable.circle_complete_tag);
@@ -72,7 +73,7 @@ public class DoctorAppointmentAdapter extends BaseAdapter {
                 imageView.setBackgroundResource(R.drawable.circle_cancel_tag);
                 break;
             default:
-                imageView.setVisibility(View.GONE);
+                imageView.setVisibility(View.INVISIBLE);
                 break;
         }
         return imageView;
@@ -87,5 +88,9 @@ public class DoctorAppointmentAdapter extends BaseAdapter {
     private class ViewHolder {
         TextView txtStartTime, txtEndTime, txtPatientName;
         ImageView status;
+    }
+
+    public List<AppointmentEntity> getListAppts() {
+        return listAppts;
     }
 }
