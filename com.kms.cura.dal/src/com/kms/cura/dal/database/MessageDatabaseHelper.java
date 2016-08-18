@@ -231,7 +231,14 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		StringBuilder builder = new StringBuilder();
 		builder.append("insert into ");
 		builder.append(MessageColumn.TABLE_NAME);
-		builder.append(" values (");
+		builder.append(" (" + MessageColumn.PATIENT_ID);
+		builder.append(", " + MessageColumn.DOCTOR_ID);
+		builder.append(", " + MessageColumn.SENT_BY_DOCTOR);
+		builder.append(", " + MessageColumn.TIME_SENT);
+		builder.append(", " + MessageColumn.MESSAGE);
+		builder.append(", " + MessageColumn.PATIENT_AVAILABLE);
+		builder.append(", " + MessageColumn.DOCTOR_AVAILABLE);
+		builder.append(") values (");
 		if (sentByDoctor) {
 			builder.append(entity.getReceiver().getId() + ", ");
 			builder.append(entity.getSender().getId() + ", ");

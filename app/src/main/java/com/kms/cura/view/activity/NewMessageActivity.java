@@ -38,6 +38,7 @@ public class NewMessageActivity extends AppCompatActivity implements Toolbar.OnM
     private ImageButton btnCancel;
     private TextView tvName;
     private EditText edtMessage;
+    public static final String REFRESH_REQUEST = "refresh";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +133,7 @@ public class NewMessageActivity extends AppCompatActivity implements Toolbar.OnM
                     ErrorController.showDialog(NewMessageActivity.this, "Error : " + exception.getMessage());
                 } else {
                     Toast.makeText(NewMessageActivity.this, R.string.sent, Toast.LENGTH_SHORT).show();
+                    sendRefreshRequest();
                     finish();
                 }
             }
@@ -155,5 +157,11 @@ public class NewMessageActivity extends AppCompatActivity implements Toolbar.OnM
         } else if (which == DialogInterface.BUTTON_NEGATIVE) {
             dialog.dismiss();
         }
+    }
+
+    private void sendRefreshRequest() {
+        Intent intent = new Intent();
+        intent.putExtra(NewMessageActivity.REFRESH_REQUEST, true);
+        setResult(RESULT_OK, intent);
     }
 }

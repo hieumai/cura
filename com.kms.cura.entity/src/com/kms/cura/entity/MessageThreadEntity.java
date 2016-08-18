@@ -96,4 +96,5 @@ public class MessageThreadEntity {
     public ArrayList<MessageEntity> getMessageEntities() {
         return messageEntities;
     }
+
 }

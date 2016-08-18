@@ -147,6 +147,10 @@ public class MessageAdapter extends BaseAdapter {
 
     public void setData(ArrayList<MessageEntity> messageEntities) {
         this.messageEntities = messageEntities;
+        selected.clear();
+        for (int i = 0; i < messageEntities.size(); ++i) {
+            selected.add(false);
+        }
     }
 
     private String toStringTime(Timestamp timestamp) {
