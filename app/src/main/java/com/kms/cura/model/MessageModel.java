@@ -1,5 +1,6 @@
 package com.kms.cura.model;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.JsonElement;
@@ -89,6 +90,8 @@ public class MessageModel {
         MessageUpdateModelResponse response = new MessageUpdateModelResponse();
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
                 object.toString(), response);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
         while (!response.isGotResponse()) ;
         if (!response.isResponseError()) {

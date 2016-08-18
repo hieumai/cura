@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 
 import com.kms.cura.dal.mapping.EntityColumn;
 import com.kms.cura.entity.Entity;
+import com.mysql.jdbc.Statement;
 
 public abstract class DatabaseHelper {
 	
@@ -152,7 +153,7 @@ public abstract class DatabaseHelper {
 		}
 		valueString.append(")");
 		String statementString = insertString.toString() + valueString.toString();
-		PreparedStatement stmt = con.prepareStatement(statementString);
+		PreparedStatement stmt = con.prepareStatement(statementString, Statement.RETURN_GENERATED_KEYS);
 		setPreparedStatementValue(valueMap, stmt);
 		return stmt;
 	}
