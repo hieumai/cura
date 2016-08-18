@@ -332,6 +332,12 @@
     <string name="between_301_and_600">301 - 600</string>
     <string name="forgotten_password">Forgot Password</string>
     <string name="step_1">Step 1</string>
+    <string name="check_mail">Checking email…</string>
+    <string name="sending_code">Sending code…</string>
+    <string name="new_code">A new code has been sent to your email</string>
+    <string name="checkingCode">Checking code...</string>
+    <string name="code_empty">Please input the code</string>
+    <string name="password_changed">Password changed</string>
     <string name="account_email">Account email</string>
     <string name="enter_email">Enter the email address used to log in to your account:</string>
     <string name="next">Next</string>

@@ -177,4 +177,16 @@ public class UserController {
     public static void getDoctorByFacility(FacilityEntity facilityEntity) {
         UserModel.getInstance().getDoctorByFacility(facilityEntity);
     }
+
+    public static boolean checkEmailExist(String email) throws Exception {
+        return UserModel.getInstance().checkEmailExist(email);
+    }
+
+    public static String sendResetCode(String email) throws Exception {
+        return UserModel.getInstance().sendResetCode(email);
+    }
+
+    public static String checkCode(String userID, String code) throws Exception {
+        return UserModel.getInstance().checkCode(userID, code);
+    }
 }
