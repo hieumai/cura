@@ -43,13 +43,13 @@ public class PatientProfileFragment extends Fragment {
     }
 
     public void loadData(String key) {
-        PatientUserEntity entity = (PatientUserEntity) user;
-        DataUtils.loadProfile(entity, (ImageView) getActivity().findViewById(R.id.ivAccountAvatar),this.getContext());
+        PatientUserEntity entity;
         if (key == null) {
             entity = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
         } else {
             entity = JsonToEntityConverter.convertJsonStringToEntity(key, PatientUserEntity.getPatientUserType());
         }
+        DataUtils.loadProfile(entity, (ImageView) getActivity().findViewById(R.id.ivAccountAvatar),this.getContext());
         txtName = loadText(DataUtils.showUnicode(entity.getName()), R.id.txtName);
         txtGender = loadText(getGender(entity), R.id.txtGender, R.id.ivGender);
         if (entity.getBirth() == null) {

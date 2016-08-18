@@ -1,7 +1,9 @@
 package com.kms.cura.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -19,9 +21,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.ErrorController;
 import com.kms.cura.controller.MessageController;
 import com.kms.cura.entity.MessageEntity;
 import com.kms.cura.entity.MessageThreadEntity;
+import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.adapter.MessageAdapter;
 
@@ -30,7 +34,6 @@ import java.util.ArrayList;
 public class MessageThreadActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, Toolbar.OnMenuItemClickListener,
         View.OnClickListener, DialogInterface.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
-    public static final String TO_MESSAGE = "message";
     private ListView lvMessage;
     private MessageAdapter adapter;
     private ArrayList<MessageEntity> messageEntities;
@@ -40,6 +43,8 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
     private Button btnReply;
     private ImageButton btnBack;
     private TextView tvTitle;
+    private static final int REQUEST_CODE = 1;
+    private String receiverID, receiverName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,14 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
         setUpButton();
         setUpListView();
         setUpData();
+        MessageEntity message = messageEntities.get(0);
+        if ((CurrentUserProfile.getInstance().isPatient() && message.isSenderDoctor()) || (CurrentUserProfile.getInstance().isDoctor() && !message.isSenderDoctor())) {
+            receiverID = message.getSender().getId();
+            receiverName = message.getSender().getName();
+        } else {
+            receiverID = message.getReceiver().getId();
+            receiverName = message.getReceiver().getName();
+        }
     }
 
     private void setUpButton() {
@@ -73,7 +86,7 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
         refreshLayout = (SwipeRefreshLayout) findViewById(R.id.lvRefreshMessage);
         refreshLayout.setOnRefreshListener(this);
         refreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary), ContextCompat.getColor(this, R.color.colorAccent));
-        refreshLayout.setEnabled(false);
+        refreshLayout.setEnabled(true);
     }
 
     private void modifyToolbar(int menuId, String title) {
@@ -131,13 +144,16 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnReply) {
-            Toast.makeText(this, "Reply", Toast.LENGTH_SHORT).show();
-            // navigate to New Message
+            Intent intent = new Intent(this, NewMessageActivity.class);
+            intent.putExtra(NewMessageActivity.KEY_SENDER, NewMessageActivity.KEY_PATIENT);
+            intent.putExtra(NewMessageActivity.KEY_RECEIVER_ID, receiverID);
+            intent.putExtra(NewMessageActivity.KEY_RECEIVER_NAME, receiverName);
+            startActivityForResult(intent, REQUEST_CODE);
         } else if (v.getId() == R.id.btnMessageThreadBack) {
             if (multiMode) {
                 clearMultipleChoiceMode();
             } else {
-                finish();
+                backToMain();
             }
         }
     }
@@ -159,13 +175,14 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onClick(DialogInterface dialog, int which) {
         if (which == DialogInterface.BUTTON_POSITIVE) {
+            ArrayList<MessageEntity> deleteMessageList = new ArrayList<>();
             for (int i = 0; i < messageEntities.size(); ++i) {
                 if (adapter.isSelected(i)) {
-                    // delete message(s)
-                    // ...
-                    clearMultipleChoiceMode();
+                    deleteMessageList.add(messageEntities.get(i));
                 }
             }
+            deleteMessages(deleteMessageList);
+            clearMultipleChoiceMode();
         } else if (which == DialogInterface.BUTTON_NEGATIVE) {
             dialog.dismiss();
         }
@@ -177,6 +194,7 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
         setLayoutColor(view, R.color.light_grey_2);
         modifyToolbar(R.menu.menu_message_list, adapter.getSelectedCount() + " selected");
         btnReply.setVisibility(View.INVISIBLE);
+        refreshLayout.setEnabled(false);
     }
 
     private void clearMultipleChoiceMode() {
@@ -185,12 +203,14 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
         adapter.clearSelection();
         adapter.notifyDataSetChanged();
         btnReply.setVisibility(View.VISIBLE);
+        refreshLayout.setEnabled(true);
     }
 
     @Override
     public void onRefresh() {
-        // refresh
-        // ...
+        if (!multiMode) {
+            refreshMessage();
+        }
     }
 
     public ListView getLvMessage() {
@@ -199,5 +219,109 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
 
     public boolean isMultiMode() {
         return multiMode;
+    }
+
+    private void deleteMessages(final ArrayList<MessageEntity> entities) {
+        new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            ProgressDialog pDialog;
+
+            @Override
+            protected void onPreExecute() {
+                pDialog = new ProgressDialog(MessageThreadActivity.this);
+                pDialog.setMessage(getString(R.string.loading));
+                pDialog.setCancelable(false);
+                pDialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    UserEntity userEntity = CurrentUserProfile.getInstance().getEntity();
+                    for (MessageEntity entity : entities) {
+                        MessageController.deleteMessage(userEntity, entity);
+                    }
+                    MessageController.loadMessage(userEntity);
+                    messageEntities = MessageController.getMessageByThread(userEntity, getIntent().getStringExtra(MessageThreadEntity.CONVERSATION));
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                if (exception != null) {
+                    ErrorController.showDialog(MessageThreadActivity.this, "Error : " + exception.getMessage());
+                    return;
+                }
+                if (messageEntities == null) {
+                    backToMain();
+                    return;
+                }
+                adapter.setData(messageEntities);
+                adapter.notifyDataSetChanged();
+                Toast.makeText(MessageThreadActivity.this, R.string.deleted, Toast.LENGTH_SHORT).show();
+                sendRefreshRequest();
+
+            }
+        }.execute();
+    }
+
+    private void refreshMessage() {
+        new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    UserEntity userEntity = CurrentUserProfile.getInstance().getEntity();
+                    MessageController.loadMessage(userEntity);
+                    messageEntities = MessageController.getMessageByThread(userEntity, getIntent().getStringExtra(MessageThreadEntity.CONVERSATION));
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if (exception != null) {
+                    ErrorController.showDialog(MessageThreadActivity.this, "Error : " + exception.getMessage());
+                    return;
+                }
+                adapter.setData(messageEntities);
+                adapter.notifyDataSetChanged();
+                refreshLayout.setRefreshing(false);
+            }
+        }.execute();
+    }
+
+    private void backToMain() {
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (multiMode) {
+            clearMultipleChoiceMode();
+        } else {
+            backToMain();
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK && data.getBooleanExtra(NewMessageActivity.REFRESH_REQUEST, false)) {
+            refreshMessage();
+            sendRefreshRequest();
+        }
+    }
+
+    private void sendRefreshRequest() {
+        Intent intent = new Intent();
+        intent.putExtra(NewMessageActivity.REFRESH_REQUEST, true);
+        setResult(RESULT_OK, intent);
     }
 }

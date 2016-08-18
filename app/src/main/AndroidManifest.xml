@@ -109,9 +109,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.AppointmentRequestDeatailActivity" />
-        <activity android:name=".view.activity.NewMessageActivity"></activity>
-        <activity android:name=".view.activity.PatientAppointmentDetailsActivity" />
         <activity android:name=".view.activity.ForgotPasswordActivity"
         <activity android:name=".view.activity.DoctorAppointmentDetailActivity"></activity>
             android:configChanges="orientation"
@@ -123,6 +120,9 @@
         <activity android:name=".view.activity.ViewPatientProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
+        <activity android:name=".view.activity.AppointmentRequestDeatailActivity"></activity>
+        <activity android:name=".view.activity.NewMessageActivity"></activity>
+        <activity android:name=".view.activity.PatientAppointmentDetailsActivity" />
         <activity android:name=".view.activity.FacilityInfoActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>

@@ -28,6 +28,7 @@ import com.kms.cura.entity.MessageThreadEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.MultipleChoiceBackPress;
 import com.kms.cura.view.activity.MessageThreadActivity;
+import com.kms.cura.view.activity.NewMessageActivity;
 import com.kms.cura.view.adapter.MessageListAdapter;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class MessageListFragment extends Fragment implements AdapterView.OnItemC
     private boolean multiMode = false;
     private Drawable naviIcon;
     private SwipeRefreshLayout refreshLayout;
-    public static String RELOAD = "reload";
+    private static final int REQUEST_CODE = 1;
 
     public MessageListFragment() {
     }
@@ -53,9 +54,9 @@ public class MessageListFragment extends Fragment implements AdapterView.OnItemC
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View myFragmentView = inflater.inflate(R.layout.fragment_message_list, container, false);
-        loadData(true);
         messageListToolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         naviIcon = messageListToolbar.getNavigationIcon();
+        loadData(true);
         modifyToolbar(R.menu.menu_blank, getString(R.string.messages));
         setUpListView(myFragmentView);
         return myFragmentView;
@@ -114,7 +115,6 @@ public class MessageListFragment extends Fragment implements AdapterView.OnItemC
                     pDialog.dismiss();
                 } else {
                     refreshLayout.setRefreshing(false);
-                    Toast.makeText(getActivity(), R.string.refreshed, Toast.LENGTH_SHORT).show();
                 }
                 if (exception != null) {
                     ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
@@ -138,7 +138,7 @@ public class MessageListFragment extends Fragment implements AdapterView.OnItemC
         } else {
             Intent intent = new Intent(getActivity(), MessageThreadActivity.class);
             intent.putExtra(MessageThreadEntity.CONVERSATION, messageThreadEntities.get(position).getConversationName(CurrentUserProfile.getInstance().getEntity()));
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE);
         }
     }
 
@@ -274,5 +274,12 @@ public class MessageListFragment extends Fragment implements AdapterView.OnItemC
     @Override
     public void onRefresh() {
         loadData(false);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == getActivity().RESULT_OK && data.getBooleanExtra(NewMessageActivity.REFRESH_REQUEST, false)) {
+            loadData(false);
+        }
     }
 }

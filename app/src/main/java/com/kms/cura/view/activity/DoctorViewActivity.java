@@ -39,7 +39,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         initDrawer();
         initNavigationView();
         initFragments();
-        navigate(getIntent().getStringExtra(NAVIGATION_KEY));
+        changeFragment(doctorProfileFragment);
     }
 
     private void initFragments() {
@@ -169,17 +169,5 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
     public void onClick(View v) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.openDrawer(GravityCompat.START);
-    }
-
-    private void navigate(String key) {
-        if (key != null) {
-            switch (key) {
-                case MessageThreadActivity.TO_MESSAGE:
-                    changeFragment(doctorMessageFragment);
-                    break;
-            }
-        } else {
-            changeFragment(doctorProfileFragment);
-        }
     }
 }
