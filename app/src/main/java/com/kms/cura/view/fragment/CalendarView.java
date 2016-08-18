@@ -52,6 +52,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
     private Date selectedDay;
     public static String APPT_POSITION = "APPT_POSITION";
     private DoctorAppointmentAdapter adapter;
+    private DoctorAppointmentAdapter adapter;
     public CalendarView(Context mContext, int currentMonthIndex) {
         this.mContext = mContext;
         this.currentMonthIndex = currentMonthIndex;
@@ -68,6 +69,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         setData();
         root.setTag(currentIndex);
         root.setTag(R.string.calendarTitle, calendarTitle);
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_DOCTOR_LIST);
         return root;
     }
 
@@ -168,7 +170,9 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
                 lvApptList.setAdapter(adapter);
                 break;
         }
+        }
     }
+
 
 
     private class ColorDecorator implements DayDecorator {

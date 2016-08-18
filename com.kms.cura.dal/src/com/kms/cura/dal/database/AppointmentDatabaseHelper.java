@@ -14,6 +14,7 @@ import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 
@@ -152,11 +153,12 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 		List<AppointmentEntity> patientAppts;
 		try {
 			con.setAutoCommit(false);
-			createAppointment(entity);
+			int newID = createAppointment(entity);
 			AppointmentEntity search = new AppointmentEntity(null, entity.getPatientUserEntity(), null, null, null,
 					null, null, -1, null, null);
 			patientAppts = getAppointment(new AppointSearchEntity(search), entity.getPatientUserEntity(), null);
 			con.commit();
+			createNewAppointmentNotification(String.valueOf(newID), entity);
 			return patientAppts;
 		} catch (SQLException e) {
 			if (con != null) {
@@ -169,11 +171,14 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 		}
 	}
 
-	private void createAppointment(AppointmentEntity entity) throws SQLException {
+	private int createAppointment(AppointmentEntity entity) throws SQLException {
 		PreparedStatement stmt = null;
 		try {
 			stmt = getinsertAppointmentQuery(entity);
 			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			return rs.getInt(1);
 		} finally {
 			if (stmt != null) {
 				stmt.close();
@@ -193,6 +198,7 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 			stmt.executeUpdate();
 			PatientUserEntity patientUserEntity = entity.getPatientUserEntity();
 			DoctorUserEntity doctorUserEntity = entity.getDoctorUserEntity();
+			int status = entity.getStatus();
 			if (patient) {
 				search = new AppointmentEntity(null, patientUserEntity, null, null, null, null, null, -1, null, null);
 				listAppts = getAppointment(new AppointSearchEntity(search), patientUserEntity, null);
@@ -201,6 +207,10 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 				listAppts = getAppointment(new AppointSearchEntity(search), null, doctorUserEntity);
 			}
 			con.commit();
+			if (!patient && (status == AppointmentEntity.ACCEPTED_STT || status == AppointmentEntity.REJECT_STT
+						|| status == AppointmentEntity.DOCTOR_CANCEL_STT)){
+					createUpdateAppointmentNotification(entity.getId(), doctorUserEntity.getId());
+			}
 			return listAppts;
 		} catch (SQLException e) {
 			if (con != null) {
@@ -212,6 +222,38 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 			con.setAutoCommit(true);
 			if (stmt != null) {
 				stmt.close();
+			}
+		}
+	}
+
+	private void createNewAppointmentNotification(String newID, AppointmentEntity entity) {
+		NotificationDatabaseHelper databaseHelper = null;
+		try {
+			databaseHelper = new NotificationDatabaseHelper();
+			databaseHelper.createNotification(newID, entity.getDoctorUserEntity().getId(),
+					NotificationEntity.APPT_NOTI_TYPE, NotificationEntity.NEW_APPT);
+		} catch (ClassNotFoundException | SQLException e) {
+
+		} finally {
+			try {
+				databaseHelper.closeConnection();
+			} catch (SQLException e) {
+			}
+		}
+	}
+
+	private void createUpdateAppointmentNotification(String id, String userID) {
+		NotificationDatabaseHelper databaseHelper = null;
+		try {
+			databaseHelper = new NotificationDatabaseHelper();
+			databaseHelper.createNotification(id, userID, NotificationEntity.APPT_NOTI_TYPE,
+					NotificationEntity.APPT_UPDATE_STT);
+		} catch (ClassNotFoundException | SQLException e) {
+
+		} finally {
+			try {
+				databaseHelper.closeConnection();
+			} catch (SQLException e) {
 			}
 		}
 	}

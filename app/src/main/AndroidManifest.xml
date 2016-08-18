@@ -114,6 +114,7 @@
         <activity android:name=".view.activity.PatientAppointmentDetailsActivity" />
         <activity android:name=".view.activity.ForgotPasswordActivity"
         <activity android:name=".view.activity.DoctorAppointmentDetailActivity"></activity>
+        <activity android:name=".view.activity.DoctorAppointmentDetailActivity"></activity>
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <activity
