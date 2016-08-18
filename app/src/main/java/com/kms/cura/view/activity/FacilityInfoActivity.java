@@ -1,6 +1,7 @@
 package com.kms.cura.view.activity;
 
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
@@ -20,23 +21,33 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.UserController;
 import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.json.JsonToEntityConverter;
+import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.adapter.WorkingTimeAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class FacilityInfoActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback {
+public class FacilityInfoActivity extends AppCompatActivity implements View.OnClickListener, OnMapReadyCallback, EventHandler {
 
     public static final String FACILITY_KEY = "facility";
+    public static final String FACILITY_DOCTOR = "facility_doctor";
     private FacilityEntity facilityEntity;
     private LinearLayout btnBack;
     private TextView tvName, tvLocation, tvNumber, tvCall, tvDirection, tvDoctorList;
     private FloatingActionButton fbMenu, fbCall, fbDoctor, fbDirection;
     private LinearLayout layoutSubMenu;
     private boolean floatingMenu = false;
+    private ProgressDialog pDialog;
+    private EventBroker broker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +63,7 @@ public class FacilityInfoActivity extends AppCompatActivity implements View.OnCl
         setDimLayout(false);
         NestedScrollView scrollView = (NestedScrollView) findViewById(R.id.svFacility);
         scrollView.smoothScrollTo(0,0);
+        broker = EventBroker.getInstance();
     }
 
     private void initWorkingTime() {
@@ -135,7 +147,7 @@ public class FacilityInfoActivity extends AppCompatActivity implements View.OnCl
                 ErrorController.showDialog(this, getString(R.string.call_error));
             }
         } else if (v.getId() == R.id.fbDoctor || v.getId() == R.id.tvDoctorList) {
-            // show doctors list
+            showDoctorList();
         } else if (v.getId() == R.id.fbDirection || v.getId() == R.id.tvDirection) {
             // intent Ggl map find direction
         } else if (v.getId() == R.id.dimLayout1 || v.getId() == R.id.dimLayout2) {
@@ -168,5 +180,62 @@ public class FacilityInfoActivity extends AppCompatActivity implements View.OnCl
             layout1.setVisibility(View.GONE);
             layout2.setVisibility(View.GONE);
         }
+    }
+
+    private void showDoctorList() {
+        pDialog = new ProgressDialog(FacilityInfoActivity.this);
+        pDialog.setMessage(getString(R.string.loading));
+        pDialog.setCancelable(false);
+        pDialog.show();
+        UserController.getDoctorByFacility(facilityEntity);
+    }
+
+    @Override
+    public void handleEvent(String event, Object data) {
+        switch (event) {
+            case EventConstant.SEARCH_SUCCESS:
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(FACILITY_DOCTOR, EntityToJsonConverter.convertEntityListToJson((List<DoctorUserEntity>) data).toString());
+                intent.putExtra(SearchActivity.ACTIVITY_NAME, FACILITY_KEY);
+                pDialog.dismiss();
+                startActivity(intent);
+                break;
+            case EventConstant.CONNECTION_ERROR:
+                pDialog.dismiss();
+                if (data != null) {
+                    ErrorController.showDialog(this, "Error " + data);
+                } else {
+                    ErrorController.showDialog(this, "Error " + getResources().getString(R.string.ConnectionError));
+                }
+                break;
+            case EventConstant.INTERNAL_ERROR:
+                pDialog.dismiss();
+                String internalError = getResources().getString(R.string.InternalError);
+                ErrorController.showDialog(this, internalError + " : " + data);
+        }
+    }
+
+    public void registerEvent() {
+        broker.register(this, EventConstant.SEARCH_SUCCESS);
+        broker.register(this, EventConstant.CONNECTION_ERROR);
+        broker.register(this, EventConstant.INTERNAL_ERROR);
+    }
+
+    public void unregisterEvent() {
+        broker.unRegister(this, EventConstant.SEARCH_SUCCESS);
+        broker.unRegister(this, EventConstant.CONNECTION_ERROR);
+        broker.unRegister(this, EventConstant.INTERNAL_ERROR);
+    }
+
+    @Override
+    public void onPause() {
+        unregisterEvent();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        registerEvent();
+        super.onResume();
     }
 }

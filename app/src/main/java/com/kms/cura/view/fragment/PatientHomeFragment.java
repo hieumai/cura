@@ -53,7 +53,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class PatientHomeFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, ReloadData, EventHandler, SpinnerEventsListener {
-    private static final String FRAGMENT_NAME = "Home";
+
+    public static final String FRAGMENT_NAME = "Home";
     public static final String AUTO_FILL = "auto_fill";
     private EditText edtName, edtLocation;
     private RadioGroup rdbtngroupLocation;
@@ -74,7 +75,7 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
     private boolean[] checkedSpeciality;
     private ReloadData reloadData;
     private String HINT_TEXT = "Please choose";
-    public static String SEARCH_RESULT = "SearchResult";
+    public static final String SEARCH_RESULT = "SearchResult";
     private EventBroker broker;
 
 
@@ -336,6 +337,7 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
             case EventConstant.SEARCH_SUCCESS:
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
                 intent.putExtra(SEARCH_RESULT, EntityToJsonConverter.convertEntityListToJson((List<DoctorUserEntity>) data).toString());
+                intent.putExtra(SearchActivity.ACTIVITY_NAME, FRAGMENT_NAME);
                 hideProgressDialog();
                 startActivity(intent);
                 break;

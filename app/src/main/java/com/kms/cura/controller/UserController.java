@@ -173,4 +173,8 @@ public class UserController {
     public static void updatePassword(UserEntity user) {
         UserModel.getInstance().updatePassword(user);
     }
+    
+    public static void getDoctorByFacility(FacilityEntity facilityEntity) {
+        UserModel.getInstance().getDoctorByFacility(facilityEntity);
+    }
 }

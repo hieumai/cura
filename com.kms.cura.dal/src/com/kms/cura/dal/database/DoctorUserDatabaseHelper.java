@@ -24,6 +24,7 @@ import com.kms.cura.dal.mapping.UserColumn;
 import com.kms.cura.entity.DegreeEntity;
 import com.kms.cura.entity.DoctorSearchEntity;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.WorkingHourEntity;
@@ -577,6 +578,43 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		builder.append(UserColumn.TABLE_NAME);
 		builder.append(".");
 		builder.append(UserColumn.ID.getColumnName());
+		try {
+			stmt = con.prepareStatement(builder.toString());
+			rs = stmt.executeQuery();
+			if (rs != null) {
+				while (rs.next()) {
+					list.add(getEntityFromResultSet(rs));
+				}
+			}
+		} finally {
+			if (rs != null) {
+				rs.close();
+			}
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+		return list;
+	}
+
+	public List<DoctorUserEntity> queryDoctorByFacility(FacilityEntity facilityEntity)
+			throws SQLException, ClassNotFoundException, IOException {
+
+		List<DoctorUserEntity> list = new ArrayList<>();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		StringBuilder builder = new StringBuilder();
+		builder.append("select * from ");
+		builder.append(DoctorColumn.TABLE_NAME + " d");
+		builder.append(" left join ");
+		builder.append("(select distinct " + Doctor_FacilityColumn.DOCTOR_ID + ", " + Doctor_FacilityColumn.FACILITY_ID);
+		builder.append(" from ");
+		builder.append(Doctor_FacilityColumn.TABLE_NAME + ") f");
+		builder.append(" on d." + DoctorColumn.USER_ID + " = f." + Doctor_FacilityColumn.DOCTOR_ID);
+		builder.append(" left join ");
+		builder.append(UserColumn.TABLE_NAME + " u");
+		builder.append(" on u." + UserColumn.ID + " = d." + DoctorColumn.USER_ID);
+		builder.append(" where f." + Doctor_FacilityColumn.FACILITY_ID + " = " + facilityEntity.getId());
 		try {
 			stmt = con.prepareStatement(builder.toString());
 			rs = stmt.executeQuery();

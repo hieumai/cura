@@ -15,6 +15,7 @@ import com.kms.cura.dal.user.DoctorUserDAL;
 import com.kms.cura.dal.user.PatientUserDAL;
 import com.kms.cura.dal.user.UserDAL;
 import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.json.JsonToEntityConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
@@ -144,6 +145,18 @@ public final class UserAPI {
 		try {
 			PatientUserEntity patient = PatientUserDAL.getInstance().updatePatientHealth(patientUserEntity);
 			return new UserAPIResponse().successResponse(patient);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+	
+	@POST
+	@Path("/getDoctorByFacility")
+	public String getDoctorByFacility(String jsonData) {
+		FacilityEntity facilityEntity = JsonToEntityConverter.convertJsonStringToEntity(jsonData, FacilityEntity.getFacilityType());
+		try {
+			List<DoctorUserEntity> doctorUserEntities = DoctorUserDAL.getInstance().getDoctorByFacility(facilityEntity);
+			return new UserAPIResponse().successResponse(doctorUserEntities);
 		} catch (Exception e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}

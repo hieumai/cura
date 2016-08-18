@@ -33,6 +33,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity implements OnItemSelectedListener, View.OnClickListener {
+
     public static final String ACTIVITY_NAME = "Results";
     public static String DOCTOR_SELECTED = "DOCTOR_SELECTED";
     private static final int NAME = 1;
@@ -60,13 +61,15 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         intent = getIntent();
-        data = intent.getStringExtra(PatientHomeFragment.SEARCH_RESULT);
+        switch (intent.getStringExtra(ACTIVITY_NAME)) {
+            case PatientHomeFragment.FRAGMENT_NAME:
+                data = intent.getStringExtra(PatientHomeFragment.SEARCH_RESULT);
+                break;
+            case FacilityInfoActivity.FACILITY_KEY:
+                data = intent.getStringExtra(FacilityInfoActivity.FACILITY_DOCTOR);
+                break;
+        }
         dialog = new SearchFilterDialog(this, null);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-            }
-        });
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -116,7 +119,14 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
         toolbar = (Toolbar) findViewById(R.id.search_toolbar);
         toolbar.setNavigationIcon(R.drawable.back);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(ACTIVITY_NAME);
+        switch (intent.getStringExtra(ACTIVITY_NAME)) {
+            case PatientHomeFragment.FRAGMENT_NAME:
+                getSupportActionBar().setTitle(ACTIVITY_NAME);
+                break;
+            case FacilityInfoActivity.FACILITY_KEY:
+                getSupportActionBar().setTitle(R.string.doctor_list);
+                break;
+        }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
