@@ -47,6 +47,7 @@ public class FacilityInfoActivity extends AppCompatActivity implements View.OnCl
     private LinearLayout layoutSubMenu;
     private boolean floatingMenu = false;
     private ProgressDialog pDialog;
+    private final String GOOGLE_MAP_PACKAGE = "com.google.android.apps.maps";
     private EventBroker broker;
 
     @Override
@@ -149,7 +150,7 @@ public class FacilityInfoActivity extends AppCompatActivity implements View.OnCl
         } else if (v.getId() == R.id.fbDoctor || v.getId() == R.id.tvDoctorList) {
             showDoctorList();
         } else if (v.getId() == R.id.fbDirection || v.getId() == R.id.tvDirection) {
-            // intent Ggl map find direction
+            intentGoogleDirection();
         } else if (v.getId() == R.id.dimLayout1 || v.getId() == R.id.dimLayout2) {
             if (floatingMenu) {
                 floatingMenu = false;
@@ -181,6 +182,22 @@ public class FacilityInfoActivity extends AppCompatActivity implements View.OnCl
             layout2.setVisibility(View.GONE);
         }
     }
+    private void intentGoogleDirection() {
+        Uri uri = getDirectionUri();
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, uri);
+        mapIntent.setPackage(GOOGLE_MAP_PACKAGE);
+        if (mapIntent.resolveActivity(getPackageManager()) == null) {
+            ErrorController.showDialog(this, getString(R.string.map_inavailable));
+        } else {
+            startActivity(mapIntent);
+        }
+    }
+
+    private Uri getDirectionUri() {
+        StringBuilder builder = new StringBuilder("google.navigation:q=");
+        builder.append(facilityEntity.getLatitude() + "," + facilityEntity.getLongitude());
+        builder.append("&mode=d");
+        return Uri.parse(builder.toString());
 
     private void showDoctorList() {
         pDialog = new ProgressDialog(FacilityInfoActivity.this);
