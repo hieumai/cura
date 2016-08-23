@@ -3,6 +3,8 @@ package com.kms.cura.view.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.kms.cura.R;
 import com.kms.cura.constant.EventConstant;
@@ -12,9 +14,10 @@ import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
 
-public class SplashScreen extends AppCompatActivity implements EventHandler {
+public class SplashScreen extends AppCompatActivity implements EventHandler, View.OnClickListener {
 
     private EventBroker broker;
+    private TextView txtRetry;
     DilatingDotsProgressBar progressBar;
 
     @Override
@@ -23,6 +26,8 @@ public class SplashScreen extends AppCompatActivity implements EventHandler {
         setContentView(R.layout.activity_splash_screen);
         broker = EventBroker.getInstance();
         progressBar = (DilatingDotsProgressBar) findViewById(R.id.progress);
+        txtRetry = (TextView) findViewById(R.id.txtRetry);
+        txtRetry.setOnClickListener(this);
         if (UserController.checkSignIn(this)) {
             progressBar.showNow();
             registerEvent();
@@ -55,6 +60,8 @@ public class SplashScreen extends AppCompatActivity implements EventHandler {
                 break;
             case EventConstant.LOGIN_FAILED:
                 ErrorController.showDialog(this, "Login failed :" + data);
+                progressBar.hideNow();
+                txtRetry.setVisibility(View.VISIBLE);
                 break;
             case EventConstant.CONNECTION_ERROR:
                 if (data != null) {
@@ -62,12 +69,18 @@ public class SplashScreen extends AppCompatActivity implements EventHandler {
                 } else {
                     ErrorController.showDialog(this, "Error " + getResources().getString(R.string.ConnectionError));
                 }
+                progressBar.hideNow();
+                txtRetry.setVisibility(View.VISIBLE);
                 break;
             case EventConstant.INTERNAL_ERROR:
                 String internalError = getResources().getString(R.string.InternalError);
                 ErrorController.showDialog(this, internalError + " : " + data);
+                progressBar.hideNow();
+                txtRetry.setVisibility(View.VISIBLE);
         }
     }
+
+
 
     @Override
     protected void onPause() {
@@ -93,5 +106,15 @@ public class SplashScreen extends AppCompatActivity implements EventHandler {
         broker.unRegister(this, EventConstant.LOGIN_FAILED);
         broker.unRegister(this, EventConstant.CONNECTION_ERROR);
         broker.unRegister(this, EventConstant.INTERNAL_ERROR);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.txtRetry && txtRetry.getVisibility() == View.VISIBLE){
+            txtRetry.setVisibility(View.INVISIBLE);
+            progressBar.showNow();
+            UserController.autoSignIn(this);
+        }
     }
 }

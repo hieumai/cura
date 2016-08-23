@@ -170,6 +170,7 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
                     SpecialityController.initData();
                 } catch (Exception e) {
                     exception = e;
+
                 }
                 return null;
             }
@@ -178,7 +179,11 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
             protected void onPostExecute(Void aVoid) {
                 hideProgressDialog();
                 if (exception != null) {
-                    ErrorController.showDialogRefresh(getActivity(), "Error : " + exception.getMessage(), reloadData);
+                    String msg = exception.getMessage();
+                    if (msg == null){
+                        msg = getActivity().getString(R.string.InternalError);
+                    }
+                    ErrorController.showDialogRefresh(getActivity(), "Error : " + msg, reloadData);
                     return;
                 }
                 setAdapter();
@@ -341,21 +346,20 @@ public class PatientHomeFragment extends Fragment implements RadioGroup.OnChecke
                 hideProgressDialog();
                 startActivity(intent);
                 break;
-            case EventConstant.LOGIN_FAILED:
-                hideProgressDialog();
-                ErrorController.showDialog(getActivity(), "Login failed :" + data);
-                break;
             case EventConstant.CONNECTION_ERROR:
                 hideProgressDialog();
                 if (data != null) {
-                    ErrorController.showDialog(getActivity(), "Error " + data);
+                    ErrorController.showDialog(getActivity(), "Error :" + data);
                 } else {
-                    ErrorController.showDialog(getActivity(), "Error " + getResources().getString(R.string.ConnectionError));
+                    ErrorController.showDialog(getActivity(), "Error :" + getResources().getString(R.string.ConnectionError));
                 }
                 break;
             case EventConstant.INTERNAL_ERROR:
                 hideProgressDialog();
                 String internalError = getResources().getString(R.string.InternalError);
+                if (data == null){
+                    data = "";
+                }
                 ErrorController.showDialog(getActivity(), internalError + " : " + data);
         }
     }
