@@ -29,7 +29,19 @@
         app:dd_scaleMultiplier="1.5"
         app:dd_animationDuration="800"
         app:dd_horizontalSpacing="3dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="30dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/retry"
+        android:id="@+id/txtRetry"
+        android:layout_alignParentBottom="true"
+        android:textSize="@dimen/docText_20"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_marginBottom="30sp"
+        />
 </RelativeLayout>

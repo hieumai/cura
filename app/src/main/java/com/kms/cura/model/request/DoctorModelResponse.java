@@ -20,9 +20,6 @@ import java.util.List;
  */
 public class DoctorModelResponse implements EntityModelResponse {
     List<DoctorUserEntity> entityList = new ArrayList<DoctorUserEntity>();
-    boolean gotResponse;
-    boolean responseError = false;
-    String error;
 
     public DoctorModelResponse() {
 
@@ -47,13 +44,11 @@ public class DoctorModelResponse implements EntityModelResponse {
 
                 EventBroker.getInstance().pusblish(EventConstant.SEARCH_SUCCESS, entityList);
             } else {
-                error = jsonObject.getString(UserEntity.MESSAGE);
-                responseError = true;
+                EventBroker.getInstance().pusblish(EventConstant.INTERNAL_ERROR, jsonObject.getString(UserEntity.MESSAGE));
             }
 
         } catch (JSONException e) {
-            responseError = true;
-            error = e.getMessage();
+            EventBroker.getInstance().pusblish(EventConstant.INTERNAL_ERROR, e.getMessage());
         }
 
 
