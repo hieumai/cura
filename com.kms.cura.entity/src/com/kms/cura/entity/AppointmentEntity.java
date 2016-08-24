@@ -36,11 +36,27 @@ public class AppointmentEntity extends Entity{
 	private int status = -1;
 	private String patientCmt;
 	private String doctorCmt;
+	private float rate;
+	private String rateCmt;
 
 	public AppointmentEntity(String id, PatientUserEntity patientUserEntity, DoctorUserEntity doctorUserEntity,
 			FacilityEntity facilityEntity, Date apptDay, Time startTime, Time endTime, int status, String patientCmt,
-			String doctorCmt) {
+			String doctorCmt, float rate, String rateCmt) {
 		super(id, null);
+		this.patientUserEntity = patientUserEntity;
+		this.doctorUserEntity = doctorUserEntity;
+		this.facilityEntity = facilityEntity;
+		this.apptDay = apptDay;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.status = status;
+		this.patientCmt = patientCmt;
+		this.doctorCmt = doctorCmt;
+		this.rate = rate;
+		this.rateCmt = rateCmt;
+	}
+
+	public AppointmentEntity(String id, PatientUserEntity patientUserEntity, DoctorUserEntity doctorUserEntity, FacilityEntity facilityEntity, Date apptDay, Time startTime, Time endTime, int status, String patientCmt, String doctorCmt) {
 		this.patientUserEntity = patientUserEntity;
 		this.doctorUserEntity = doctorUserEntity;
 		this.facilityEntity = facilityEntity;
@@ -55,7 +71,7 @@ public class AppointmentEntity extends Entity{
 	public AppointmentEntity copy() {
 		AppointmentEntity appointmentEntity = new AppointmentEntity(super.getId(), this.patientUserEntity,
 				this.doctorUserEntity, this.facilityEntity, this.apptDay, this.startTime, this.endTime, this.status,
-				this.patientCmt, this.doctorCmt);
+				this.patientCmt, this.doctorCmt, this.rate, this.rateCmt);
 		return appointmentEntity;
 	}
 
@@ -188,4 +204,22 @@ public class AppointmentEntity extends Entity{
 		return (c1.get(Calendar.ERA) == c2.get(Calendar.ERA) && c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
 				&& c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR));
 	}
+
+	public float getRate() {
+		return rate;
+	}
+
+	public void setRate(int rate) {
+		this.rate = rate;
+	}
+
+	public String getRate_comment() {
+		return rateCmt;
+	}
+
+	public void setRate_comment(String rateCmt) {
+		this.rateCmt = rateCmt;
+	}
+	
+	
 }

@@ -68,7 +68,9 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 				resultSet.getTime(AppointmentColumn.END_TIME.getColumnName()),
 				resultSet.getInt(AppointmentColumn.STATUS.getColumnName()),
 				resultSet.getString(AppointmentColumn.PATIENT_CMT.getColumnName()),
-				resultSet.getString(AppointmentColumn.DOCTOR_CMT.getColumnName()));
+				resultSet.getString(AppointmentColumn.DOCTOR_CMT.getColumnName()),
+                resultSet.getFloat(AppointmentColumn.RATE.getColumnName()),
+                resultSet.getString(AppointmentColumn.RATE_CMT.getColumnName()));
 	}
 
 	public List<AppointmentEntity> getAppointment(AppointSearchEntity criteria, PatientUserEntity patientUserEntity,
@@ -283,4 +285,32 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 		}
 	}
 
+    public AppointmentEntity updateRating(AppointmentEntity entity) throws SQLException, ClassNotFoundException, IOException {
+    	PreparedStatement stmt = null;
+    	ResultSet rs = null;
+    	StringBuilder builder = new StringBuilder();
+    	builder.append("update " + AppointmentColumn.TABLE_NAME);
+    	builder.append(" set " + AppointmentColumn.RATE.getColumnName() + " = " + entity.getRate());
+    	builder.append(", " + AppointmentColumn.RATE_CMT.getColumnName() + " = '" + entity.getRate_comment() + "'");
+    	builder.append(" where " + AppointmentColumn.APPT_ID.getColumnName() + " = " + entity.getId());
+    	try {
+    		con.setAutoCommit(false);
+    		stmt = con.prepareStatement(builder.toString());
+    		stmt.executeUpdate();
+    		rs = queryByReferenceID(AppointmentColumn.TABLE_NAME, AppointmentColumn.APPT_ID.getColumnName(), Integer.parseInt(entity.getId()));
+    		rs.next();
+    		return geAppointmentEntityFromResultSet(rs, null, null);
+    	} catch (SQLException e) {
+            if (con != null) {
+                System.err.print("Transaction is being rolled back");
+                con.rollback();
+            }
+            throw e;
+        } finally {
+            con.setAutoCommit(true);
+            if (stmt != null) {
+                stmt.close();
+            }
+        }
+    }
 }

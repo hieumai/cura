@@ -11,6 +11,8 @@ CREATE TABLE Appointments (
     current_status INT NOT NULL,
     patient_cmt text,
     doctor_cmt text,
+    rate float,
+    rate_cmt text,
     FOREIGN KEY (doctor_id) REFERENCES doctor_facilities (doctor_id),
     FOREIGN KEY (patient_id) REFERENCES patient (user_id),
     FOREIGN KEY (facility_id) REFERENCES doctor_facilities (facility_id),

@@ -52,4 +52,13 @@ public class AppointmentDAL {
             dbh.closeConnection();
         }
     }
+    
+    public AppointmentEntity rateAppointment(AppointmentEntity entity) throws ClassNotFoundException, SQLException, IOException {
+        AppointmentDatabaseHelper dbh = new AppointmentDatabaseHelper();
+        try {
+            return dbh.updateRating(entity);
+        } finally {
+            dbh.closeConnection();
+        }
+    }
 }

@@ -29,5 +29,12 @@ public class AppointmentAPIResponse extends APIResponse{
 		object.addProperty(Entity.STATUS_KEY, true);
 		return object.toString();
 	}
+	
+	public String successRatingResponse(AppointmentEntity entity) {
+		JsonElement element = new Gson().toJsonTree(entity, AppointmentEntity.getAppointmentType());
+		JsonObject object = (JsonObject) element;
+		object.addProperty(Entity.STATUS_KEY, true);
+		return object.toString();
+	}
 
 }
