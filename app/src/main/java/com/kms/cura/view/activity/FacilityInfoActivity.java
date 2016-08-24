@@ -198,6 +198,7 @@ public class FacilityInfoActivity extends AppCompatActivity implements View.OnCl
         builder.append(facilityEntity.getLatitude() + "," + facilityEntity.getLongitude());
         builder.append("&mode=d");
         return Uri.parse(builder.toString());
+    }
 
     private void showDoctorList() {
         pDialog = new ProgressDialog(FacilityInfoActivity.this);

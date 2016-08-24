@@ -9,10 +9,14 @@ import java.util.List;
 
 import com.kms.cura.dal.mapping.DoctorColumn;
 import com.kms.cura.dal.mapping.MessageColumn;
+import com.kms.cura.dal.mapping.NotificationType;
 import com.kms.cura.dal.mapping.PatientColumn;
+import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.MessageEntity;
+import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
+import com.mysql.jdbc.Statement;
 
 public class MessageDatabaseHelper extends DatabaseHelper {
 
@@ -25,17 +29,22 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 	}
 
 	@Override
-	protected MessageEntity getEntityFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException, IOException {
+	protected MessageEntity getEntityFromResultSet(ResultSet resultSet)
+			throws SQLException, ClassNotFoundException, IOException {
 		DoctorUserDatabaseHelper doctorUserDatabaseHelper = new DoctorUserDatabaseHelper();
 		PatientUserDatabaseHelper patientUserDatabaseHelper = new PatientUserDatabaseHelper();
 		try {
-			DoctorUserEntity doctor = doctorUserDatabaseHelper.queryDoctorByID(resultSet.getString(MessageColumn.DOCTOR_ID.getColumnName()));
-			PatientUserEntity patient = patientUserDatabaseHelper.queryPatientByID(resultSet.getString(MessageColumn.PATIENT_ID.getColumnName()));
+			DoctorUserEntity doctor = doctorUserDatabaseHelper
+					.queryDoctorByID(resultSet.getString(MessageColumn.DOCTOR_ID.getColumnName()));
+			PatientUserEntity patient = patientUserDatabaseHelper
+					.queryPatientByID(resultSet.getString(MessageColumn.PATIENT_ID.getColumnName()));
 			if (resultSet.getBoolean(MessageColumn.SENT_BY_DOCTOR.getColumnName())) {
-			return new MessageEntity(resultSet.getString(MessageColumn.MSG_ID.getColumnName()), doctor, patient, resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
+				return new MessageEntity(resultSet.getString(MessageColumn.MSG_ID.getColumnName()), doctor, patient,
+						resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
 						resultSet.getString(MessageColumn.MESSAGE.getColumnName()));
 			} else {
-			return new MessageEntity(resultSet.getString(MessageColumn.MSG_ID.getColumnName()), patient, doctor, resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
+				return new MessageEntity(resultSet.getString(MessageColumn.MSG_ID.getColumnName()), patient, doctor,
+						resultSet.getTimestamp(MessageColumn.TIME_SENT.getColumnName()),
 						resultSet.getString(MessageColumn.MESSAGE.getColumnName()));
 			}
 		} finally {
@@ -231,14 +240,21 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		StringBuilder builder = new StringBuilder();
 		builder.append("insert into ");
 		builder.append(MessageColumn.TABLE_NAME);
-		builder.append(" (" + MessageColumn.PATIENT_ID);
-		builder.append(", " + MessageColumn.DOCTOR_ID);
-		builder.append(", " + MessageColumn.SENT_BY_DOCTOR);
-		builder.append(", " + MessageColumn.TIME_SENT);
-		builder.append(", " + MessageColumn.MESSAGE);
-		builder.append(", " + MessageColumn.PATIENT_AVAILABLE);
-		builder.append(", " + MessageColumn.DOCTOR_AVAILABLE);
-		builder.append(") values (");
+		builder.append("(");
+		builder.append(MessageColumn.PATIENT_ID.getColumnName());
+		builder.append(", ");
+		builder.append(MessageColumn.DOCTOR_ID.getColumnName());
+		builder.append(", ");
+		builder.append(MessageColumn.SENT_BY_DOCTOR.getColumnName());
+		builder.append(", ");
+		builder.append(MessageColumn.TIME_SENT.getColumnName());
+		builder.append(", ");
+		builder.append(MessageColumn.MESSAGE.getColumnName());
+		builder.append(", ");
+		builder.append(MessageColumn.PATIENT_AVAILABLE.getColumnName());
+		builder.append(", ");
+		builder.append(MessageColumn.DOCTOR_AVAILABLE.getColumnName());
+		builder.append(") ");
 		if (sentByDoctor) {
 			builder.append(entity.getReceiver().getId() + ", ");
 			builder.append(entity.getSender().getId() + ", ");
@@ -253,9 +269,17 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		builder.append("true, true)");
 		try {
 			con.setAutoCommit(false);
-			stmt = con.prepareStatement(builder.toString());
+			stmt = con.prepareStatement(builder.toString(), Statement.RETURN_GENERATED_KEYS);
 			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			int newID = rs.getInt(1);
+			String newInsertedID = String.valueOf(newID);
 			con.commit();
+			if (sentByDoctor) {
+				createNewMessageNotification(newInsertedID, entity);
+			}
+			createNewMessageNotification(newInsertedID, entity);
 		} catch (SQLException e) {
 			if (con != null) {
 				System.err.print("Transaction is being rolled back");
@@ -266,6 +290,23 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 			con.setAutoCommit(true);
 			if (stmt != null) {
 				stmt.close();
+			}
+		}
+	}
+
+	private void createNewMessageNotification(String newID, MessageEntity entity) {
+		NotificationDatabaseHelper databaseHelper = null;
+		try {
+			databaseHelper = new NotificationDatabaseHelper();
+			databaseHelper.createNotification(newID, entity.getReceiver().getId(),
+					NotificationType.APPT_TYPE.getNotiType(), null);
+		} catch (ClassNotFoundException | SQLException e) {
+			//TODO log file for server later
+		} finally {
+			try {
+				databaseHelper.closeConnection();
+			} catch (SQLException e) {
+				return;
 			}
 		}
 	}

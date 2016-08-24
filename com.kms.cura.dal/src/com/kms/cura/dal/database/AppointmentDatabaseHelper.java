@@ -10,10 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.kms.cura.dal.mapping.AppointmentColumn;
+import com.kms.cura.dal.mapping.AppointmentNotiType;
+import com.kms.cura.dal.mapping.NotificationType;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 
@@ -152,11 +155,12 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 		List<AppointmentEntity> patientAppts;
 		try {
 			con.setAutoCommit(false);
-			createAppointment(entity);
+			int newID = createAppointment(entity);
 			AppointmentEntity search = new AppointmentEntity(null, entity.getPatientUserEntity(), null, null, null,
 					null, null, -1, null, null);
 			patientAppts = getAppointment(new AppointSearchEntity(search), entity.getPatientUserEntity(), null);
 			con.commit();
+			createNewAppointmentNotification(String.valueOf(newID), entity);
 			return patientAppts;
 		} catch (SQLException e) {
 			if (con != null) {
@@ -169,11 +173,14 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 		}
 	}
 
-	private void createAppointment(AppointmentEntity entity) throws SQLException {
+	private int createAppointment(AppointmentEntity entity) throws SQLException {
 		PreparedStatement stmt = null;
 		try {
 			stmt = getinsertAppointmentQuery(entity);
 			stmt.executeUpdate();
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			return rs.getInt(1);
 		} finally {
 			if (stmt != null) {
 				stmt.close();
@@ -193,6 +200,7 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 			stmt.executeUpdate();
 			PatientUserEntity patientUserEntity = entity.getPatientUserEntity();
 			DoctorUserEntity doctorUserEntity = entity.getDoctorUserEntity();
+			int status = entity.getStatus();
 			if (patient) {
 				search = new AppointmentEntity(null, patientUserEntity, null, null, null, null, null, -1, null, null);
 				listAppts = getAppointment(new AppointSearchEntity(search), patientUserEntity, null);
@@ -201,6 +209,10 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 				listAppts = getAppointment(new AppointSearchEntity(search), null, doctorUserEntity);
 			}
 			con.commit();
+			if (!patient && (status == AppointmentEntity.ACCEPTED_STT || status == AppointmentEntity.REJECT_STT
+					|| status == AppointmentEntity.DOCTOR_CANCEL_STT)) {
+				createUpdateAppointmentNotification(entity.getId(), doctorUserEntity.getId());
+			}
 			return listAppts;
 		} catch (SQLException e) {
 			if (con != null) {
@@ -210,6 +222,61 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 			throw e;
 		} finally {
 			con.setAutoCommit(true);
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+	}
+
+	private void createNewAppointmentNotification(String newID, AppointmentEntity entity) {
+		NotificationDatabaseHelper databaseHelper = null;
+		try {
+			databaseHelper = new NotificationDatabaseHelper();
+			databaseHelper.createNotification(newID, entity.getDoctorUserEntity().getId(),
+					NotificationType.APPT_TYPE.getNotiType(), AppointmentNotiType.NEW_APPT.getNotiType());
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO log file for server later
+		} finally {
+			try {
+				databaseHelper.closeConnection();
+			} catch (SQLException e) {
+				return;
+			}
+		}
+	}
+
+	private void createUpdateAppointmentNotification(String id, String userID) {
+		NotificationDatabaseHelper databaseHelper = null;
+		try {
+			databaseHelper = new NotificationDatabaseHelper();
+			databaseHelper.createNotification(id, userID, NotificationType.APPT_TYPE.getNotiType(),
+					AppointmentNotiType.UPDATE_STT.getNotiType());
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO log file for server later
+		} finally {
+			try {
+				databaseHelper.closeConnection();
+			} catch (SQLException e) {
+				return;
+			}
+		}
+	}
+
+	public AppointmentEntity querybyID(int id) throws ClassNotFoundException, SQLException, IOException {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.prepareStatement("SELECT * FROM " + AppointmentColumn.TABLE_NAME + " WHERE "
+					+ AppointmentColumn.APPT_ID.getColumnName() + " = ?");
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
+			rs.next();
+			AppointmentEntity result = geAppointmentEntityFromResultSet(rs, null, null);
+			return result;
+		} finally {
+			if (rs != null) {
+				rs.close();
+			}
 			if (stmt != null) {
 				stmt.close();
 			}
