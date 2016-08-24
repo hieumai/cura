@@ -173,7 +173,7 @@ public class CalendarPagerAdapter extends PagerAdapter {
         calendarViews.get(position).colorSelectedDayFromDayView(selected);
     }
 
-    public void unClickabaleView (int position){
+    public void setUnClickable(int position){
         calendarViews.get(position).unEnableEveryday();
     }
 

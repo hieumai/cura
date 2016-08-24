@@ -17,13 +17,11 @@ import android.widget.TextView;
 
 import com.kms.cura.R;
 import com.kms.cura.view.DepthPageTransformer;
-import com.kms.cura.view.DoctorApptDayVIew;
 
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by linhtnvo on 7/26/2016.
@@ -141,27 +139,19 @@ public class DoctorAppointmentMonthViewFragment extends Fragment implements View
         if (!initialCalendar) {
             vpCalendar.setCurrentItem(dateInPage.indexOf(currentCalendar.get(Calendar.MONTH) + timeDiff));
             currentPos = vpCalendar.getCurrentItem();
-            int position = dateInPage.get(currentPos);
-            if (position >= 0) {
-                adapter.colorTheSelectedDayFromDayView(selectedDay, position);
-            } else {
-                adapter.colorTheSelectedDayFromDayView(selectedDay, (dateInPage.size() - currentPos - 1));
-            }
+            adapter.colorTheSelectedDayFromDayView(selectedDay, currentPos);
             return;
         }
         Calendar calendar = Calendar.getInstance();
         vpCalendar.setCurrentItem(calendar.get(Calendar.MONTH));
         currentPos = vpCalendar.getCurrentItem();
+        adapter.setClickable(currentPos);
     }
 
     @Override
     public void onPageSelected(int position) {
-        int pos = dateInPage.get(currentPos);
-        if (pos >= 0) {
-            adapter.clearAlltheContent(pos);
-        } else {
-            adapter.clearAlltheContent(currentPos);
-        }
+        adapter.clearAlltheContent(currentPos);
+        adapter.setUnClickable(currentPos);
         if (currentPos == position) {
             if (currentPos - 1 == 0) {
                 vpCalendar.setCurrentItem(currentPos + 1);
@@ -181,6 +171,7 @@ public class DoctorAppointmentMonthViewFragment extends Fragment implements View
             createDateAtFirst();
         }
         vpCalendar.setCurrentItem(currentPos);
+        adapter.setClickable(currentPos);
     }
 
     private void createDateAtLast() {

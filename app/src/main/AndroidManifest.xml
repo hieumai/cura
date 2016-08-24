@@ -74,9 +74,6 @@
             android:name=".view.activity.DoctorSearchActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.ProfilePictureActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
         <activity android:name=".view.activity.ChangePasswordActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
@@ -109,7 +106,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.ForgotPasswordActivity"
+        <activity android:name=".view.activity.ForgotPasswordActivity"/>
         <activity android:name=".view.activity.DoctorAppointmentDetailActivity"></activity>
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>

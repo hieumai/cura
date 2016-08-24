@@ -15,6 +15,7 @@ public class MessageEntity extends Entity {
 	public final static String RECEIVER = "receiver";
 	public final static String TIME_SENT = "time_sent";
 	public final static String MESSAGE = "message";
+	public static final String MSG_TYPE = "msg";
 
 	public MessageEntity(String id, UserEntity sender, UserEntity receiver, Timestamp timeSent, String message) {
 		super(id, null);
@@ -22,6 +23,19 @@ public class MessageEntity extends Entity {
 		this.receiver = receiver;
 		this.timeSent = timeSent;
 		this.message = message;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		MessageEntity src = (MessageEntity) obj;
+		return (this.sender.getId().equals(src.getSender().getId())
+				&& this.receiver.getId().equals(src.getReceiver().getId()) && this.timeSent.equals(src.getTimeSent())
+				&& this.message.equals(src.getMessage()));
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.getId().hashCode();
 	}
 
 	public UserEntity getSender() {

@@ -3,13 +3,14 @@ package com.kms.cura.entity;
 import java.lang.reflect.Type;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.List;
 
 import com.google.gson.reflect.TypeToken;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 
-public class AppointmentEntity {
+public class AppointmentEntity extends Entity{
 	public static final String UPDATE_TYPE = "update_type";
 	public static final int PENDING_STT = 0;
 	public static final int ACCEPTED_STT = 1;
@@ -25,7 +26,7 @@ public class AppointmentEntity {
 	public static String INCOMPLETE = "INCOMPLETE";
 	public static String ACCEPTED = "ACCEPTED";
 	public static String APPTS_LIST = "appts_list";
-	private String id;
+	public static final String APPT_TYPE = "appt";
 	private PatientUserEntity patientUserEntity;
 	private DoctorUserEntity doctorUserEntity;
 	private FacilityEntity facilityEntity;
@@ -39,7 +40,7 @@ public class AppointmentEntity {
 	public AppointmentEntity(String id, PatientUserEntity patientUserEntity, DoctorUserEntity doctorUserEntity,
 			FacilityEntity facilityEntity, Date apptDay, Time startTime, Time endTime, int status, String patientCmt,
 			String doctorCmt) {
-		this.id = id;
+		super(id, null);
 		this.patientUserEntity = patientUserEntity;
 		this.doctorUserEntity = doctorUserEntity;
 		this.facilityEntity = facilityEntity;
@@ -50,25 +51,31 @@ public class AppointmentEntity {
 		this.patientCmt = patientCmt;
 		this.doctorCmt = doctorCmt;
 	}
-	
+
 	public AppointmentEntity copy() {
-		AppointmentEntity appointmentEntity = new AppointmentEntity(this.id, this.patientUserEntity, this.doctorUserEntity, 
-				this.facilityEntity, this.apptDay, this.startTime, this.endTime, this.status, this.patientCmt, this.doctorCmt);
+		AppointmentEntity appointmentEntity = new AppointmentEntity(super.getId(), this.patientUserEntity,
+				this.doctorUserEntity, this.facilityEntity, this.apptDay, this.startTime, this.endTime, this.status,
+				this.patientCmt, this.doctorCmt);
 		return appointmentEntity;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		AppointmentEntity entity = (AppointmentEntity) obj;
-		return (this.id.equals(entity.getId()));
+		return (super.getId().equals(entity.getId()));
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.getId().hashCode();
 	}
 
 	public String getId() {
-		return id;
+		return super.getId();
 	}
 
 	public void setId(String id) {
-		this.id = id;
+		super.setId(id);
 	}
 
 	public PatientUserEntity getPatientUserEntity() {
@@ -171,5 +178,14 @@ public class AppointmentEntity {
 			return INCOMPLETE;
 		}
 		return null;
+	}
+
+	private boolean isSameDay(Date d1, Date d2) {
+		Calendar c1 = Calendar.getInstance();
+		c1.setTime(d1);
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(d2);
+		return (c1.get(Calendar.ERA) == c2.get(Calendar.ERA) && c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+				&& c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR));
 	}
 }

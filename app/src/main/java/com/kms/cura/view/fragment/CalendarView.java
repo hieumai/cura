@@ -38,7 +38,7 @@ import java.util.Locale;
 /**
  * Created by linhtnvo on 7/26/2016.
  */
-public class CalendarView implements CalendarListener, AdapterView.OnItemClickListener, EventHandler{
+public class CalendarView implements CalendarListener, AdapterView.OnItemClickListener, EventHandler {
     private Context mContext;
     private CustomCalendarView calendarView;
     private int currentMonthIndex;
@@ -52,14 +52,15 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
     private Date selectedDay;
     public static String APPT_POSITION = "APPT_POSITION";
     private DoctorAppointmentAdapter adapter;
+
     public CalendarView(Context mContext, int currentMonthIndex) {
         this.mContext = mContext;
         this.currentMonthIndex = currentMonthIndex;
     }
 
-    public View createView () {
+    public View createView() {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View root = inflater.inflate(R.layout.fragment_calendar_view_pager,null);
+        View root = inflater.inflate(R.layout.fragment_calendar_view_pager, null);
         txtDate = (TextView) root.findViewById(R.id.txtDate);
         lvApptList = (ListView) root.findViewById(R.id.lvApptList);
         lvApptList.setOnItemClickListener(this);
@@ -68,14 +69,15 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         setData();
         root.setTag(currentIndex);
         root.setTag(R.string.calendarTitle, calendarTitle);
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_DOCTOR_LIST);
         return root;
     }
 
-    public void unEnableEveryday(){
+    public void unEnableEveryday() {
         calendarView.unEnableEveryday();
     }
 
-    public void enableEveryday(){
+    public void enableEveryday() {
         calendarView.enableEveryday();
     }
 
@@ -96,8 +98,8 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         listApptDay = new ArrayList<>();
         for (AppointmentEntity entity : appts) {
             int status = entity.getStatus();
-            if (status !=  AppointmentEntity.PENDING_STT && status != AppointmentEntity.PATIENT_CANCEL_STT
-                    && status != AppointmentEntity.REJECT_STT  && !listApptDay.contains(entity.getApptDay())) {
+            if (status != AppointmentEntity.PENDING_STT && status != AppointmentEntity.PATIENT_CANCEL_STT
+                    && status != AppointmentEntity.REJECT_STT && !listApptDay.contains(entity.getApptDay())) {
                 listApptDay.add(entity.getApptDay());
             }
         }
@@ -134,7 +136,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         builder.append(", ");
         builder.append(calendar.get(Calendar.DAY_OF_MONTH));
         builder.append("/");
-        builder.append(calendar.get(Calendar.MONTH)+1);
+        builder.append(calendar.get(Calendar.MONTH) + 1);
         builder.append("/");
         builder.append(calendar.get(Calendar.YEAR));
         return builder.toString();
@@ -148,7 +150,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        List<AppointmentEntity> entityList = ((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
+        List<AppointmentEntity> entityList = ((DoctorUserEntity) CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
         Intent toApptDetail = new Intent(mContext, DoctorAppointmentDetailActivity.class);
         toApptDetail.putExtra(APPT_POSITION, entityList.indexOf(adapter.getListAppts().get(position)));
         mContext.startActivity(toApptDetail);
@@ -156,9 +158,9 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
 
     @Override
     public void handleEvent(String event, Object data) {
-        switch (event){
+        switch (event) {
             case EventConstant.UPDATE_APPT_DOCTOR_LIST:
-                if (adapter == null){
+                if (adapter == null) {
                     return;
                 }
                 appts.clear();
@@ -180,21 +182,21 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
             ImageView circle = new ImageView(mContext);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             circle.setLayoutParams(params);
-            int dimen = (int) (mContext.getResources().getDimension(R.dimen.docText_14)/mContext.getResources().getDisplayMetrics().scaledDensity);
+            int dimen = (int) (mContext.getResources().getDimension(R.dimen.docText_14) / mContext.getResources().getDisplayMetrics().scaledDensity);
             circle.getLayoutParams().width = dimen;
             circle.getLayoutParams().height = dimen;
             circle.setBackgroundResource(R.drawable.circle_mark_appt_day);
             RelativeLayout.LayoutParams rLParams =
                     new RelativeLayout.LayoutParams(
                             dimen, dimen);
-            rLParams.addRule(RelativeLayout.CENTER_HORIZONTAL,1);
+            rLParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
             rLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1);
-            rLParams.setMargins(0,0,0,dimen);
+            rLParams.setMargins(0, 0, 0, dimen);
             parent.addView(circle, rLParams);
         }
     }
 
-    public void clearAlltheContent(){
+    public void clearAlltheContent() {
         adapter = null;
         txtDate.setVisibility(View.INVISIBLE);
         calendarView.decorateApptDay(new ColorDecorator(), listApptDay);
@@ -209,7 +211,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
         return selectedDay;
     }
 
-    public void colorSelectedDayFromDayView(Date selectedDay){
+    public void colorSelectedDayFromDayView(Date selectedDay) {
         calendarView.colorSelectedDay(selectedDay);
     }
 
