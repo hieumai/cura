@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/padding_8">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvSpecialityName"
+            android:textSize="@dimen/docText_18"
+            android:textColor="@color/black"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/padding_5" />
+
+        <Button
+            android:layout_width="@dimen/docText_18"
+            android:layout_height="@dimen/docText_18"
+            android:background="@drawable/send_cancel"
+            android:backgroundTint="@color/red"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/padding_5"
+            android:id="@+id/btnSpecialityRemove"/>
+
+    </LinearLayout>

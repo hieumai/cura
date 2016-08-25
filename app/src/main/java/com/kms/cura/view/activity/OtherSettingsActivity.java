@@ -15,8 +15,6 @@ import android.widget.Spinner;
 import com.kms.cura.R;
 import com.kms.cura.controller.DegreeController;
 import com.kms.cura.controller.ErrorController;
-import com.kms.cura.controller.FacilityController;
-import com.kms.cura.controller.SpecialityController;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.model.DegreeModel;
 import com.kms.cura.utils.CurrentUserProfile;
@@ -26,18 +24,17 @@ import com.kms.cura.view.adapter.StringListAdapter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class OtherSettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class OtherSettingsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
     private static String ACTIVITY_NAME = "Other";
     private Toolbar toolbar;
     private Spinner spnDegree;
     private ArrayList<String> degree;
-    private ArrayAdapter<String> adapterDegree;
+    private StringListAdapter adapterDegree;
     private int checkedDegree;
-    private Button save;
+    private Button btnSave;
     private DoctorUserEntity entity;
     private ProgressDialog pDialog;
     private EditText minPrice, maxPrice, experienceStart;
-
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -78,17 +75,15 @@ public class OtherSettingsActivity extends AppCompatActivity implements AdapterV
             }
         };
         task.execute();
-
-
     }
 
     private void initAdapter() {
-        adapterDegree = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, degree);
+        adapterDegree = new StringListAdapter(this, R.layout.string_list_item, degree, checkedDegree);
     }
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.other_settings_toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
+        toolbar.setNavigationIcon(R.drawable.toolbar_back2);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(ACTIVITY_NAME);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -100,7 +95,8 @@ public class OtherSettingsActivity extends AppCompatActivity implements AdapterV
     }
 
     private void initButton() {
-        save = (Button) findViewById(R.id.button_settings_save);
+        btnSave = (Button) findViewById(R.id.button_settings_save);
+        btnSave.setOnClickListener(this);
     }
 
     private void initEditText() {
@@ -109,12 +105,9 @@ public class OtherSettingsActivity extends AppCompatActivity implements AdapterV
         experienceStart = (EditText) findViewById(R.id.editText_settings_experience_start);
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR) - entity.getExperience();
-
         experienceStart.setText(Integer.toString(year));
         minPrice.setText(Double.toString(entity.getMinPrice()));
         maxPrice.setText(Double.toString(entity.getMaxPrice()));
-
-
     }
 
     private void initSpinner() {
@@ -122,9 +115,7 @@ public class OtherSettingsActivity extends AppCompatActivity implements AdapterV
         spnDegree.setAdapter(adapterDegree);
         spnDegree.setSelection(checkedDegree);
         spnDegree.setOnItemSelectedListener(this);
-
     }
-
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -133,7 +124,6 @@ public class OtherSettingsActivity extends AppCompatActivity implements AdapterV
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
     }
 
     private void showProgressDialog() {
@@ -146,4 +136,10 @@ public class OtherSettingsActivity extends AppCompatActivity implements AdapterV
             pDialog.hide();
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.button_settings_save) {
+            //
+        }
+    }
 }

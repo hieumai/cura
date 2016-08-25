@@ -236,4 +236,16 @@ public class DoctorUserEntity extends UserEntity {
         return false;
     }
 
+	public List<WorkingHourEntity> cloneWorkingHourEntities() {
+		List<WorkingHourEntity> workingHourEntities = new ArrayList<>();
+		for (WorkingHourEntity entity : workingTime) {
+			FacilityEntity facilityEntity = new FacilityEntity(entity.getFacilityEntity());
+			List<OpeningHour> openingHours = new ArrayList<>();
+			for (OpeningHour openingHour : entity.getWorkingTime()) {
+				openingHours.add(new OpeningHour(openingHour));
+			}
+			workingHourEntities.add(new WorkingHourEntity(openingHours, facilityEntity));
+		}
+		return workingHourEntities;
+	}
 }

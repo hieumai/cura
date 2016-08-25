@@ -10,6 +10,7 @@ import com.kms.cura.view.activity.RegisterDoctorActivity;
 
 import org.json.JSONException;
 
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class SpecialityController {
         List<SpecialityEntity> specialitySelected = new ArrayList<>();
         List<SpecialityEntity> allSpecialities = SpecialityModel.getInstace().getSpecialities();
         for (int i = 0 ; i< allSpecialities.size();++i){
-            if(specialities[i]){
+            if (specialities[i]){
                 specialitySelected.add(allSpecialities.get(i));
             }
         }
@@ -39,4 +40,11 @@ public class SpecialityController {
         return SpecialityModel.getInstace().getSpecialitiesByCondition(entity);
     }
 
+    public static boolean isDataLoaded() {
+        return (!SpecialityModel.getInstace().getSpecialities().isEmpty());
+    }
+
+    public static List<SpecialityEntity> getAllSpecialities() {
+        return SpecialityModel.getInstace().getSpecialities();
+    }
 }

@@ -13,6 +13,7 @@ import java.util.List;
  * Created by linhtnvo on 6/16/2016.
  */
 public class FacilityController {
+
     public static void initData() throws Exception {
         FacilityModel.getInstace().init();
     }
@@ -27,5 +28,13 @@ public class FacilityController {
             }
         }
         return facilitySelected;
+    }
+
+    public static boolean isDataLoaded() {
+        return (!FacilityModel.getInstace().getFacilities().isEmpty());
+    }
+
+    public static List<FacilityEntity> getAllFacilities() {
+        return FacilityModel.getInstace().getFacilities();
     }
 }

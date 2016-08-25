@@ -44,7 +44,7 @@ public class StringListAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.string_list_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(resource, parent, false);
         }
         setupTextView(convertView, position);
         return convertView;

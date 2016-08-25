@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.activity.SettingEditWorkingHourActivity"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tbWorkingHourEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            app:contentInsetStart="0dp"
+            android:paddingBottom="@dimen/padding_16">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:orientation="horizontal"
+                    android:baselineAligned="true">
+
+                    <ImageButton
+                        android:id="@+id/btnWorkingHourCancel"
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorPrimary"
+                        android:src="@drawable/send_cancel"
+                        android:scaleY="0.8"
+                        android:scaleX="0.8"
+                        android:layout_gravity="left"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/tvWeekDay"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textAllCaps="true"
+                        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                        android:textColor="@color/white" />
+
+                    <ImageButton
+                        android:id="@+id/btnWorkingHourDone"
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorPrimary"
+                        android:src="@drawable/done_button" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/padding_5">
+
+                    <com.kms.cura.view.CustomSpinner
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/spinner_60"
+                        android:id="@+id/spnFacilityEdit"
+                        android:layout_marginTop="@dimen/margin_10"
+                        android:textSize="@dimen/docText_18"
+                        style="@style/Widget.AppCompat.Spinner.Underlined"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="@dimen/padding_5"
+                        android:layout_marginRight="@dimen/padding_5"/>
+
+                    <ImageButton
+                        android:id="@+id/btnEditFacility"
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:src="@drawable/edit"
+                        android:layout_gravity="bottom"
+                        android:layout_marginBottom="@dimen/padding_8"/>
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_50"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif"
+            android:paddingLeft="@dimen/padding_5"
+            android:text="@string/start_time"
+            android:textColor="@color/material_grey_600"
+            android:textSize="@dimen/docText_18" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left|center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvStartTime"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="@dimen/padding_5"
+                android:text="@string/click_to_add"
+                android:textColor="@color/black"
+                android:textSize="@dimen/docText_18"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"></LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spinner_50"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="100sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif"
+            android:paddingLeft="@dimen/padding_5"
+            android:text="@string/end_time"
+            android:textColor="@color/material_grey_600"
+            android:textSize="@dimen/docText_18" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="left|center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvEndTime"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="@dimen/padding_5"
+                android:text="@string/click_to_add"
+                android:textColor="@color/black"
+                android:textSize="@dimen/docText_18"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"></LinearLayout>
+</LinearLayout>

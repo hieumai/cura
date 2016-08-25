@@ -12,7 +12,7 @@
 
     <meta-data
         android:name="com.google.android.maps.v2.API_KEY"
-        android:value="@string/google_maps_key"/>
+        android:value="@string/google_maps_key" />
     <meta-data
         android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />
@@ -78,19 +78,24 @@
             android:name=".view.activity.DoctorSearchActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.ChangePasswordActivity"
+        <activity
+            android:name=".view.activity.ChangePasswordActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.DoctorBasicSettingsActivity"
+        <activity
+            android:name=".view.activity.DoctorBasicSettingsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.DoctorProfessionalSettingsActivity"
+        <activity
+            android:name=".view.activity.DoctorProfessionalSettingsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.ViewDoctorProfileActivity"
+        <activity
+            android:name=".view.activity.ViewDoctorProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.DoctorWorkingHourSettingsActivity"
+        <activity
+            android:name=".view.activity.DoctorWorkingHourSettingsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
@@ -107,20 +112,24 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.ForgotPasswordActivity"/>
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
         <activity android:name=".view.activity.DoctorAppointmentDetailActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".view.activity.ForgotPasswordActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.MessageThreadActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.ViewPatientProfileActivity"
+        <activity
+            android:name=".view.activity.ViewPatientProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity android:name=".view.activity.AppointmentRequestDeatailActivity"
@@ -134,14 +143,25 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".view.activity.FacilityInfoActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity android:name="com.kms.cura.view.activity.ViewScheduleActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
+        <activity android:name=".view.activity.SettingSpecialityActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.activity.SettingWorkingHourActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.activity.SettingEditWorkingHourActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.activity.SettingFacilityEditActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

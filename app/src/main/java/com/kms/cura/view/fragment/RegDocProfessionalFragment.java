@@ -38,15 +38,12 @@ public class RegDocProfessionalFragment extends Fragment implements View.OnClick
     private ImageButton btnNext, btnBack;
     private String spnText[] = {"Degree Types", "Areas of Speciality", "Facilities"};
 
-
     public RegDocProfessionalFragment() {
-
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
 

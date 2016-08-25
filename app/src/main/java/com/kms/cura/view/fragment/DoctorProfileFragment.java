@@ -94,7 +94,7 @@ public class DoctorProfileFragment extends Fragment {
 
     private void setUpListWorkingHour() {
         listWorkingHour = (ExpandableListView) root.findViewById(R.id.listWorkingTime);
-        List<HashMap<String, OpeningHour>> list = convertWorkingHour();
+        List<HashMap<String, List<OpeningHour>>> list = convertWorkingHour();
         WorkingHourExpandableAdapter adapter = new WorkingHourExpandableAdapter(getActivity(), list);
         listWorkingHour.setAdapter(adapter);
         listWorkingHour.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -191,16 +191,18 @@ public class DoctorProfileFragment extends Fragment {
     }
 
 
-    private List<HashMap<String, OpeningHour>> convertWorkingHour() {
-        List<HashMap<String, OpeningHour>> list = new ArrayList<>();
+    private List<HashMap<String, List<OpeningHour>>> convertWorkingHour() {
+        List<HashMap<String, List<OpeningHour>>> list = new ArrayList<>();
         for (int i = 0; i < 7; ++i) {
-            HashMap<String, OpeningHour> workingtime = new HashMap<>();
+            HashMap<String, List<OpeningHour>> workingtime = new HashMap<>();
             for (WorkingHourEntity workingHourEntity : listWH) {
+                List<OpeningHour> workingHourOfi = new ArrayList<>();
                 for (int k = 0; k < workingHourEntity.getWorkingTime().size(); ++k) {
                     if (workingHourEntity.getWorkingTime().get(k).getDayOfTheWeek().getCode() == i) {
-                        workingtime.put(workingHourEntity.getFacilityEntity().getName(), workingHourEntity.getWorkingTime().get(k));
+                        workingHourOfi.add(workingHourEntity.getWorkingTime().get(k));
                     }
                 }
+                workingtime.put(workingHourEntity.getFacilityEntity().getName(), workingHourOfi);
             }
             list.add(workingtime);
         }
