@@ -253,6 +253,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/ExtraComment"
+                    android:id="@+id/txtlbExtraComment"
                     android:layout_marginLeft="10sp"
                     android:textSize="@dimen/docText_18"/>
             </LinearLayout>

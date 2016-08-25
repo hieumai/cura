@@ -212,10 +212,10 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
 
             @Override
             protected void onPostExecute(Void aVoid) {
+                hideProgressDialog();
                 if (exception != null) {
                     ErrorController.showDialog(DoctorAppointmentDetailActivity.this, "Error : " + exception.getMessage());
                 } else {
-                    hideProgressDialog();
                     EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_DOCTOR_LIST, appointmentEntity.getApptDay() );
                 }
                 finish();
@@ -249,10 +249,10 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
 
             @Override
             protected void onPostExecute(Void aVoid) {
+                hideProgressDialog();
                 if (exception != null) {
                     ErrorController.showDialog(DoctorAppointmentDetailActivity.this, "Error : " + exception.getMessage());
                 } else {
-                    hideProgressDialog();
                     EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_DOCTOR_LIST, appointmentEntity.getApptDay());
                 }
                 finish();

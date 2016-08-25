@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.kms.cura.R;
 import com.kms.cura.view.DoctorApptDayVIew;
+import com.kms.cura.view.activity.ViewScheduleActivity;
 import com.kms.cura.view.adapter.DayViewPagerAdapter;
 
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public class DoctorApptDayVIewFragment extends Fragment implements ViewPager.OnP
     private int timeDiff;
     private boolean is31st = false;
     private boolean differentYear = false;
+    private Bundle bundle;
+    private int fromRequest;
     public DoctorApptDayVIewFragment() {
 
     }
@@ -54,6 +57,7 @@ public class DoctorApptDayVIewFragment extends Fragment implements ViewPager.OnP
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_doctor_appt_day_view, null);
+        bundle = getArguments();
         tabStrip = (PagerTabStrip) root.findViewById(R.id.pager_header);
         tabStrip.setDrawFullUnderline(false);
         tabStrip.setTabIndicatorColor(ContextCompat.getColor(getActivity(), R.color.white));
@@ -64,12 +68,15 @@ public class DoctorApptDayVIewFragment extends Fragment implements ViewPager.OnP
         vpCalendar.setAdapter(adapter);
         setCurrentCalendar();
         vpCalendar.addOnPageChangeListener(this);
-        modifyToolbar();
+        fromRequest = bundle.getInt(ViewScheduleActivity.FROM_REQUEST,0);
+        if (fromRequest == 0) {
+            modifyToolbar();
+        }
         return root;
     }
 
     private void getDataFromMonthView() {
-        selectedDay = new Date(getArguments().getLong(SELECTED_DAY));
+        selectedDay = new Date(bundle.getLong(SELECTED_DAY));
         Calendar newCalendar = (Calendar) currentCalendar.clone();
         newCalendar.setTime(selectedDay);
         if (currentCalendar.get(Calendar.YEAR) == newCalendar.get(Calendar.YEAR)) {
@@ -250,7 +257,9 @@ public class DoctorApptDayVIewFragment extends Fragment implements ViewPager.OnP
 
     @Override
     public void onDestroyView() {
-        appointmenttoolbar.removeView(toolbarView);
+        if (fromRequest ==0) {
+            appointmenttoolbar.removeView(toolbarView);
+        }
         super.onDestroyView();
     }
 }

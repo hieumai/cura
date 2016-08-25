@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.AppointmentController;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.entity.AppointSearchEntity;
@@ -22,6 +23,8 @@ import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.AnimationExecutor;
 import com.kms.cura.view.activity.AppointmentRequestDeatailActivity;
@@ -45,7 +48,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 /**
  * Created by linhtnvo on 7/13/2016.
  */
-public class DoctorRequestListFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class DoctorRequestListFragment extends Fragment implements AdapterView.OnItemClickListener, EventHandler {
     private ExpandableStickyListHeadersListView lvRequestList;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private DoctorRequestListAdapter adapter;
@@ -59,6 +62,7 @@ public class DoctorRequestListFragment extends Fragment implements AdapterView.O
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_request_list, container, false);
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_DOCTOR_REQUEST_LIST);
         lvRequestList = (ExpandableStickyListHeadersListView) root.findViewById(R.id.lvRequestList);
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -85,6 +89,13 @@ public class DoctorRequestListFragment extends Fragment implements AdapterView.O
                         if (exception != null) {
                             ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
                         } else {
+                            if (requestList == null){
+                                requestList = getRequests();
+                            }
+                            else{
+                                requestList.clear();
+                                requestList.addAll(getRequests());
+                            }
                             adapter = new DoctorRequestListAdapter(getActivity(),getRequests());
                             lvRequestList.setAdapter(adapter);
                             lvRequestList.setAnimExecutor(new AnimationExecutor(mOriginalViewHeightPool));
@@ -151,4 +162,21 @@ public class DoctorRequestListFragment extends Fragment implements AdapterView.O
         startActivity(toDetail);
     }
 
+    @Override
+    public void handleEvent(String event, Object data) {
+        switch (event){
+            case EventConstant.UPDATE_DOCTOR_REQUEST_LIST:
+                requestList.clear();
+                requestList.addAll(getRequests());
+                adapter = new DoctorRequestListAdapter(getActivity(), requestList);
+                lvRequestList.setAdapter(adapter);
+                break;
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBroker.getInstance().unRegister(this, EventConstant.UPDATE_DOCTOR_REQUEST_LIST);
+        super.onDestroyView();
+    }
 }

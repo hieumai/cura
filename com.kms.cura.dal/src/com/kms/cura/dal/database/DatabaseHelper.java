@@ -21,7 +21,7 @@ import com.kms.cura.entity.Entity;
 import com.mysql.jdbc.Statement;
 
 public abstract class DatabaseHelper {
-	
+
 	private static final String USE_CURA_DATABASE = "use cura";
 	private static final String CONNECTION_NAME = "jdbc:mysql://localhost:3306/";
 	private static final String CONNECTION_ID = "root";
@@ -43,7 +43,7 @@ public abstract class DatabaseHelper {
 
 	public void closeConnection() throws SQLException {
 		if (con != null) {
-	 		con.close();
+			con.close();
 		}
 	}
 
@@ -70,23 +70,23 @@ public abstract class DatabaseHelper {
 	public Entity queryByID(String tableName, int id) throws SQLException, ClassNotFoundException, IOException {
 		return queryByID(tableName, EntityColumn.ID.getColumnName(), id);
 	}
-	
-	public Entity queryByID(String tableName, String idColumnName, int id) throws SQLException, ClassNotFoundException, IOException {
+
+	public Entity queryByID(String tableName, String idColumnName, int id)
+			throws SQLException, ClassNotFoundException, IOException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement(
-					"SELECT * FROM " + tableName + " WHERE " + idColumnName + " = ?");
+			stmt = con.prepareStatement("SELECT * FROM " + tableName + " WHERE " + idColumnName + " = ?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			rs.next();
 			Entity result = getEntityFromResultSet(rs);
 			return result;
 		} finally {
-			if(rs != null){
+			if (rs != null) {
 				rs.close();
 			}
-			if(stmt != null){
+			if (stmt != null) {
 				stmt.close();
 			}
 		}
@@ -119,7 +119,8 @@ public abstract class DatabaseHelper {
 		return rs;
 	}
 
-	protected abstract Entity getEntityFromResultSet(ResultSet resultSet) throws SQLException, ClassNotFoundException, IOException;
+	protected abstract Entity getEntityFromResultSet(ResultSet resultSet)
+			throws SQLException, ClassNotFoundException, IOException;
 
 	public void insertReferenceRowsToReferenceTable(String database, List<ReferenceTableRow> referenceRows)
 			throws SQLException {
@@ -137,7 +138,8 @@ public abstract class DatabaseHelper {
 		}
 	}
 
-	protected PreparedStatement createInsertPreparedStatement(Map<String, Object> valueMap, String databaseName) throws SQLException {
+	protected PreparedStatement createInsertPreparedStatement(Map<String, Object> valueMap, String databaseName)
+			throws SQLException {
 		StringBuilder insertString = new StringBuilder("INSERT INTO " + databaseName + " (");
 		StringBuilder valueString = new StringBuilder(") VALUES (");
 		boolean isFirst = true;
@@ -157,12 +159,22 @@ public abstract class DatabaseHelper {
 		setPreparedStatementValue(valueMap, stmt);
 		return stmt;
 	}
-	
-	protected PreparedStatement createUpdatePreparedStatement(Map<String, Object> valueMap, String databaseName, String columnUpdate, Object valueUpdate) throws SQLException {
+
+	protected PreparedStatement createUpdatePreparedStatement(Map<String, Object> valueMap, String databaseName,
+			List<String> columnUpdate, List<Object> valueUpdate) throws SQLException {
 		StringBuilder updateString = new StringBuilder();
+		Map<String, Object> map = new LinkedHashMap<>();
 		updateString.append("UPDATE ");
 		updateString.append(databaseName + " SET ");
-		updateString.append(columnUpdate + " = ? WHERE ");
+		for (int i = 0; i < columnUpdate.size(); ++i) {
+			map.put(columnUpdate.get(i), valueUpdate.get(i));
+			if (i == columnUpdate.size() - 1) {
+				updateString.append(columnUpdate.get(i) + " = ? WHERE ");
+			} else {
+				updateString.append(columnUpdate.get(i) + " = ?, ");
+			}
+		}
+		map.putAll(valueMap);
 		boolean isFirst = true;
 		for (Entry<String, Object> entry : valueMap.entrySet()) {
 			if (isFirst) {
@@ -175,15 +187,12 @@ public abstract class DatabaseHelper {
 			updateString.append("?");
 		}
 		PreparedStatement stmt = con.prepareStatement(updateString.toString());
-		Map<String, Object> map = new LinkedHashMap<>();
-		map.put(columnUpdate, valueUpdate);
-		map.putAll(valueMap);
 		setPreparedStatementValue(map, stmt);
 		return stmt;
 	}
-	
-	
-	protected PreparedStatement createSelectWherePreparedStatement(Map<String, Object> valueMap, String databaseName) throws SQLException {
+
+	protected PreparedStatement createSelectWherePreparedStatement(Map<String, Object> valueMap, String databaseName)
+			throws SQLException {
 		StringBuilder whereString = new StringBuilder("SELECT * FROM ");
 		whereString.append(databaseName);
 		whereString.append(" WHERE ");
@@ -214,7 +223,7 @@ public abstract class DatabaseHelper {
 				stmt.setDate(count, (Date) valueEntry.getValue());
 			} else if (valueEntry.getValue() instanceof Double) {
 				stmt.setDouble(count, (Double) valueEntry.getValue());
-			} else if (valueEntry.getValue() instanceof Time){
+			} else if (valueEntry.getValue() instanceof Time) {
 				stmt.setTime(count, (Time) valueEntry.getValue());
 			} else {
 				// handle for null
@@ -224,5 +233,4 @@ public abstract class DatabaseHelper {
 		}
 	}
 
-	
 }

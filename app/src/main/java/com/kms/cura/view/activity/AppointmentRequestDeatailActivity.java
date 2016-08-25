@@ -1,7 +1,10 @@
 package com.kms.cura.view.activity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -12,10 +15,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
+import com.kms.cura.controller.AppointmentController;
+import com.kms.cura.controller.ErrorController;
 import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.event.EventBroker;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
+import com.kms.cura.view.fragment.DoctorApptDayVIewFragment;
 import com.kms.cura.view.fragment.DoctorRequestListFragment;
 import com.kms.cura.view.fragment.RejectApptDialog;
 
@@ -31,6 +41,7 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
     private TextView txtPatientName, txtApptDay, txtApptTime, txtAppFacility, txtComment;
     private AppointmentEntity appointmentEntity = null;
     private ImageButton btnBack;
+    private ProgressDialog pDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +63,7 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
         }
         appointmentEntity = ((DoctorUserEntity) CurrentUserProfile.getInstance().getEntity()).getAppointmentList().get(position);
         txtPatientName = loadText(R.id.txtPatientName, appointmentEntity.getPatientUserEntity().getName());
+        txtPatientName.setOnClickListener(this);
         txtAppFacility = loadText(R.id.txtApptFacility, appointmentEntity.getFacilityEntity().getName());
         txtApptDay = loadText(R.id.txtAppDay, getApptDate(appointmentEntity.getApptDay()));
         txtApptTime = loadText(R.id.txtApptTime, getApptTime(appointmentEntity.getStartTime(), appointmentEntity.getEndTime()));
@@ -79,7 +91,7 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btnReject) {
-            RejectApptDialog dialog = new RejectApptDialog();
+            RejectApptDialog dialog = RejectApptDialog.newInstance(AppointmentRequestDeatailActivity.this, appointmentEntity);
             dialog.show(getFragmentManager(), DIALOG);
         } else if (id == R.id.btnAccept) {
             if (checkConflict()) {
@@ -89,6 +101,18 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
             createAcceptDialog();
         } else if (id == R.id.btnBack) {
             finish();
+        } else if (id == R.id.btnViewSchedule){
+            Intent toSchedule = new Intent(this, ViewScheduleActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putLong(DoctorApptDayVIewFragment.SELECTED_DAY, appointmentEntity.getApptDay().getTime());
+            toSchedule.putExtras(bundle);
+            startActivity(toSchedule);
+        }
+        else if (id == R.id.txtPatientName){
+            PatientUserEntity patientUserEntity = appointmentEntity.getPatientUserEntity();
+            Intent intent = new Intent(AppointmentRequestDeatailActivity.this, ViewPatientProfileActivity.class);
+            intent.putExtra(ViewPatientProfileActivity.PATIENT_KEY, EntityToJsonConverter.convertEntityToJson(patientUserEntity).toString());
+            startActivity(intent);
         }
     }
 
@@ -162,6 +186,51 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
     public void onClick(DialogInterface dialog, int which) {
         if (which == DialogInterface.BUTTON_NEGATIVE) {
             dialog.dismiss();
+            return;
         }
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage(getString(R.string.loading));
+        pDialog.setCancelable(false);
+        dialog.dismiss();
+        showProgressDialog();
+        AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    DoctorUserEntity doctorUserEntity = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
+                    appointmentEntity.setStatus(AppointmentEntity.ACCEPTED_STT);
+                    DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(),null,null,null,null,null,null,null,null,null);
+                    appointmentEntity.setDoctorUserEntity(doctor);
+                    doctorUserEntity.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, doctorUserEntity));
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                hideProgressDialog();
+                if (exception != null) {
+                    ErrorController.showDialog(AppointmentRequestDeatailActivity.this, "Error : " + exception.getMessage());
+                } else {
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_DOCTOR_REQUEST_LIST, appointmentEntity.getApptDay() );
+                }
+                finish();
+            }
+        };
+        task.execute();
+    }
+
+    private void showProgressDialog() {
+        if (!pDialog.isShowing())
+            pDialog.show();
+    }
+
+    private void hideProgressDialog() {
+        if (pDialog.isShowing())
+            pDialog.dismiss();
     }
 }

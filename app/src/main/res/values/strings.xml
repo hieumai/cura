@@ -359,4 +359,6 @@
     <string name="no_result">No results, try changing your search criteria</string>
     <string name="errorLoadingApptDetail">Can not load the appointment detail</string>
     <string name="retry">RETRY</string>
+    <string name="schedule">Schedule</string>
+    <string name="rejectDoctorCmtLabel">Rejection Message</string>
 </resources>
