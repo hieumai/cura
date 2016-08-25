@@ -89,6 +89,13 @@ public class DoctorRequestListFragment extends Fragment implements AdapterView.O
                         if (exception != null) {
                             ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
                         } else {
+                            if (requestList == null){
+                                requestList = getRequests();
+                            }
+                            else{
+                                requestList.clear();
+                                requestList.addAll(getRequests());
+                            }
                             adapter = new DoctorRequestListAdapter(getActivity(),getRequests());
                             lvRequestList.setAdapter(adapter);
                             lvRequestList.setAnimExecutor(new AnimationExecutor(mOriginalViewHeightPool));
