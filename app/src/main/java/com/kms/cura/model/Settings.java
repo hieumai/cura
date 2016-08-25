@@ -37,4 +37,5 @@ public class Settings {
     public static final int TIME_OUT = 60000;
     public static final String SEND_CODE = "/user/sendCode";
     public static final String CHECK_CODE = "/user/checkCode";
+    public static final String RATE_APPT = "/appt/rateAppt";
 }

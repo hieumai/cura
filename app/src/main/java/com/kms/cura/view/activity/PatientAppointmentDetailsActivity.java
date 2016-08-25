@@ -1,24 +1,17 @@
 package com.kms.cura.view.activity;
 
-import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kms.cura.R;
 import com.kms.cura.constant.EventConstant;
@@ -28,6 +21,7 @@ import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.fragment.PatientAppointmentListTabFragment;
@@ -36,7 +30,7 @@ import com.kms.cura.view.fragment.RateDoctorDialogFragment;
 import java.sql.Date;
 import java.sql.Time;
 
-public class PatientAppointmentDetailsActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener {
+public class PatientAppointmentDetailsActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener, EventHandler {
     private Button btnTag, btnSendMessage, btnCancelorRate;
     private ImageView btnBack;
     private LinearLayout lbRated, lbExtraComment;
@@ -61,7 +55,6 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
     private void loadView() {
         txtlabelExtraCmt = (TextView) findViewById(R.id.txtlbExtraComment);
         lbRated = (LinearLayout) findViewById(R.id.lbRated);
-        lbRated.setVisibility(View.INVISIBLE);
         lbExtraComment = (LinearLayout) findViewById(R.id.lbExtraComment);
         ivPatientPicture = (ImageView) findViewById(R.id.ivPatientPicture);
         ivPatientPicture.setOnClickListener(this);
@@ -75,6 +68,13 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
         txtApptFacilityPhone = loadTextView(R.id.txtApptFacilityPhone, facilityEntity.getPhone());
         loadComment();
         loadButton();
+        if (appointmentEntity.getRate() == 0) {
+            lbRated.setVisibility(View.INVISIBLE);
+        } else {
+            lbRated.setVisibility(View.VISIBLE);
+            btnCancelorRate.setVisibility(View.GONE);
+        }
+
     }
 
     private void loadComment() {
@@ -196,7 +196,12 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
             Intent toProfileView = new Intent(this, ViewDoctorProfileActivity.class);
             toProfileView.putExtra(PATIENT_POSITION, position);
             startActivity(toProfileView);
-
+        } else if (id == R.id.btnSendMessage) {
+            Intent intent = new Intent(this, NewMessageActivity.class);
+            intent.putExtra(NewMessageActivity.KEY_SENDER, NewMessageActivity.KEY_PATIENT);
+            intent.putExtra(NewMessageActivity.KEY_RECEIVER_ID, appointmentEntity.getDoctorUserEntity().getId());
+            intent.putExtra(NewMessageActivity.KEY_RECEIVER_NAME, appointmentEntity.getDoctorUserEntity().getName());
+            startActivity(intent);
         }
     }
 
@@ -261,5 +266,25 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
     private void hideProgressDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    @Override
+    public void handleEvent(String event, Object data) {
+        if (event.equals(EventConstant.APPOINTMENT_RATED)) {
+            btnCancelorRate.setVisibility(View.GONE);
+            lbRated.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        EventBroker.getInstance().unRegister(this, EventConstant.APPOINTMENT_RATED);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        EventBroker.getInstance().register(this, EventConstant.APPOINTMENT_RATED);
+        super.onResume();
     }
 }

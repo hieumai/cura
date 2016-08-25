@@ -254,7 +254,7 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		builder.append(MessageColumn.PATIENT_AVAILABLE.getColumnName());
 		builder.append(", ");
 		builder.append(MessageColumn.DOCTOR_AVAILABLE.getColumnName());
-		builder.append(") ");
+		builder.append(") values (");
 		if (sentByDoctor) {
 			builder.append(entity.getReceiver().getId() + ", ");
 			builder.append(entity.getSender().getId() + ", ");

@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.kms.cura.R;
+import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.view.adapter.DoctorListViewAdapter;
@@ -81,7 +82,7 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
         initToolbar();
         initArray();
         lv = (ListView) findViewById(R.id.listView1);
-        filteredDoctors = new ArrayList<DoctorUserEntity>(doctors);
+        filteredDoctors = new ArrayList<>(doctors);
         listViewAdapter = new DoctorListViewAdapter(this, filteredDoctors);
         textView = (TextView) findViewById(R.id.empty_list_item);
         lv.setAdapter(listViewAdapter);
@@ -229,8 +230,8 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
 
     static class RatingComparator implements Comparator<DoctorUserEntity> {
         public int compare(DoctorUserEntity u1, DoctorUserEntity u2) {
-            Double a1 = u1.getRating();
-            Double a2 = u2.getRating();
+            Float a1 = u1.getRating();
+            Float a2 = u2.getRating();
             return a2.compareTo(a1);
         }
     }
@@ -242,6 +243,7 @@ public class SearchActivity extends AppCompatActivity implements OnItemSelectedL
             return a1.compareTo(a2);
         }
     }
+
 }
 
 

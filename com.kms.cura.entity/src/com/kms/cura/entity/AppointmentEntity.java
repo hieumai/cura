@@ -39,6 +39,14 @@ public class AppointmentEntity extends Entity{
 	private float rate;
 	private String rateCmt;
 
+	private AppointmentEntity(DoctorUserEntity doctorUserEntity) {
+		this.doctorUserEntity = doctorUserEntity;
+	}
+
+	public static AppointSearchEntity searchEntityForDoctor(DoctorUserEntity doctorUserEntity) {
+		return new AppointSearchEntity(new AppointmentEntity(doctorUserEntity));
+	}
+
 	public AppointmentEntity(String id, PatientUserEntity patientUserEntity, DoctorUserEntity doctorUserEntity,
 			FacilityEntity facilityEntity, Date apptDay, Time startTime, Time endTime, int status, String patientCmt,
 			String doctorCmt, float rate, String rateCmt) {
@@ -209,7 +217,7 @@ public class AppointmentEntity extends Entity{
 		return rate;
 	}
 
-	public void setRate(int rate) {
+	public void setRate(float rate) {
 		this.rate = rate;
 	}
 
