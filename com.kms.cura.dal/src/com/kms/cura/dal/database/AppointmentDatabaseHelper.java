@@ -213,7 +213,6 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 			stmt.executeUpdate();
 			PatientUserEntity patientUserEntity = entity.getPatientUserEntity();
 			DoctorUserEntity doctorUserEntity = entity.getDoctorUserEntity();
-			int status = entity.getStatus();
 			if (patient) {
 				search = new AppointmentEntity(null, patientUserEntity, null, null, null, null, null, -1, null, null);
 				listAppts = getAppointment(new AppointSearchEntity(search), patientUserEntity, null);
