@@ -19,6 +19,14 @@ public class OpeningHour {
 		this.openTime = openTime;
 		this.closeTime = closeTime;
 	}
+
+	public OpeningHour(OpeningHour openingHour) {
+		super();
+		this.dayOfTheWeek = openingHour.getDayOfTheWeek();
+		this.openTime = openingHour.getOpenTime();
+		this.closeTime = openingHour.getCloseTime();
+	}
+
 	public DayOfTheWeek getDayOfTheWeek() {
 		return dayOfTheWeek;
 	}
@@ -48,7 +56,7 @@ public class OpeningHour {
          builder.append(getCloseTime().toString().substring(0, 5));
          return builder.toString();
      }
-	public static Type getPatientUserType() {
+	public static Type getOpeningHourType() {
 		Type type = new TypeToken<OpeningHour>() {
 		}.getType();
 		return type;

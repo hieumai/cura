@@ -25,6 +25,20 @@ public class FacilityEntity extends Entity {
 		this.longitude = longtitude;
 	}
 
+	public FacilityEntity(FacilityEntity facilityEntity) {
+		super(facilityEntity.getId(), facilityEntity.getName());
+		this.address = facilityEntity.getAddress();
+		this.phone = facilityEntity.getPhone();
+		this.city = facilityEntity.getCity();
+		List<OpeningHour> openingHours = new ArrayList<>();
+		for (OpeningHour openingHour : facilityEntity.getOpeningHours()) {
+			openingHours.add(new OpeningHour(openingHour));
+		}
+		this.openingHours = openingHours;
+		this.latitude = facilityEntity.getLatitude();
+		this.longitude = facilityEntity.getLongitude();
+	}
+
 	public String getCity() {
 		return city;
 	}

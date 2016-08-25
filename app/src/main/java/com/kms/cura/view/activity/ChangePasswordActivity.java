@@ -36,7 +36,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements TextWat
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.changePassword_toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
+        toolbar.setNavigationIcon(R.drawable.toolbar_back2);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(ACTIVITY_NAME);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

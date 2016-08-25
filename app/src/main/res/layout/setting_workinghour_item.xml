@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnEditWorkingHour"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:padding="@dimen/padding_5">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvFacilityName"
+            android:textSize="@dimen/docText_18"
+            android:textColor="@color/black"
+            android:padding="@dimen/padding_5"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvHours"
+            android:textSize="@dimen/docText_18"
+            android:textColor="@color/black"
+            android:padding="@dimen/padding_5"/>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="@dimen/docText_20"
+        android:layout_height="@dimen/docText_20"
+        android:background="@drawable/send_cancel"
+        android:backgroundTint="@color/red"
+        android:layout_gravity="center"
+        android:layout_marginRight="@dimen/padding_16"
+        android:id="@+id/btnWorkingHourRemove"/>
+</LinearLayout>

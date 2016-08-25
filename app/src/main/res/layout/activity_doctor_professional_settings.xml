@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/doctor_professional_settings"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/view"
@@ -21,25 +20,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ExpandableListView
-        android:id="@+id/lvExp"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layoutDirection="rtl"
-        android:paddingLeft="5sp" />
-    <View
-        android:id="@+id/divider"
-        android:background="?android:attr/listDivider"
-        android:layout_width="fill_parent"
-        android:layout_height="1sp"
-        android:layout_below="@+id/lvExp" />
-
     <ListView
-        android:id="@+id/listView"
-        android:layout_weight="1"
+        android:id="@+id/lvProfessional"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="?attr/actionBarSize" />
 
-</LinearLayout>
+</RelativeLayout>

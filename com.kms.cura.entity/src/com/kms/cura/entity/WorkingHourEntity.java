@@ -1,6 +1,5 @@
 package com.kms.cura.entity;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +12,6 @@ public class WorkingHourEntity {
 		this.facilityEntity = facilityEntity;
 		this.workingTime = new ArrayList<>();
 	}
-	
-	
 	
 	public List<OpeningHour> getWorkingTime() {
 		return workingTime;

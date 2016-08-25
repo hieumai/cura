@@ -73,11 +73,6 @@
         <item>Password</item>
     </string-array>
 
-    <string-array name="ProfessionalSettings">
-        <item>Working Hour</item>
-        <item>Other</item>
-    </string-array>
-
     <string-array name="Insurance">
         <item>Aetna</item>
         <item>Altius</item>
@@ -361,4 +356,14 @@
     <string name="retry">RETRY</string>
     <string name="schedule">Schedule</string>
     <string name="rejectDoctorCmtLabel">Rejection Message</string>
+    <string name="specialityTitle">Speciality</string>
+    <string name="remove_speciality">Are you sure to remove this speciality?</string>
+    <string name="select_speciality">Select a speciality</string>
+    <string name="add_speciality">Add speciality</string>
+    <string name="change_done">Are you sure to make the change(s)?</string>
+    <string name="change_discard">Are you sure to discard the change(s)?</string>
+    <string name="start_time">Start time:</string>
+    <string name="end_time">End time:</string>
+    <string name="click_to_add">Click to add</string>
+    <string name="select_time">Select Time</string>
 </resources>

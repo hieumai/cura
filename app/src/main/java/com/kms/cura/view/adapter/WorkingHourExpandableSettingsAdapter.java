@@ -24,9 +24,9 @@ import java.util.Map;
 
 public class WorkingHourExpandableSettingsAdapter extends BaseExpandableListAdapter {
     private Context mContext;
-    private List<HashMap<String, OpeningHour>> allworkingHours;
+    private List<HashMap<String, List<OpeningHour>>> allworkingHours;
 
-    public WorkingHourExpandableSettingsAdapter(Context mContext, List<HashMap<String, OpeningHour>> allworkingHours) {
+    public WorkingHourExpandableSettingsAdapter(Context mContext, List<HashMap<String, List<OpeningHour>>> allworkingHours) {
         this.mContext = mContext;
         this.allworkingHours = allworkingHours;
     }
@@ -81,18 +81,41 @@ public class WorkingHourExpandableSettingsAdapter extends BaseExpandableListAdap
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        HashMap<String, OpeningHour> workingHoursUnsort = allworkingHours.get(childPosition);
-        List<Map.Entry<String,OpeningHour>> workingHours = new ArrayList<Map.Entry<String,OpeningHour>>(workingHoursUnsort.entrySet());
-        Collections.sort(workingHours, new Comparator<Map.Entry<String, OpeningHour>>() {
+        final Comparator<OpeningHour> listComparator = new Comparator<OpeningHour>() {
             @Override
-            public int compare(Map.Entry<String, OpeningHour> lhs, Map.Entry<String, OpeningHour> rhs) {
-                if(lhs.getValue().getOpenTime().before(rhs.getValue().getOpenTime()) &&
-                        lhs.getValue().getCloseTime().before(rhs.getValue().getCloseTime())){
+            public int compare(OpeningHour lhs, OpeningHour rhs) {
+                if (lhs.getOpenTime().before(rhs.getOpenTime()) &&
+                        lhs.getCloseTime().before(rhs.getCloseTime())) {
                     return -1;
-                }
-                else{
+                } else {
                     return 1;
                 }
+            }
+        };
+        HashMap<String, List<OpeningHour>> workingHoursUnsort = allworkingHours.get(childPosition);
+        List<Map.Entry<String,List<OpeningHour>>> workingHours = new ArrayList<Map.Entry<String,List<OpeningHour>>>(workingHoursUnsort.entrySet());
+        Collections.sort(workingHours, new Comparator<Map.Entry<String, List<OpeningHour>>>() {
+            @Override
+            public int compare(Map.Entry<String, List<OpeningHour>> lhs, Map.Entry<String, List<OpeningHour>> rhs) {
+                List<OpeningHour> lhsWH = lhs.getValue();
+                List<OpeningHour> rhsWH = rhs.getValue();
+                int lhsLength = lhsWH.size();
+                int rhsLength = rhsWH.size();
+                if (lhsLength > rhsLength){
+                    return 1;
+                }
+                if (lhsLength < rhsLength){
+                    return -1;
+                }
+                Collections.sort(lhsWH, listComparator);
+                Collections.sort(rhsWH, listComparator);
+                OpeningHour lhs1 = lhsWH.get(0);
+                OpeningHour rhs1 = rhsWH.get(0);
+                if (lhs1.getOpenTime().before(rhs1.getOpenTime()) &&
+                        lhs1.getCloseTime().before(rhs1.getCloseTime())){
+                    return -1;
+                }
+                return 1;
             }
         });
         if (convertView == null) {
@@ -111,18 +134,16 @@ public class WorkingHourExpandableSettingsAdapter extends BaseExpandableListAdap
             workingTimeLayout.addView(createWorkingHourDetails("N/A", null));
         } else {
             for (int j=0; j<workingHours.size(); ++j) {
-                Map.Entry<String,OpeningHour> entry = workingHours.get(j);
+                Map.Entry<String,List<OpeningHour>> entry = workingHours.get(j);
                 workingTimeLayout.addView(createWorkingHourDetails(entry.getKey(), entry.getValue()));
             }
         }
-
-            dayOftheWeek.setBackgroundColor(ContextCompat.getColor(mContext, R.color.grey2));
-            workingTimeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.light_grey_4));
-
+        dayOftheWeek.setBackgroundColor(ContextCompat.getColor(mContext, R.color.grey2));
+        workingTimeLayout.setBackgroundColor(ContextCompat.getColor(mContext, R.color.light_grey_4));
         return convertView;
     }
 
-    private View createWorkingHourDetails(String faciliyName, OpeningHour openingHour) {
+    private View createWorkingHourDetails(String faciliyName, List<OpeningHour> openingHour) {
         LayoutInflater inflater = (LayoutInflater) this.mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View root = inflater.inflate(R.layout.working_hour_settings_details, null);
         TextView txtWHTime = (TextView) root.findViewById(R.id.txtWHTime);
@@ -132,15 +153,25 @@ public class WorkingHourExpandableSettingsAdapter extends BaseExpandableListAdap
             txtWHFacility.setText(faciliyName);
             txtWHFacility.setGravity(Gravity.CENTER);
         } else {
-            txtWHTime.setText(openingHour.getTime() + " | ");
-            txtWHFacility.setText(faciliyName);
+            StringBuilder facilityBuilder = new StringBuilder();
+            StringBuilder timeBuilder = new StringBuilder();
+            for (int i=0; i<openingHour.size(); ++i) {
+                timeBuilder.append(openingHour.get(i).getTime() + " | ");
+                facilityBuilder.append(faciliyName);
+                if (i!=openingHour.size()-1){
+                    timeBuilder.append("\n");
+                    facilityBuilder.append("\n");
+                }
+            }
+            txtWHTime.setText(timeBuilder.toString());
+            txtWHFacility.setText(facilityBuilder.toString());
         }
         return root;
     }
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return false;
+        return true;
     }
 
 }

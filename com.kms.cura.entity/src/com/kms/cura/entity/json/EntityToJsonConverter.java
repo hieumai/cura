@@ -1,5 +1,6 @@
 package com.kms.cura.entity.json;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import com.google.gson.Gson;
