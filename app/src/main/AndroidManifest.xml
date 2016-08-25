@@ -110,7 +110,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.ForgotPasswordActivity"
+        <activity android:name=".view.activity.ForgotPasswordActivity"/>
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
         <activity android:name=".view.activity.DoctorAppointmentDetailActivity"
@@ -135,7 +135,9 @@
         <activity android:name=".view.activity.FacilityInfoActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
-
+        <activity android:name="com.kms.cura.view.activity.ViewScheduleActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

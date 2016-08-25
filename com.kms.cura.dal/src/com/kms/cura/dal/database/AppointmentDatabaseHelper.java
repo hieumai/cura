@@ -106,11 +106,12 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 		return createInsertPreparedStatement(getColumnValueMapForEntity(entity), AppointmentColumn.TABLE_NAME);
 	}
 
-	private PreparedStatement getUpdateAppointmentQuery(AppointmentEntity entity) throws SQLException {
+	private PreparedStatement getUpdateAppointmentQuery(AppointmentEntity entity, List<String> columnUpdate,
+			List<Object> valueUpdate) throws SQLException {
 		AppointmentEntity appointmentEntity = entity.copy();
 		appointmentEntity.setStatus(-1);
 		return createUpdatePreparedStatement(getColumnValueMapForEntity(appointmentEntity),
-				AppointmentColumn.TABLE_NAME, AppointmentColumn.STATUS.getColumnName(), entity.getStatus());
+				AppointmentColumn.TABLE_NAME, columnUpdate, valueUpdate);
 	}
 
 	private Map<String, Object> getColumnValueMapForEntity(AppointmentEntity entity) {
@@ -196,9 +197,19 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 		List<AppointmentEntity> listAppts = null;
 		AppointmentEntity search = null;
 		PreparedStatement stmt = null;
+		List<String> columnUpdate = new ArrayList<>();
+		List<Object> valueUpdate = new ArrayList<>();
+		columnUpdate.add(AppointmentColumn.STATUS.getColumnName());
+		int status = entity.getStatus();
+		valueUpdate.add(status);
+		if (status == AppointmentEntity.REJECT_STT) {
+			columnUpdate.add(AppointmentColumn.DOCTOR_CMT.getColumnName());
+			valueUpdate.add(entity.getDoctorCmt());
+			entity.setDoctorCmt(null);
+		}
 		try {
 			con.setAutoCommit(false);
-			stmt = getUpdateAppointmentQuery(entity);
+			stmt = getUpdateAppointmentQuery(entity, columnUpdate, valueUpdate);
 			stmt.executeUpdate();
 			PatientUserEntity patientUserEntity = entity.getPatientUserEntity();
 			DoctorUserEntity doctorUserEntity = entity.getDoctorUserEntity();

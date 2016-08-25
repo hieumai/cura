@@ -41,7 +41,7 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
     private ImageView btnBack;
     private LinearLayout lbRated, lbExtraComment;
     private ImageView ivPatientPicture;
-    private TextView txtDoctorName, txtApptDate, txtApptTime, txtApptFacility, txtApptFacilityAddress, txtApptFacilityPhone, txtComment;
+    private TextView txtDoctorName, txtApptDate, txtApptTime, txtApptFacility, txtApptFacilityAddress, txtApptFacilityPhone, txtComment, txtlabelExtraCmt;
     private AppointmentEntity appointmentEntity;
     private int position;
     private boolean rated = true;
@@ -59,6 +59,7 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
     }
 
     private void loadView() {
+        txtlabelExtraCmt = (TextView) findViewById(R.id.txtlbExtraComment);
         lbRated = (LinearLayout) findViewById(R.id.lbRated);
         lbRated.setVisibility(View.INVISIBLE);
         lbExtraComment = (LinearLayout) findViewById(R.id.lbExtraComment);
@@ -85,6 +86,7 @@ public class PatientAppointmentDetailsActivity extends AppCompatActivity impleme
         }
         txtComment = (TextView) findViewById(R.id.txtComment);
         if (doctorCmt != null) {
+            txtlabelExtraCmt.setText(R.string.rejectDoctorCmtLabel);
             txtComment.setText(doctorCmt);
             return;
         }

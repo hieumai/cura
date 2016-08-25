@@ -22,4 +22,5 @@ public interface EventConstant {
     public static final String UPDATE_APPT_PATIENT_LIST = "UPDATE_APPT_PATIENT_LIST";
     public static final String FILTER_APPLIED = "FILTER_APPLIED";
     public static final String UPDATE_APPT_DOCTOR_LIST = "UPDATE_APPT_DOCTOR_LIST";
+    public static final String UPDATE_DOCTOR_REQUEST_LIST = "UPDATE_DOCTOR_REQUEST_LIST";
 }
