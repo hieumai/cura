@@ -2,7 +2,9 @@ package com.kms.cura.view.fragment;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -12,8 +14,12 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
+import com.kms.cura.controller.AppointmentController;
+import com.kms.cura.controller.ErrorController;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.event.EventBroker;
 import com.kms.cura.utils.CurrentUserProfile;
 
 /**
@@ -76,12 +82,50 @@ public class RateDoctorDialogFragment extends DialogFragment implements DialogIn
         if (which == DialogInterface.BUTTON_NEGATIVE) {
             dialog.dismiss();
         } else {
-            //Submit Rating
+            rateAsynTask().execute();
         }
     }
 
     @Override
     public void onShow(DialogInterface dialog) {
         ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+    }
+
+    private AsyncTask<Object, Void, Void> rateAsynTask() {
+        return new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            ProgressDialog pDialog;
+
+            @Override
+            protected void onPreExecute() {
+                pDialog = new ProgressDialog(getActivity());
+                pDialog.setMessage(getString(R.string.sending));
+                pDialog.setCancelable(false);
+                pDialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    appt.setRate(ratingBar.getRating());
+                    appt.setRate_comment(edtComment.getText().toString());
+                    AppointmentController.rateAppointment(appt);
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                if (exception != null) {
+                    ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
+                } else {
+                    EventBroker.getInstance().pusblish(EventConstant.APPOINTMENT_RATED, null);
+                    dismiss();
+                }
+            }
+        };
     }
 }

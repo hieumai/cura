@@ -49,25 +49,33 @@ public class DoctorListViewAdapter extends ArrayAdapter {
         return position;
     }
 
-    public class Holder {
-        TextView name;
-        TextView speciality;
-        RatingBar raiting;
+    private class ViewHolder {
+        private TextView name;
+        private TextView speciality;
+        private RatingBar rating;
+
+        public void setUpView(View convertView, int position) {
+            name = (TextView) convertView.findViewById(R.id.doctorName);
+            speciality = (TextView) convertView.findViewById(R.id.speciality);
+            rating = (RatingBar) convertView.findViewById(R.id.ratingBar);
+            name.setText(result.get(position).getName());
+            speciality.setText(getSpecialityString(position));
+            rating.setRating(result.get(position).getRating());
+        }
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        Holder holder = new Holder();
-        View rowView;
-        rowView = inflater.inflate(R.layout.list_row, null);
-        holder.name = (TextView) rowView.findViewById(R.id.doctorName);
-        holder.speciality = (TextView) rowView.findViewById(R.id.speciality);
-        holder.raiting = (RatingBar) rowView.findViewById(R.id.ratingBar);
-
-        holder.name.setText(result.get(position).getName());
-        holder.speciality.setText(getSpecialityString(position));
-        holder.raiting.setRating((float) result.get(position).getRating());
-        return rowView;
+        ViewHolder holder = null;
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.list_row, parent, false);
+            holder = new ViewHolder();
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        holder.setUpView(convertView, position);
+        return convertView;
     }
 
     @NonNull
@@ -84,5 +92,4 @@ public class DoctorListViewAdapter extends ArrayAdapter {
         }
         return sb.toString();
     }
-
 }

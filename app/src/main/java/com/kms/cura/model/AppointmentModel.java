@@ -9,9 +9,11 @@ import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.request.AppointmentModelResponse;
+import com.kms.cura.model.request.RatingModelResponse;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.RequestUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -92,4 +94,19 @@ public class AppointmentModel {
         throw new Exception(response.getError());
     }
 
+    public AppointmentEntity rateAppointment(AppointmentEntity entity) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.RATE_APPT);
+        RatingModelResponse response = new RatingModelResponse();
+        String apptUpdate = new Gson().toJson(entity, AppointmentEntity.getAppointmentType());
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                apptUpdate, response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse());
+        if(!response.isResponseError()) {
+            return response.getAppt();
+        }
+        throw new Exception(response.getError());
+    }
 }

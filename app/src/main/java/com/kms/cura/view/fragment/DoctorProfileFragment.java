@@ -1,7 +1,9 @@
 package com.kms.cura.view.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,9 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.kms.cura.R;
+import com.kms.cura.controller.AppointmentController;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.SpecialityEntity;
@@ -76,6 +81,7 @@ public class DoctorProfileFragment extends Fragment {
         if (CurrentUserProfile.getInstance().isDoctor()) {
             doctorUserEntity = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
         }
+        calculateRatingAsyntask().execute();
         DataUtils.loadProfile(doctorUserEntity, (ImageView) root.findViewById(R.id.ivDoctor), this.getContext());
         txtName = loadText(doctorUserEntity.getName(), R.id.txtDoctorName);
         txtDegree = loadText(doctorUserEntity.getDegree().getName(), R.id.txtDoctorDegree);
@@ -83,7 +89,6 @@ public class DoctorProfileFragment extends Fragment {
         txtGender = loadText(getGender(doctorUserEntity), R.id.txtDoctorGender);
         txtPriceRange = loadText(doctorUserEntity.getPriceRange(), R.id.txtDoctorPrice);
         txtYearExperience = loadText(doctorUserEntity.getExperience() + " years experience", R.id.txtDoctorYearExperience);
-        ratingBar = initRatingBar(doctorUserEntity);
         facilityLayout = (LinearLayout) root.findViewById(R.id.layoutFacility);
         listWH = doctorUserEntity.getWorkingTime();
         for (int i = 0; i < listWH.size(); ++i) {
@@ -111,7 +116,7 @@ public class DoctorProfileFragment extends Fragment {
         if (entity.getRating() == 0) {
             ratingBar.setVisibility(View.INVISIBLE);
         } else {
-            ratingBar.setRating((float) entity.getRating());
+            ratingBar.setRating(entity.getRating());
         }
         return ratingBar;
     }
@@ -255,4 +260,40 @@ public class DoctorProfileFragment extends Fragment {
         toolbar.inflateMenu(R.menu.menu_blank);
     }
 
+    private AsyncTask<Object, Void, Void> calculateRatingAsyntask() {
+        return new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            private ProgressDialog pDialog;
+            private List<AppointmentEntity> appointmentEntities;
+
+            @Override
+            protected void onPreExecute() {
+                pDialog = new ProgressDialog(getActivity());
+                pDialog.setMessage(getString(R.string.loading));
+                pDialog.setCancelable(false);
+                pDialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    appointmentEntities = AppointmentController.getAppointment(AppointmentEntity.searchEntityForDoctor(doctorUserEntity));
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                if (exception != null) {
+                    ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
+                } else {
+                    doctorUserEntity.setAppointmentList(appointmentEntities);
+                    ratingBar = initRatingBar(doctorUserEntity);
+                }
+            }
+        };
+    }
 }
