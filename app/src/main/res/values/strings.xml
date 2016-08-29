@@ -355,6 +355,7 @@
     <string name="errorLoadingApptDetail">Can not load the appointment detail</string>
     <string name="retry">RETRY</string>
     <string name="schedule">Schedule</string>
+    <string name="maxNoti">99+</string>
     <string name="rejectDoctorCmtLabel">Rejection Message</string>
     <string name="specialityTitle">Speciality</string>
     <string name="remove_speciality">Are you sure to remove this speciality?</string>

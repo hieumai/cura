@@ -16,9 +16,11 @@ import android.widget.EditText;
 import com.kms.cura.R;
 import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.NotificationController;
 import com.kms.cura.controller.UserController;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
+import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.InputUtils;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener, EventHandler {

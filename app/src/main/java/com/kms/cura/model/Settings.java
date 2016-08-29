@@ -35,6 +35,7 @@ public class Settings {
     public static final String GET_DOCTOR_BY_FACILITY = "/user/getDoctorByFacility";
     public static final String CHECK_EMAIL = "/user/checkEmailExist";
     public static final int TIME_OUT = 60000;
+    public static final String GET_NOTIFICATION = "/noti/getNotiByType";
     public static final String SEND_CODE = "/user/sendCode";
     public static final String CHECK_CODE = "/user/checkCode";
     public static final String RATE_APPT = "/appt/rateAppt";

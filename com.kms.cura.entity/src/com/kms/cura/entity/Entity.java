@@ -1,5 +1,6 @@
 package com.kms.cura.entity;
   
+   
 public abstract class Entity {
 	private String id;
 	private String name;

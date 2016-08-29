@@ -2,22 +2,20 @@ package com.kms.cura_server.response;
 
 import java.util.List;
 
-import javax.json.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.kms.cura.dal.mapping.NotificationColumn;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.Entity;
-import com.kms.cura.entity.MessageEntity;
 import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.UserEntity;
-import com.kms.cura_server.NotificationAPI;
+
 
 public class NotificationAPIResponse extends APIResponse {
 	
@@ -39,14 +37,14 @@ public class NotificationAPIResponse extends APIResponse {
 		return jsonObject.toString();
 	}
 	
-	public String successNotiListResponse(List<NotificationEntity> list, String type){
+	public String successNotiListResponse(List<NotificationEntity> list, String type) throws JsonProcessingException{
 		JSONArray array = new JSONArray();
 		for (int i=0; i<list.size(); ++i){
 			array.put(manuallyParse(list.get(i)));
 		}
 		JSONObject object = new JSONObject();
 		object.put(UserEntity.STATUS_KEY, true);
-		object.append(NotificationEntity.NOTI_LIST, array);
+		object.put(NotificationEntity.NOTI_LIST, array);
 		return object.toString();
 	}
 	

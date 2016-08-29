@@ -77,6 +77,7 @@ public class UserModel extends EntityModel {
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
     }
 
+
     public void doctorSearch(DoctorSearchEntity entity) {
         StringBuilder builder = new StringBuilder();
         builder.append(Settings.SERVER_URL);
