@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListAdapter;
@@ -30,6 +31,7 @@ import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
+import com.kms.cura.view.activity.DoctorRatingListActivity;
 import com.kms.cura.view.activity.FacilityInfoActivity;
 import com.kms.cura.view.adapter.WorkingHourExpandableAdapter;
 
@@ -40,7 +42,7 @@ import java.util.List;
 /**
  * Created by linhtnvo on 6/29/2016.
  */
-public class DoctorProfileFragment extends Fragment {
+public class DoctorProfileFragment extends Fragment implements View.OnTouchListener {
     private TextView txtName, txtDegree, txtSpeciality, txtYearExperience, txtPriceRange, txtGender;
     private LinearLayout facilityLayout;
     private ExpandableListView listWorkingHour;
@@ -50,6 +52,7 @@ public class DoctorProfileFragment extends Fragment {
     private List<WorkingHourEntity> listWH;
     private ImageView profile;
     private DoctorUserEntity doctorUserEntity;
+    public static final String DOCTOR_ENTITY = "doctor_entity";
 
     public DoctorProfileFragment() {
 
@@ -117,6 +120,7 @@ public class DoctorProfileFragment extends Fragment {
             ratingBar.setVisibility(View.INVISIBLE);
         } else {
             ratingBar.setRating(entity.getRating());
+            ratingBar.setOnTouchListener(this);
         }
         return ratingBar;
     }
@@ -157,6 +161,19 @@ public class DoctorProfileFragment extends Fragment {
 
         }
         return builder.toString();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (v.getId() == R.id.ratingbar) {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                Intent intent = new Intent(getActivity(), DoctorRatingListActivity.class);
+                intent.putExtra(DOCTOR_ENTITY, EntityToJsonConverter.convertEntityToJson(doctorUserEntity).toString());
+                startActivity(intent);
+            }
+            return true;
+        }
+        return false;
     }
 
 
