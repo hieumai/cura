@@ -130,19 +130,6 @@ public final class UserAPI {
 	}
 
 	@POST
-	@Path("/updateDoctor")
-	public String updateDoctor(String jsonData) {
-		DoctorUserEntity doctorUserEntity = JsonToEntityConverter.convertJsonStringToEntity(jsonData,
-				DoctorUserEntity.getDoctorEntityType());
-		try {
-			DoctorUserEntity newDoctor = DoctorUserDAL.getInstance().updateDoctor(doctorUserEntity);
-			return new UserAPIResponse().successResponse(newDoctor);
-		} catch (Exception e) {
-			return APIResponse.unsuccessResponse(e.getMessage());
-		}
-	}
-
-	@POST
 	@Path("/updatePatientHealth")
 	public String updatePatientHealth(String jsonData) {
 		PatientUserEntity patientUserEntity = JsonToEntityConverter.convertJsonStringToEntity(jsonData,
@@ -203,7 +190,7 @@ public final class UserAPI {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
-
+	
 	protected String getUserWithType(UserEntity user) throws ClassNotFoundException, SQLException, IOException {
 		PatientUserEntity patientUserEntity = PatientUserDAL.getInstance().searchPatient(user);
 		if (patientUserEntity != null) {
@@ -250,6 +237,32 @@ public final class UserAPI {
 		String code = jsonObject.getString(UserEntity.CODE);
 		try {
 			return new UserAPIResponse().successResponseWithString (UserDAL.getInstance().checkCode(userID, code), UserEntity.STRING_RESPONSE);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+	
+	@POST
+	@Path("/updateDoctorBasic")
+	public String updateDoctorBasic(String jsonData) {
+		DoctorUserEntity doctorUserEntity = JsonToEntityConverter.convertJsonStringToEntity(jsonData,
+				DoctorUserEntity.getDoctorEntityType());
+		try {
+			DoctorUserEntity newDoctor = DoctorUserDAL.getInstance().updateDoctorBasic(doctorUserEntity);
+			return new UserAPIResponse().successResponse(newDoctor);
+		} catch (Exception e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+	
+	@POST
+	@Path("/updateDoctorProfessional")
+	public String updateDoctorProfessional(String jsonData) {
+		DoctorUserEntity doctorUserEntity = JsonToEntityConverter.convertJsonStringToEntity(jsonData,
+				DoctorUserEntity.getDoctorEntityType());
+		try {
+			DoctorUserEntity newDoctor = DoctorUserDAL.getInstance().updateDoctorProfessional(doctorUserEntity);
+			return new UserAPIResponse().successResponse(newDoctor);
 		} catch (Exception e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}

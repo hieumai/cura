@@ -3,8 +3,8 @@ USE cura;
 CREATE TABLE Insurances_Facilities (
 	insurance_id INT NOT NULL,
     facility_id INT NOT NULL,
-    FOREIGN KEY (insurance_id) REFERENCES insurance (id),
-    FOREIGN KEY (facility_id) REFERENCES facilities (id)
+    FOREIGN KEY (insurance_id) REFERENCES insurance (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (facility_id) REFERENCES facilities (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
     
 INSERT INTO Insurances_Facilities VALUE(1, 1);
