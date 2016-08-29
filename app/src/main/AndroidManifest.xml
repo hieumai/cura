@@ -52,12 +52,14 @@
             android:name=".view.activity.ConditionSymptomSearchActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.BookAppointmentActivity"
+        <activity
+            android:name=".view.activity.BookAppointmentActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.activity.ChooseTimeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.ChooseTimeActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.SearchActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -116,7 +118,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.DoctorAppointmentDetailActivity"
+        <activity
+            android:name=".view.activity.DoctorAppointmentDetailActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
         </activity>
@@ -132,24 +135,33 @@
             android:name=".view.activity.ViewPatientProfileActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".view.activity.AppointmentRequestDeatailActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.activity.NewMessageActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.activity.PatientAppointmentDetailsActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.activity.FacilityInfoActivity"
+        <activity
+            android:name=".view.activity.AppointmentRequestDeatailActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name="com.kms.cura.view.activity.ViewScheduleActivity"
+        <activity
+            android:name=".view.activity.NewMessageActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.PatientAppointmentDetailsActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.FacilityInfoActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.kms.cura.view.activity.ViewScheduleActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+        <activity android:name=".view.activity.DoctorRatingListActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
         <activity android:name=".view.activity.SettingSpecialityActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>

@@ -75,4 +75,6 @@
     <dimen name="btnUpload">200sp</dimen>
     <dimen name="padding_32">32sp</dimen>
     <dimen name="icon_32">32sp</dimen>
+    <dimen name="star_length">200sp</dimen>
+    <dimen name="star_height">40sp</dimen>
 </resources>
