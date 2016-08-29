@@ -1,7 +1,10 @@
 package com.kms.cura.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -12,25 +15,45 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
+import com.kms.cura.controller.AppointmentController;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.NotificationController;
 import com.kms.cura.controller.UserController;
+import com.kms.cura.entity.AppointSearchEntity;
+import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.entity.NotificationEntity;
+import com.kms.cura.entity.user.DoctorUserEntity;
+import com.kms.cura.entity.user.UserEntity;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
+import com.kms.cura.utils.CurrentUserProfile;
+import com.kms.cura.view.AnimationExecutor;
+import com.kms.cura.view.adapter.DoctorRequestListAdapter;
 import com.kms.cura.view.fragment.DoctorApptDayVIewFragment;
-import com.kms.cura.view.MultipleChoiceBackPress;
 import com.kms.cura.view.fragment.DoctorAppointmentMonthViewFragment;
 import com.kms.cura.view.fragment.DoctorSettingsFragment;
 import com.kms.cura.view.fragment.DoctorProfileFragment;
 import com.kms.cura.view.fragment.DoctorRequestListFragment;
 import com.kms.cura.view.fragment.MessageListFragment;
 
+import java.util.List;
+
 public class DoctorViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener, View.OnClickListener {
     public static final String NAVIGATION_KEY = "navi_key";
     private Toolbar doctorToolbar;
     private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorMessageFragment, doctorRequestListFragment, doctorApptDayViewFragment, doctorApptView2;
-
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle toggle;
+    private NavigationView navigationView;
+    private ProgressDialog pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,15 +81,51 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
     }
 
     private void initNavigationView() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.inflateMenu(R.menu.doctor_navigation_drawer_drawer);
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(this);
+        setApptNotiForDoctor();
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage(getString(R.string.loading));
+        pDialog.setCancelable(false);
+        showProgressDialog();
+        AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            private List<NotificationEntity> msgNotifs;
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    msgNotifs = NotificationController.getMsgNotification(CurrentUserProfile.getInstance().getEntity());
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                hideProgressDialog();
+                if (exception != null) {
+                    ErrorController.showDialog(DoctorViewActivity.this, "Error : " + exception.getMessage());
+                } else {
+                    if (msgNotifs.size() == 0){
+                        return;
+                    }
+                    changeToggle();
+                    setMenuCounter(R.id.nav_messages, msgNotifs.size());
+                }
+
+            }
+        };
+        task.execute();
     }
 
+
+
     private void initDrawer() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, doctorToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
@@ -165,9 +224,59 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         }
     }
 
+    private void changeToggle(){
+        toggle.setDrawerIndicatorEnabled(false);
+        doctorToolbar.setNavigationIcon(R.drawable.noti_drawer);
+        doctorToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawer.openDrawer(Gravity.LEFT);
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.openDrawer(GravityCompat.START);
+    }
+
+    private void setApptNotiForDoctor(){
+        List<AppointmentEntity> appts = ((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
+        int incompleteAppt = 0;
+        int request = 0;
+        for (AppointmentEntity entity : appts){
+            int status = entity.getStatus();
+            if (status == AppointmentEntity.INCOMPLETED_STT){
+                ++incompleteAppt;
+            }
+            if (status == AppointmentEntity.PENDING_STT){
+                ++request;
+            }
+        }
+        setMenuCounter(R.id.nav_request, request);
+        setMenuCounter(R.id.nav_appointment, incompleteAppt);
+    }
+
+    private void setMenuCounter(@IdRes int itemId, int count) {
+        if (count == 0){
+            return;
+        }
+        View view = navigationView.getMenu().findItem(itemId).getActionView();
+        TextView txtCounter = (TextView) view.findViewById(R.id.txtCounter);
+        txtCounter.setText(String.valueOf(count));
+        txtCounter.setVisibility(View.VISIBLE);
+    }
+
+    private void showProgressDialog() {
+        if (!pDialog.isShowing()) {
+            pDialog.show();
+        }
+    }
+
+    private void hideProgressDialog() {
+        if (pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
     }
 }

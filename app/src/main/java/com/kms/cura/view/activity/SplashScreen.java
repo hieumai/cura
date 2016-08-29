@@ -9,9 +9,11 @@ import android.widget.TextView;
 import com.kms.cura.R;
 import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.NotificationController;
 import com.kms.cura.controller.UserController;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
+import com.kms.cura.utils.CurrentUserProfile;
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
 
 public class SplashScreen extends AppCompatActivity implements EventHandler, View.OnClickListener {
