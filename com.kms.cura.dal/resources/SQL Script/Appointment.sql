@@ -13,9 +13,9 @@ CREATE TABLE Appointments (
     doctor_cmt text,
     rate float,
     rate_cmt text,
-    FOREIGN KEY (doctor_id) REFERENCES doctor_facilities (doctor_id),
+    FOREIGN KEY (doctor_id) REFERENCES doctor (user_id),
     FOREIGN KEY (patient_id) REFERENCES patient (user_id),
-    FOREIGN KEY (facility_id) REFERENCES doctor_facilities (facility_id),
+    FOREIGN KEY (facility_id) REFERENCES facilities (id),
     PRIMARY KEY (id)
 );
 

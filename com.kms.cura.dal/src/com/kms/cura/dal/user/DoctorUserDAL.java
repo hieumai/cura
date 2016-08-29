@@ -71,16 +71,7 @@ public class DoctorUserDAL extends UserDAL {
 			dbh.closeConnection();
 		}
 	}
-
-	public DoctorUserEntity updateDoctor(DoctorUserEntity doctorUserEntity) throws NumberFormatException, Exception {
-		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
-		try {
-			return getAllReferenceAttributeforDoctor((DoctorUserEntity) dbh.updateDoctor(doctorUserEntity));
-		} finally {
-			dbh.closeConnection();
-		}
-	}
-
+	
 	public List<DoctorUserEntity> searchDoctorFunction(DoctorSearchEntity search)
 			throws SQLException, ClassNotFoundException, IOException {
 		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
@@ -120,4 +111,21 @@ public class DoctorUserDAL extends UserDAL {
 		}
 	}
 
+	public DoctorUserEntity updateDoctorBasic(DoctorUserEntity doctorUserEntity) throws ClassNotFoundException, SQLException, IOException {
+		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
+		try {
+			return getAllReferenceAttributeforDoctor((DoctorUserEntity) dbh.updateDoctorBasic(doctorUserEntity));
+		} finally {
+			dbh.closeConnection();
+		}
+	}
+	
+	public DoctorUserEntity updateDoctorProfessional(DoctorUserEntity doctorUserEntity) throws NumberFormatException, Exception {
+		DoctorUserDatabaseHelper dbh = new DoctorUserDatabaseHelper();
+		try {
+			return getAllReferenceAttributeforDoctor((DoctorUserEntity) dbh.updateProfessional(doctorUserEntity));
+		} finally {
+			dbh.closeConnection();
+		}
+	}
 }

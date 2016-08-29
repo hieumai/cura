@@ -20,7 +20,7 @@ CREATE TABLE Opening_hours(
     week_day INT NOT NULL, #0 = monday, 6 = sunday
     time_open TIME NOT NULL,
     time_close TIME NOT NULL,
-    FOREIGN KEY (facility_id) REFERENCES Facilities (id)
+    FOREIGN KEY (facility_id) REFERENCES Facilities (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 #Hue hospital data     
@@ -202,9 +202,9 @@ CREATE TABLE Patient (
     gender CHAR(1),
 	birth DATE,
     location VARCHAR(50),
-    insurance VARCHAR(50),
-    health_concern VARCHAR(100),
-    FOREIGN KEY (user_id) REFERENCES users (id)
+    insurance VARCHAR(10),
+    health_concern VARCHAR(10),
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 INSERT INTO Patient(user_id,name,gender,birth,location) VALUES ((SELECT id FROM Users WHERE email = 'patient@kms-technology.com'), 'Alan Turing','M','19900101','Hồ Chí Minh');
@@ -220,11 +220,11 @@ CREATE TABLE Doctor (
     price_max DOUBLE,
     gender CHAR(1),
     birth DATE,
-    insurance VARCHAR(50),
+    insurance VARCHAR(10),
     FOREIGN KEY (user_id)
-        REFERENCES Users (id),
+        REFERENCES Users (id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (degree_id)
-        REFERENCES Degree (id)
+        REFERENCES Degree (id) ON DELETE CASCADE ON UPDATE CASCADE
 	);
     
 
@@ -232,16 +232,16 @@ CREATE TABLE Doctor (
 CREATE TABLE Doctor_Specialties (
 	doctor_id INT NOT NULL,
     speciality_id INT NOT NULL,
-    FOREIGN KEY (doctor_id) REFERENCES Doctor (user_id),
-    FOREIGN KEY (speciality_id) REFERENCES Specialties (id)
+    FOREIGN KEY (doctor_id) REFERENCES Doctor (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (speciality_id) REFERENCES Specialties (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 #Hold relationship between doctor and facilities (many-many)
 CREATE TABLE Doctor_Facilities (
 	doctor_id INT NOT NULL,
     facility_id INT NOT NULL,
-    FOREIGN KEY (doctor_id) REFERENCES Doctor (user_id),
-    FOREIGN KEY (facility_id) REFERENCES Facilities (id)
+    FOREIGN KEY (doctor_id) REFERENCES Doctor (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (facility_id) REFERENCES Facilities (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
     
 INSERT INTO Doctor(user_id,name, degree_id,gender,birth,experience) VALUES ((SELECT id FROM Users WHERE email = 'doctor@kms-technology.com'),'Alexander Fleming', (SELECT id FROM Degree WHERE name = 'PhD'), 'M', '19801230', 5);
@@ -257,7 +257,7 @@ CREATE TABLE Rating (
     value DOUBLE,
     votes INT,
     PRIMARY KEY (id),
-    FOREIGN KEY (doctor_id) REFERENCES Doctor (user_id)
+    FOREIGN KEY (doctor_id) REFERENCES Doctor (user_id) ON DELETE CASCADE ON UPDATE CASCADE
     );
  
  INSERT INTO Users (email,password) VALUE ('awruck@yahoo.com','annabellewruck');

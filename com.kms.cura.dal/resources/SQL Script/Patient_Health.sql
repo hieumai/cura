@@ -6,9 +6,9 @@ create table Patient_Health (
     symptom_id INT,
     start_date date NOT NULL,
     end_date date,
-    FOREIGN KEY (patient_id) REFERENCES patient (user_id),
-    FOREIGN KEY (condition_id) REFERENCES conditions (id),
-    FOREIGN KEY (symptom_id) REFERENCES symptoms (id)
+    FOREIGN KEY (patient_id) REFERENCES patient (user_id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (condition_id) REFERENCES conditions (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (symptom_id) REFERENCES symptoms (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 insert into patient_health (patient_id, condition_id, start_date, end_date) values (2, 2, 19991212, 20031212);

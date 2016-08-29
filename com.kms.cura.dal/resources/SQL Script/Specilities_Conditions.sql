@@ -3,8 +3,8 @@ USE cura;
 CREATE TABLE Specialities_Conditions (
 	speciality_id INT NOT NULL,
     condition_id INT NOT NULL,
-    FOREIGN KEY (speciality_id) REFERENCES specialties (id),
-    FOREIGN KEY (condition_id) REFERENCES conditions (id)
+    FOREIGN KEY (speciality_id) REFERENCES specialties (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (condition_id) REFERENCES conditions (id) ON DELETE CASCADE ON UPDATE CASCADE
     );
     
 INSERT INTO Specialities_Conditions VALUES ((SELECT id FROM Specialties WHERE name = 'Allergist'), (SELECT id FROM Conditions WHERE name = 'Allergies'));

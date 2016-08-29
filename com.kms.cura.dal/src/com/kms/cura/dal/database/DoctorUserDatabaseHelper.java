@@ -185,11 +185,11 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 			throws SQLException, ClassNotFoundException, IOException {
 		ResultSet doctorSpecialityRS = null;
 		ResultSet workingHourRS = null;
-		
+
 		try {
-			
+
 			String path = resultSet.getString(UserColumn.IMAGE_PATH.getColumnName());
-			
+
 			doctorSpecialityRS = queryByReferenceID(Doctor_SpecialityColumn.TABLE_NAME,
 					Doctor_SpecialityColumn.DOCTOR_ID.getColumnName(),
 					resultSet.getInt(DoctorColumn.USER_ID.getColumnName()));
@@ -522,40 +522,6 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		}
 	}
 
-	public Entity updateDoctor(DoctorUserEntity doctorUserEntity) throws NumberFormatException, Exception {
-		boolean equal = true;
-		DoctorUserEntity oldDoctor = searchDoctor(doctorUserEntity);
-		// Update only working hour
-		List<WorkingHourEntity> oldDoctorWH = oldDoctor.getWorkingTime();
-		List<WorkingHourEntity> newDoctorWH = doctorUserEntity.getWorkingTime();
-		if (oldDoctorWH.size() == newDoctorWH.size()) {
-			for (int i = 0; i < oldDoctorWH.size(); ++i) {
-				if (!oldDoctorWH.get(i).equals(newDoctorWH.get(i))) {
-					equal = false;
-					break;
-				}
-			}
-			if (equal) {
-				return oldDoctor;
-			}
-		}
-		try {
-			con.setAutoCommit(false);
-			deleteFacilityWorkingHourForOneDoctorID(Integer.parseInt(oldDoctor.getId()), oldDoctorWH);
-			addNewFacilityWorkingHourForOneDoctor(Integer.parseInt(oldDoctor.getId()), newDoctorWH);
-			con.commit();
-			return searchDoctor(doctorUserEntity);
-		} catch (SQLException e) {
-			if (con != null) {
-				System.err.print("Transaction is being rolled back");
-				con.rollback();
-			}
-			throw e;
-		} finally {
-			con.setAutoCommit(true);
-		}
-	}
-
 	public DoctorUserEntity queryDoctorByID(String id) throws SQLException, ClassNotFoundException, IOException {
 		return (DoctorUserEntity) queryUserEntitybyId(DoctorColumn.TABLE_NAME, id,
 				DoctorColumn.USER_ID.getColumnName());
@@ -607,7 +573,8 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		builder.append("select * from ");
 		builder.append(DoctorColumn.TABLE_NAME + " d");
 		builder.append(" left join ");
-		builder.append("(select distinct " + Doctor_FacilityColumn.DOCTOR_ID + ", " + Doctor_FacilityColumn.FACILITY_ID);
+		builder.append(
+				"(select distinct " + Doctor_FacilityColumn.DOCTOR_ID + ", " + Doctor_FacilityColumn.FACILITY_ID);
 		builder.append(" from ");
 		builder.append(Doctor_FacilityColumn.TABLE_NAME + ") f");
 		builder.append(" on d." + DoctorColumn.USER_ID + " = f." + Doctor_FacilityColumn.DOCTOR_ID);
@@ -634,4 +601,102 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 		return list;
 	}
 
+	public DoctorUserEntity updateDoctorBasic(DoctorUserEntity entity)
+			throws SQLException, ClassNotFoundException, IOException {
+		PreparedStatement stmt = null;
+		StringBuilder builder = new StringBuilder();
+		builder.append("update " + DoctorColumn.TABLE_NAME);
+		builder.append(" set " + DoctorColumn.NAME.getColumnName() + " = '" + entity.getName() + "'");
+		builder.append(", " + DoctorColumn.GENDER.getColumnName() + " = '" + entity.getGender() + "'");
+		builder.append(", " + DoctorColumn.BIRTH.getColumnName() + " = '" + entity.getBirth().toString() + "'");
+		builder.append(", " + DoctorColumn.DEGREE_ID.getColumnName() + " = " + entity.getDegree().getId());
+		builder.append(", " + DoctorColumn.EXPERIENCE.getColumnName() + " = " + entity.getExperience());
+		builder.append(", " + DoctorColumn.MIN_PRICE.getColumnName() + " = " + entity.getMinPrice());
+		builder.append(", " + DoctorColumn.MAX_PRICE.getColumnName() + " = " + entity.getMaxPrice());
+		builder.append(" where " + DoctorColumn.USER_ID.getColumnName() + " = " + entity.getId());
+		try {
+			con.setAutoCommit(false);
+			stmt = con.prepareStatement(builder.toString());
+			stmt.executeUpdate();
+			con.commit();
+			return queryDoctorByID(entity.getId());
+		} catch (SQLException e) {
+			if (con != null) {
+				System.err.print("Transaction is being rolled back");
+				con.rollback();
+			}
+			throw e;
+		} finally {
+			con.setAutoCommit(true);
+			if (stmt != null) {
+				stmt.close();
+			}
+		}
+	}
+
+	private void updateSpeciality(DoctorUserEntity entity) throws SQLException, ClassNotFoundException, IOException {
+		PreparedStatement stmtDelete = null, stmtInsert = null;
+		StringBuilder deleteQuery = new StringBuilder();
+		deleteQuery.append("delete from " + Doctor_SpecialityColumn.TABLE_NAME);
+		deleteQuery.append(" where " + Doctor_SpecialityColumn.DOCTOR_ID.getColumnName() + " = " + entity.getId() + ";");
+		StringBuilder insertQuery = new StringBuilder();
+		insertQuery.append("insert into ");
+		insertQuery.append(Doctor_SpecialityColumn.TABLE_NAME);
+		insertQuery.append(" values (?, ?);");
+		try {
+			stmtDelete = con.prepareStatement(deleteQuery.toString());
+			stmtDelete.executeUpdate();
+			stmtInsert = con.prepareStatement(insertQuery.toString());
+			stmtInsert.setInt(1, Integer.parseInt(entity.getId()));
+			for (SpecialityEntity specialityEntity : entity.getSpeciality()) {
+				stmtInsert.setInt(2, Integer.parseInt(specialityEntity.getId()));
+				stmtInsert.executeUpdate();
+			}
+		} finally {
+			if (stmtInsert != null) {
+				stmtInsert.close();
+			}
+			if (stmtDelete != null) {
+				stmtDelete.close();
+			}
+		}
+	}
+
+	private void updateDoctorWorkingHour(DoctorUserEntity doctorUserEntity) throws NumberFormatException, Exception {
+		boolean equal = true;
+		DoctorUserEntity oldDoctor = queryDoctorByID(doctorUserEntity.getId());
+		List<WorkingHourEntity> oldDoctorWH = oldDoctor.getWorkingTime();
+		List<WorkingHourEntity> newDoctorWH = doctorUserEntity.getWorkingTime();
+		if (oldDoctorWH.size() == newDoctorWH.size()) {
+			for (int i = 0; i < oldDoctorWH.size(); ++i) {
+				if (!oldDoctorWH.get(i).equals(newDoctorWH.get(i))) {
+					equal = false;
+					break;
+				}
+			}
+			if (equal) {
+				return;
+			}
+		}
+		deleteFacilityWorkingHourForOneDoctorID(Integer.parseInt(oldDoctor.getId()), oldDoctorWH);
+		addNewFacilityWorkingHourForOneDoctor(Integer.parseInt(oldDoctor.getId()), newDoctorWH);
+	}
+
+	public DoctorUserEntity updateProfessional(DoctorUserEntity entity) throws NumberFormatException, Exception {
+		try {
+			con.setAutoCommit(false);
+			updateDoctorWorkingHour(entity);
+			updateSpeciality(entity);
+			con.commit();
+			return queryDoctorByID(entity.getId());
+		} catch (SQLException e) {
+			if (con != null) {
+				System.err.print("Transaction is being rolled back");
+				con.rollback();
+			}
+			throw e;
+		} finally {
+			con.setAutoCommit(true);
+		}
+	}
 }
