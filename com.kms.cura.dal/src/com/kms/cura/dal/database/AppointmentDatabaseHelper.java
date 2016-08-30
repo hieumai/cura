@@ -9,7 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.Notification;
 
 import com.kms.cura.dal.database.NotificationHelper;
 import com.kms.cura.dal.mapping.AppointmentColumn;
@@ -19,7 +18,6 @@ import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.FacilityEntity;
-import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 
@@ -163,6 +161,7 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 			con.setAutoCommit(false);
 			int newID = createAppointment(entity);
 			NotificationHelper notificationHelper = new NotificationHelper();
+			AutoRejectHelper helper = new AutoRejectHelper();
 			AppointmentEntity search = new AppointmentEntity(null, entity.getPatientUserEntity(), null, null, null,
 					null, null, -1, null, null);
 			patientAppts = getAppointment(new AppointSearchEntity(search), entity.getPatientUserEntity(), null);
@@ -170,6 +169,7 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 			entity.setId(String.valueOf(newID));
 			createNewAppointmentNotification(String.valueOf(newID), entity);
 			notificationHelper.sendAppointmentRequest(entity.getDoctorID(), entity);
+			helper.createSchedule(String.valueOf(newID), entity.getApptDay());
 			return patientAppts;
 		} catch (SQLException e) {
 			if (con != null) {
