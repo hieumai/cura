@@ -200,6 +200,7 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 
 	public List<AppointmentEntity> updateAppointment(AppointmentEntity entity, boolean patient)
 			throws SQLException, ClassNotFoundException, IOException {
+		NotificationHelper notificationHelper = null;
 		List<AppointmentEntity> listAppts = null;
 		AppointmentEntity search = null;
 		PreparedStatement stmt = null;
@@ -228,8 +229,11 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 			}
 			con.commit();
 			if (!patient && (status == AppointmentEntity.ACCEPTED_STT || status == AppointmentEntity.REJECT_STT
-					|| status == AppointmentEntity.DOCTOR_CANCEL_STT)) {
-				createUpdateAppointmentNotification(entity.getId(), doctorUserEntity.getId());
+					|| status == AppointmentEntity.DOCTOR_CANCEL_STT || status == AppointmentEntity.COMPLETED_STT)) {
+				createUpdateAppointmentNotification(entity.getId(), patientUserEntity.getId());
+				notificationHelper = new NotificationHelper();
+				notificationHelper.sendAppointmentUpdateNoti(entity.getPatientID());
+				
 			}
 			return listAppts;
 		} catch (SQLException e) {

@@ -211,6 +211,10 @@ public class AppointmentEntity extends Entity {
 	public String getDoctorID() {
 		return UserEntity.USER + doctorUserEntity.getId();
 	}
+	
+	public String getPatientID() {
+		return UserEntity.USER + patientUserEntity.getId();
+	}
 
 	private boolean isSameDay(Date d1, Date d2) {
 		Calendar c1 = Calendar.getInstance();

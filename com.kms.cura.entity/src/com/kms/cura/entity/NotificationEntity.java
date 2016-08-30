@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class NotificationEntity {
 	public static String PATIENT_REQUEST_TYPE = "patient_request";
+	public static String UPDATE_APPT_TYPE = "update_appt_type";
 	public static String REG_ID = "regId";
 	public static String REG_NAME = "regName";
 	public static final String NOTI_LIST = "noti_list";

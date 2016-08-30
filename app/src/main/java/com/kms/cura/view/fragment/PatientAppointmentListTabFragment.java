@@ -34,6 +34,7 @@ import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.AnimationExecutor;
 import com.kms.cura.view.activity.PatientAppointmentDetailsActivity;
 import com.kms.cura.view.adapter.PatientAppointmentListAdapter;
+import com.kms.cura.view.service.NotificationListener;
 
 
 import se.emilsjolander.stickylistheaders.ExpandableStickyListHeadersListView;
@@ -50,7 +51,7 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
     private PatientAppointmentListAdapter adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private WeakHashMap<View, Integer> mOriginalViewHeightPool = new WeakHashMap<View, Integer>();
-
+    private boolean isUpdated;
     public PatientAppointmentListTabFragment() {
     }
 
@@ -63,47 +64,56 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
-                    private Exception exception = null;
-
-                    @Override
-                    protected Void doInBackground(Object[] params) {
-                        try {
-                            PatientUserEntity patient = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
-                            PatientUserEntity patientUserEntity = new PatientUserEntity(patient.getId(),null,null,null,null,null,null,null,null,null);
-                            AppointmentEntity entity = new AppointmentEntity(null,patientUserEntity, null, null, null, null, null, -1, null, null);
-                            patient.setAppointmentList(AppointmentController.getAppointment(new AppointSearchEntity(entity)));
-                        } catch (Exception e) {
-                            exception = e;
-                        }
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void aVoid) {
-                        if (exception != null) {
-                            ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
-                        } else {
-                            apptsList.clear();
-                            setupData();
-                            adapter = new PatientAppointmentListAdapter(getActivity(), apptsList);
-                            lvAppts.setAdapter(adapter);
-                            lvAppts.setAnimExecutor(new AnimationExecutor(mOriginalViewHeightPool));
-                        }
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                };
-                task.execute();
+                updateApptList();
             }
         });
         EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_PATIENT_LIST);
         setupData();
         setupListView(myFragmentView);
+        if (!isUpdated){
+            mSwipeRefreshLayout.setRefreshing(true);
+            updateApptList();
+        }
         return myFragmentView;
+    }
+
+    private void updateApptList(){
+        AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    PatientUserEntity patient = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+                    PatientUserEntity patientUserEntity = new PatientUserEntity(patient.getId(),null,null,null,null,null,null,null,null,null);
+                    AppointmentEntity entity = new AppointmentEntity(null,patientUserEntity, null, null, null, null, null, -1, null, null);
+                    patient.setAppointmentList(AppointmentController.getAppointment(new AppointSearchEntity(entity)));
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if (exception != null) {
+                    ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
+                } else {
+                    apptsList.clear();
+                    setupData();
+                    adapter = new PatientAppointmentListAdapter(getActivity(), apptsList);
+                    lvAppts.setAdapter(adapter);
+                    lvAppts.setAnimExecutor(new AnimationExecutor(mOriginalViewHeightPool));
+                }
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        };
+        task.execute();
     }
 
     private void setupData() {
         Bundle bundle = getArguments();
+        isUpdated = bundle.getBoolean(NotificationListener.UPDATE);
         state = bundle.getInt(PatientAppointmentListFragment.KEY_STATE, PatientAppointmentListFragment.STATE_UPCOMING);
         apptsList = getData();
     }

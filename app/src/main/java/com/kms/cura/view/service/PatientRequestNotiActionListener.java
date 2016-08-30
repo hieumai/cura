@@ -71,7 +71,7 @@ public class PatientRequestNotiActionListener extends BroadcastReceiver {
                 } else {
                     NotificationManager notificationManager =
                             (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                    notificationManager.cancel(NotificationListener.PATIENT_REUUEST_ID);
+                    notificationManager.cancel(NotificationListener.PATIENT_REQUEST_ID);
                     EventBroker.getInstance().pusblish(EventConstant.UPDATE_PATIENT_REQUEST_LIST, null );
                 }
             }
@@ -82,7 +82,7 @@ public class PatientRequestNotiActionListener extends BroadcastReceiver {
     private void rejectRequest(final Context context, String id) {
         NotificationManager notificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(NotificationListener.PATIENT_REUUEST_ID);
+        notificationManager.cancel(NotificationListener.PATIENT_REQUEST_ID);
         Intent intent = new Intent(context, AppointmentRequestDeatailActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(FROM_NOTI, true);
