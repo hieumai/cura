@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.kms.cura.R;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.view.adapter.PatientAppointmentListTabAdapter;
+import com.kms.cura.view.service.NotificationListener;
 
 import java.util.List;
 
@@ -27,10 +28,11 @@ public class PatientAppointmentListFragment extends Fragment {
     public static final int STATE_UPCOMING = 0;
     public static final int STATE_PAST = 1;
     public static final String KEY_STATE = "state";
-
+    private boolean updatedAppt;
     public PatientAppointmentListFragment() {
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +51,8 @@ public class PatientAppointmentListFragment extends Fragment {
     }
 
     private void setupDataOnView() {
-        adapter = new PatientAppointmentListTabAdapter(getChildFragmentManager());
+        updatedAppt = getActivity().getIntent().getBooleanExtra(NotificationListener.UPDATE, false);
+        adapter = new PatientAppointmentListTabAdapter(getChildFragmentManager(), updatedAppt);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }

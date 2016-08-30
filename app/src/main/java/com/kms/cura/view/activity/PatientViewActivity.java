@@ -51,6 +51,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
     private HealthTrackerFragment patientHealthTrachkerFragment;
     static final public String PATIENT = "500";
     public final static String NAVIGATION_KEY = "naviKey";
+    public final static String PATIENT_APPT = "patientAppt";
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawer;
@@ -253,6 +254,9 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
                     break;
                 case PatientSignUpActivity.FROM_PATIENT_REGISTER:
                     changeFragment(patientProfileFragment);
+                    break;
+                case PATIENT_APPT:
+                    changeFragment(patientAppointmentFragment);
                     break;
             }
         } else {
