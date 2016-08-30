@@ -9,8 +9,9 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.entity.user.UserEntity;
 
-public class AppointmentEntity extends Entity{
+public class AppointmentEntity extends Entity {
 	public static final String UPDATE_TYPE = "update_type";
 	public static final int PENDING_STT = 0;
 	public static final int ACCEPTED_STT = 1;
@@ -64,7 +65,10 @@ public class AppointmentEntity extends Entity{
 		this.rateCmt = rateCmt;
 	}
 
-	public AppointmentEntity(String id, PatientUserEntity patientUserEntity, DoctorUserEntity doctorUserEntity, FacilityEntity facilityEntity, Date apptDay, Time startTime, Time endTime, int status, String patientCmt, String doctorCmt) {
+	public AppointmentEntity(String id, PatientUserEntity patientUserEntity, DoctorUserEntity doctorUserEntity,
+			FacilityEntity facilityEntity, Date apptDay, Time startTime, Time endTime, int status, String patientCmt,
+			String doctorCmt) {
+		super.setId(id);
 		this.patientUserEntity = patientUserEntity;
 		this.doctorUserEntity = doctorUserEntity;
 		this.facilityEntity = facilityEntity;
@@ -88,7 +92,7 @@ public class AppointmentEntity extends Entity{
 		AppointmentEntity entity = (AppointmentEntity) obj;
 		return (super.getId().equals(entity.getId()));
 	}
-	
+
 	@Override
 	public int hashCode() {
 		return this.getId().hashCode();
@@ -204,6 +208,10 @@ public class AppointmentEntity extends Entity{
 		return null;
 	}
 
+	public String getDoctorID() {
+		return UserEntity.USER + doctorUserEntity.getId();
+	}
+
 	private boolean isSameDay(Date d1, Date d2) {
 		Calendar c1 = Calendar.getInstance();
 		c1.setTime(d1);
@@ -228,6 +236,5 @@ public class AppointmentEntity extends Entity{
 	public void setRate_comment(String rateCmt) {
 		this.rateCmt = rateCmt;
 	}
-	
-	
+
 }

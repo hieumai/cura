@@ -43,6 +43,7 @@ import javax.crypto.spec.PBEParameterSpec;
 public class UserController {
     private static final String ENCRYPT_METHOD = "PBEWithMD5AndDES";
     private static final String SIGNED_IN_INFO = "userInfo";
+    private static final String GCM_KEY = "gcmKey";
     private static final byte[] SALT = {
             (byte) 0xde, (byte) 0x33, (byte) 0x10, (byte) 0x12,
             (byte) 0xde, (byte) 0x33, (byte) 0x10, (byte) 0x12,
@@ -150,6 +151,32 @@ public class UserController {
         }
     }
 
+    public static void saveGCMRegisterKey(Context context, String regID){
+        File file = new File(context.getFilesDir(), GCM_KEY);
+        try {
+            PrintWriter writer = new PrintWriter(new FileOutputStream(file));
+            writer.write(regID);
+            writer.write('\n');
+            writer.close();
+        } catch (FileNotFoundException e) {
+            //TODO : log for app
+        }
+    }
+
+    public static boolean alreadyRegisterdGCM(Context context){
+        File file = new File(context.getFilesDir(), GCM_KEY);
+        return file.exists();
+    }
+
+
+    public static void unregisterGCMLocal(Context context){
+        File file = new File(context.getFilesDir(), GCM_KEY);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+
     public static void userSignOut(Context context) {
         File file = new File(context.getFilesDir(), SIGNED_IN_INFO);
         if (file.exists()) {
@@ -173,7 +200,7 @@ public class UserController {
     public static void updatePassword(UserEntity user) {
         UserModel.getInstance().updatePassword(user);
     }
-    
+
     public static void getDoctorByFacility(FacilityEntity facilityEntity) {
         UserModel.getInstance().getDoctorByFacility(facilityEntity);
     }

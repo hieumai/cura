@@ -23,12 +23,15 @@ import android.widget.TextView;
 
 import com.kms.cura.R;
 import com.kms.cura.constant.EventConstant;
+import com.kms.cura.controller.NotificationController;
 import com.kms.cura.controller.AppointmentController;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.controller.NotificationController;
 import com.kms.cura.controller.UserController;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.entity.user.UserEntity;
+import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.UserEntity;
@@ -50,10 +53,12 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
     public static final String NAVIGATION_KEY = "navi_key";
     private Toolbar doctorToolbar;
     private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorMessageFragment, doctorRequestListFragment, doctorApptDayViewFragment, doctorApptView2;
+    public static final String NAVIGATE_TO = "navigate_to";
+    public static final String PATIENT_REQUEST = "patient_request";
+    private ProgressDialog pDialog;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
-    private ProgressDialog pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +67,11 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         initDrawer();
         initNavigationView();
         initFragments();
-        changeFragment(doctorProfileFragment);
+    }
+
+    private String getNavigationTo(){
+        String navigate = getIntent().getStringExtra(NAVIGATE_TO);
+        return navigate;
     }
 
     private void initFragments() {
@@ -71,6 +80,14 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         doctorRequestListFragment = new DoctorRequestListFragment();
         doctorMessageFragment = new MessageListFragment();
         doctorApptDayViewFragment = new DoctorApptDayVIewFragment();
+        String navigateTo = getNavigationTo();
+        if (navigateTo == null){
+            changeFragment(doctorProfileFragment);
+            return;
+        }
+        if (navigateTo.equals(PATIENT_REQUEST)){
+            changeFragment(doctorRequestListFragment);
+        }
     }
 
     private void changeFragment(Fragment newFragment) {
@@ -200,9 +217,40 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
 
     private void signOut() {
         UserController.userSignOut(this);
-        Intent i = new Intent(this, LoginActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
+        unregisterServer();
+    }
+
+    private void unregisterServer(){
+        pDialog = new ProgressDialog(this);
+        pDialog.setMessage(getString(R.string.loading));
+        pDialog.setCancelable(false);
+        showProgressDialog();
+        AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    String regName = UserEntity.USER + CurrentUserProfile.getInstance().getEntity().getId();
+                    NotificationController.unregisterGCM(regName);
+                } catch (Exception e) {
+                    //TODO : log for app
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                hideProgressDialog();
+                UserController.unregisterGCMLocal(DoctorViewActivity.this);
+                CurrentUserProfile.getInstance().setData(null);
+                Intent i = new Intent(DoctorViewActivity.this, LoginActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(i);
+                return;
+            }
+        };
+        task.execute();
     }
 
     private void showDialogSignOut() {

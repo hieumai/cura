@@ -2,9 +2,12 @@ package com.kms.cura_server.response;
 
 import java.util.List;
 
+import org.json.JSONObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import com.kms.cura.entity.Entity;
+import com.kms.cura.entity.NotificationEntity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
@@ -18,7 +21,7 @@ import com.kms.cura.entity.user.UserEntity;
 
 
 public class NotificationAPIResponse extends APIResponse {
-	
+
 	@Override
 	public String successResponse(Entity entity) {
 		// TODO Auto-generated method stub
@@ -29,6 +32,13 @@ public class NotificationAPIResponse extends APIResponse {
 	public String successResponse(List<? extends Entity> entity) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public String success(String regID){
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put(Entity.STATUS_KEY, true);
+		jsonObject.put(NotificationEntity.REG_ID, regID);
+		return jsonObject.toString();
 	}
 
 	public String success() {
