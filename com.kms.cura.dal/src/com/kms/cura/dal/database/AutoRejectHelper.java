@@ -13,10 +13,11 @@ import com.kms.cura.entity.AppointmentEntity;
 
 public class AutoRejectHelper {
 	private static long TIME_OF_DAY = 86400000;
+
 	public AutoRejectHelper() {
-		
+
 	}
-	
+
 	public void createSchedule(final String id, Date apptDate) {
 		long currentTime = System.currentTimeMillis();
 		long apptTime = apptDate.getTime();
@@ -24,14 +25,14 @@ public class AutoRejectHelper {
 		final Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 			private String requestId = id;
+
 			public void run() {
 				AppointmentDatabaseHelper dbh = null;
-				AppointmentEntity criteria = new AppointmentEntity(requestId, null, null, null, null, null, null, -1, null,
-						null);
+				AppointmentEntity criteria = new AppointmentEntity(requestId, null, null, null, null, null, null, -1,
+						null, null);
 				try {
 					dbh = new AppointmentDatabaseHelper();
-					List<AppointmentEntity> list = AppointmentDAL.getInstance()
-							.getAppointment(new AppointSearchEntity(criteria), null, null);
+					List<AppointmentEntity> list = dbh.getAppointment(new AppointSearchEntity(criteria), null, null);
 					AppointmentEntity appt = list.get(0);
 					if (appt.getStatus() == AppointmentEntity.PENDING_STT) {
 						appt.setStatus(AppointmentEntity.REJECT_STT);
@@ -44,7 +45,7 @@ public class AutoRejectHelper {
 					try {
 						dbh.closeConnection();
 					} catch (SQLException e) {
-						//TODO : log for server
+						// TODO : log for server
 					}
 					timer.cancel();
 					timer.purge();
