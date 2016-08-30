@@ -1,10 +1,14 @@
 package com.kms.cura.view.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -17,10 +21,15 @@ import com.kms.cura.R;
 import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.controller.NotificationController;
+import com.kms.cura.controller.RegisterIntentService;
 import com.kms.cura.controller.UserController;
+import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.CurrentUserProfile;
+import com.kms.cura.model.Settings;
+import com.kms.cura.utils.CurrentUserProfile;
+import com.kms.cura.utils.GCMUtils;
 import com.kms.cura.utils.InputUtils;
 
 public class LoginActivity extends AppCompatActivity implements TextWatcher, View.OnClickListener, EventHandler {
@@ -28,17 +37,43 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     private EditText email, password;
     private Button forgotPasswordButton, loginButton, createAccountButton;
     private EventBroker broker;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private boolean isReceiverRegistered = false;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction() == Settings.REGISTRATION_INCOMPLETE) {
+                    ErrorController.showDialog(LoginActivity.this, getString(R.string.notreceiveNoti));
+                } else {
+                    UserController.saveGCMRegisterKey(LoginActivity.this, intent.getStringExtra(NotificationEntity.REG_ID));
+                }
+                navigateTo(CurrentUserProfile.getInstance().isPatient());
+            }
+        };
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         broker = EventBroker.getInstance();
         initView();
         registerEvent();
+        registerReceiver();
         createAccountButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
+    }
+
+    private void registerReceiver() {
+        if (isReceiverRegistered){
+            return;
+        }
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Settings.REGISTRATION_COMPLETE);
+        intentFilter.addAction(Settings.REGISTRATION_INCOMPLETE);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, intentFilter);
+        isReceiverRegistered = true;
     }
 
     /**
@@ -165,25 +200,33 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
         }
     }
 
+
+    private void navigateTo(boolean patient) {
+        Intent toHome = null;
+        if (patient) {
+            toHome = new Intent(this, PatientViewActivity.class);
+        }
+        else{
+            toHome = new Intent(LoginActivity.this, DoctorViewActivity.class);
+        }
+        startActivity(toHome);
+        unregisterEvent();
+        finish();
+    }
+
     @Override
     public void handleEvent(String event, Object data) {
         switch (event) {
             case EventConstant.LOGIN_SUCCESS:
+                boolean patient = CurrentUserProfile.getInstance().isPatient();
                 UserController.saveLoginInfo(this, email.getText().toString(), password.getText().toString());
-                switch ((String) data) {
-                    case EventConstant.TYPE_PATIENT:
-                        Intent toHomePatient = new Intent(this, PatientViewActivity.class);
-                        startActivity(toHomePatient);
-                        unregisterEvent();
-                        finish();
-                        break;
-                    case EventConstant.TYPE_DOCTOR:
-                        Intent toHomeDoctor = new Intent(this, DoctorViewActivity.class);
-                        startActivity(toHomeDoctor);
-                        unregisterEvent();
-                        finish();
-                        break;
+                if (UserController.alreadyRegisterdGCM(LoginActivity.this) || !GCMUtils.checkPlayServices(this)) {
+                    navigateTo(patient);
+                    return;
                 }
+                Intent intent = new Intent(this, RegisterIntentService.class);
+                intent.putExtra(RegisterIntentService.CURRENT_USER_ID, CurrentUserProfile.getInstance().getEntity().getId());
+                startService(intent);
                 break;
             case EventConstant.LOGIN_FAILED:
                 ErrorController.showDialog(this, "Login failed :" + data);
@@ -207,13 +250,17 @@ public class LoginActivity extends AppCompatActivity implements TextWatcher, Vie
     @Override
     protected void onPause() {
         unregisterEvent();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        isReceiverRegistered = false;
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         registerEvent();
+        registerReceiver();
         super.onResume();
     }
+
 
 }

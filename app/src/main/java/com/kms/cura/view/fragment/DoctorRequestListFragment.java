@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.kms.cura.R;
 import com.kms.cura.constant.EventConstant;
@@ -19,24 +18,16 @@ import com.kms.cura.controller.AppointmentController;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
-import com.kms.cura.entity.FacilityEntity;
-import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.user.DoctorUserEntity;
-import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
+import com.kms.cura.view.service.NotificationListener;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.AnimationExecutor;
 import com.kms.cura.view.activity.AppointmentRequestDeatailActivity;
 import com.kms.cura.view.adapter.DoctorRequestListAdapter;
-import com.kms.cura.view.adapter.PatientAppointmentListAdapter;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -55,15 +46,26 @@ public class DoctorRequestListFragment extends Fragment implements AdapterView.O
     private WeakHashMap<View, Integer> mOriginalViewHeightPool = new WeakHashMap<View, Integer>();
     private List<AppointmentEntity> requestList;
     public static String REQUEST_POSITION = "REQUEST_POSITION";
+    private boolean updatedRequest;
     public DoctorRequestListFragment() {
+    }
+
+
+    private void checkForUpdated(){
+        updatedRequest = getActivity().getIntent().getBooleanExtra(NotificationListener.UPDATE, false);
+        if (updatedRequest){
+            return;
+        }
+        updateRequestList();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_request_list, container, false);
-        EventBroker.getInstance().register(this, EventConstant.UPDATE_DOCTOR_REQUEST_LIST);
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_PATIENT_REQUEST_LIST);
         lvRequestList = (ExpandableStickyListHeadersListView) root.findViewById(R.id.lvRequestList);
+        checkForUpdated();
         mSwipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -162,21 +164,30 @@ public class DoctorRequestListFragment extends Fragment implements AdapterView.O
         startActivity(toDetail);
     }
 
+    private void updateRequestList(){
+        if (requestList != null) {
+            requestList.clear();
+            requestList.addAll(getRequests());
+        }
+        else{
+            requestList = getRequests();
+        }
+        adapter = new DoctorRequestListAdapter(getActivity(), requestList);
+        lvRequestList.setAdapter(adapter);
+    }
+
     @Override
     public void handleEvent(String event, Object data) {
         switch (event){
-            case EventConstant.UPDATE_DOCTOR_REQUEST_LIST:
-                requestList.clear();
-                requestList.addAll(getRequests());
-                adapter = new DoctorRequestListAdapter(getActivity(), requestList);
-                lvRequestList.setAdapter(adapter);
+            case EventConstant.UPDATE_PATIENT_REQUEST_LIST:
+                updateRequestList();
                 break;
         }
     }
 
     @Override
     public void onDestroyView() {
-        EventBroker.getInstance().unRegister(this, EventConstant.UPDATE_DOCTOR_REQUEST_LIST);
+        EventBroker.getInstance().unRegister(this, EventConstant.UPDATE_PATIENT_REQUEST_LIST);
         super.onDestroyView();
     }
 }

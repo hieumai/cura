@@ -310,6 +310,7 @@
     <string name="doctor_list">Doctors List</string>
     <string name="opening_hours">Opening hours</string>
     <string name="RateThisDoctor">Rate This Doctor</string>
+    <string name="errorPatientRequestNoti">Internal Error. Can not accept or reject patient request</string>
     <string name="MonthView">Month View</string>
     <string name="CompleteAppt">Complete Appointment</string>
     <string name="Submit">Summit</string>
@@ -361,6 +362,10 @@
     <string name="remove_speciality">Are you sure to remove this speciality?</string>
     <string name="select_speciality">Select a speciality</string>
     <string name="add_speciality">Add speciality</string>
+    <string name="appName">Cura</string>
+    <string name="notiMsgCollapse">1 new appointment request</string>
+    <string name="notreceiveNoti">Can not receive notification</string>
+    <string name="errorMsgAcceptRejectNoti">Can not accept or reject patient request</string>
     <string name="change_done">Are you sure to make the change(s)?</string>
     <string name="change_discard">Are you sure to discard the change(s)?</string>
     <string name="start_time">Start time:</string>

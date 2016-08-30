@@ -12,7 +12,9 @@ import javax.ws.rs.Path;
 
 import org.json.JSONObject;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.kms.cura.dal.database.UserDatabaseHelper;
 import com.kms.cura.dal.exception.DALException;
 import com.kms.cura.dal.mapping.PasswordCodeColumn;
@@ -21,6 +23,7 @@ import com.kms.cura.dal.user.PatientUserDAL;
 import com.kms.cura.dal.user.UserDAL;
 import com.kms.cura.entity.Entity;
 import com.kms.cura.entity.FacilityEntity;
+import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.json.JsonToEntityConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
@@ -126,7 +129,6 @@ public final class UserAPI {
 		} catch (ClassNotFoundException | SQLException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
-
 	}
 
 	@POST

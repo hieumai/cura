@@ -125,7 +125,7 @@ public class RejectApptDialog extends DialogFragment implements DialogInterface.
                     if (exception != null) {
                         ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
                     } else {
-                        EventBroker.getInstance().pusblish(EventConstant.UPDATE_DOCTOR_REQUEST_LIST, appointmentEntity.getApptDay() );
+                        EventBroker.getInstance().pusblish(EventConstant.UPDATE_PATIENT_REQUEST_LIST, appointmentEntity.getApptDay() );
                         dialog.dismiss();
                         ((Activity)mContext).finish();
                     }

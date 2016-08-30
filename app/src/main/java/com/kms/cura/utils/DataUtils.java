@@ -14,6 +14,7 @@ import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.Settings;
 
 import java.io.UnsupportedEncodingException;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -104,6 +105,14 @@ public class DataUtils {
             }
         }
         return newList;
+    }
+
+    public static String getApptTime(Time start, Time end){
+        StringBuilder builder = new StringBuilder();
+        builder.append(start.toString().substring(0,5));
+        builder.append(" - ");
+        builder.append(end.toString().substring(0,5));
+        return builder.toString();
     }
 
     private static boolean isSameDay (Calendar cal1, Calendar cal2){

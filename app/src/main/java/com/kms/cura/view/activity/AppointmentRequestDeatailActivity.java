@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -23,6 +22,7 @@ import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.event.EventBroker;
+import com.kms.cura.view.service.PatientRequestNotiActionListener;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.fragment.DoctorApptDayVIewFragment;
@@ -42,12 +42,25 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
     private AppointmentEntity appointmentEntity = null;
     private ImageButton btnBack;
     private ProgressDialog pDialog;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_request_deatail);
-        setUpView();
+        if (!checkFromNoti()){
+            setUpView();
+            return;
+        }
+        id = getIntent().getStringExtra(PatientRequestNotiActionListener.REQUEST_ID);
+        appointmentEntity = new AppointmentEntity(id, null, null, null, null, null,null,AppointmentEntity.ACCEPTED_STT,null,null);
+        btnReject = (Button) initView(R.id.btnReject);
+        btnReject.performClick();
+    }
+
+    private boolean checkFromNoti(){
+        return getIntent().getBooleanExtra(PatientRequestNotiActionListener.FROM_NOTI, false);
+
     }
 
     private void setUpView() {
@@ -216,7 +229,7 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
                 if (exception != null) {
                     ErrorController.showDialog(AppointmentRequestDeatailActivity.this, "Error : " + exception.getMessage());
                 } else {
-                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_DOCTOR_REQUEST_LIST, appointmentEntity.getApptDay() );
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_PATIENT_REQUEST_LIST, appointmentEntity.getApptDay() );
                 }
                 finish();
             }

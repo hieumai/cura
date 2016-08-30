@@ -9,7 +9,6 @@ import javax.ws.rs.Path;
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.kms.cura.dal.NotificationDAL;
 import com.kms.cura.dal.mapping.NotificationColumn;
 import com.kms.cura.entity.AppointmentEntity;
@@ -18,8 +17,40 @@ import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura_server.response.APIResponse;
 import com.kms.cura_server.response.NotificationAPIResponse;
 
-@Path("/noti") 
+
+import com.kms.cura.dal.database.NotificationHelper;
+
+@Path("/noti")
 public final class NotificationAPI {
+
+	@POST
+	@Path("/registerNoti")
+	public String registerNoti(String jsonData){
+		JSONObject jsonObject = new JSONObject(jsonData);
+		String regID = jsonObject.getString(NotificationEntity.REG_ID);
+		String regName = jsonObject.getString(NotificationEntity.REG_NAME);
+		NotificationHelper helper = new NotificationHelper();
+		try {
+			helper.registerID(regName, regID);
+			return new NotificationAPIResponse().success(regID);
+		} catch (IOException e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
+	
+	@POST
+	@Path("/unregisterNoti")
+	public String unRegisterNoti(String jsonData){
+		JSONObject jsonObject = new JSONObject(jsonData);
+		String regName = jsonObject.getString(NotificationEntity.REG_NAME);
+		NotificationHelper helper = new NotificationHelper();
+		try {
+			helper.unRegisterID(regName);
+			return new NotificationAPIResponse().success();
+		} catch (IOException e) {
+			return APIResponse.unsuccessResponse(e.getMessage());
+		}
+	}
 	
 	@POST 
 	@Path("/getNotiByType")

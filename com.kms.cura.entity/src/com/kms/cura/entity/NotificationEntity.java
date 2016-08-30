@@ -6,6 +6,9 @@ import java.util.List;
 import com.google.gson.reflect.TypeToken;
 
 public class NotificationEntity {
+	public static String PATIENT_REQUEST_TYPE = "patient_request";
+	public static String REG_ID = "regId";
+	public static String REG_NAME = "regName";
 	public static final String NOTI_LIST = "noti_list";
 	public static final String NOTI_TYPE = "noti_type";
 	public static final String USER_ID = "user_id";

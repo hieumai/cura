@@ -9,6 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.Notification;
+
+import com.kms.cura.dal.database.NotificationHelper;
 import com.kms.cura.dal.mapping.AppointmentColumn;
 import com.kms.cura.dal.mapping.AppointmentNotiType;
 import com.kms.cura.dal.mapping.NotificationType;
@@ -159,11 +162,14 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 		try {
 			con.setAutoCommit(false);
 			int newID = createAppointment(entity);
+			NotificationHelper notificationHelper = new NotificationHelper();
 			AppointmentEntity search = new AppointmentEntity(null, entity.getPatientUserEntity(), null, null, null,
 					null, null, -1, null, null);
 			patientAppts = getAppointment(new AppointSearchEntity(search), entity.getPatientUserEntity(), null);
 			con.commit();
+			entity.setId(String.valueOf(newID));
 			createNewAppointmentNotification(String.valueOf(newID), entity);
+			notificationHelper.sendAppointmentRequest(entity.getDoctorID(), entity);
 			return patientAppts;
 		} catch (SQLException e) {
 			if (con != null) {

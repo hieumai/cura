@@ -31,6 +31,7 @@ public class Settings {
     public static final String GET_MESSAGE_DOCTOR = "/message/getByDoctor";
     public static final String DELETE_PATIENT_MESSAGE = "/message/deletePatientMessage";
     public static final String DELETE_DOCTOR_MESSAGE = "/message/deleteDoctorMessage";
+    public static final String PROJECT_ID = "26069924783";
     public static final String INSERT_MESSAGE = "/message/insertMessage";
     public static final String GET_DOCTOR_BY_FACILITY = "/user/getDoctorByFacility";
     public static final String CHECK_EMAIL = "/user/checkEmailExist";
@@ -39,4 +40,9 @@ public class Settings {
     public static final String SEND_CODE = "/user/sendCode";
     public static final String CHECK_CODE = "/user/checkCode";
     public static final String RATE_APPT = "/appt/rateAppt";
+    public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String REGISTRATION_INCOMPLETE = "registrationIncomplete";
+    public static final String REGISTER_GCM = "/noti/registerNoti";
+    public static final String UNREGISTER_GCM = "/noti/unregisterNoti";
 }

@@ -9,6 +9,7 @@ import com.kms.cura.entity.ImageEntity;
 public class UserEntity extends Entity {
 	public static final String TYPE = "type";
 	public static final int USER_TYPE = 0;
+	public static final String USER = "user";
 	private String email;
 	private String password;
 	private ImageEntity imageEntity;

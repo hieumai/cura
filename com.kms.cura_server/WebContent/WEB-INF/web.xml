@@ -22,4 +22,9 @@
 		<servlet-name>Jersey Web Application</servlet-name>
 		<url-pattern>/cura_server/*</url-pattern>
 	</servlet-mapping>
+	<servlet>
+    	<servlet-name>MainServer</servlet-name>
+    	<servlet-class>com.kms.cura_server.MainServer</servlet-class>
+    	<load-on-startup>1</load-on-startup>
+	</servlet>
 </web-app>
