@@ -35,7 +35,7 @@ public class DoctorRatingListActivity extends AppCompatActivity implements View.
         tvName = (TextView) findViewById(R.id.tvDoctorName);
         tvName.setText(doctorUserEntity.getName());
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
-        ratingBar.setRating((float) doctorUserEntity.getRating());
+        ratingBar.setRating(doctorUserEntity.getRating());
         ratingBar.setEnabled(false);
         btnBack = (ImageButton) findViewById(R.id.btnRatingListBack);
         btnBack.setOnClickListener(this);
