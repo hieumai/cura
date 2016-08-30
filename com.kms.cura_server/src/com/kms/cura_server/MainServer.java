@@ -28,6 +28,7 @@ import com.kms.cura.entity.AppointmentEntity;
 
 public class MainServer extends HttpServlet {
 	public void init() throws ServletException {
+		disableSSL();
 		scheduleExistingRequest();
 	}
 
