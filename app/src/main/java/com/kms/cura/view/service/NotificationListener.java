@@ -6,8 +6,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -218,7 +216,7 @@ public class NotificationListener extends GcmListenerService {
             builder.append(getString(R.string.apptUpdateNoti));
         }
         else{
-            builder.append(getString(R.string.apptUpdateNotsi));
+            builder.append(getString(R.string.apptUpdateNotis));
         }
         return  builder.toString();
     }

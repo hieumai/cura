@@ -373,5 +373,5 @@
     <string name="click_to_add">Click to add</string>
     <string name="select_time">Select Time</string>
     <string name="apptUpdateNoti">appointment updated</string>
-    <string name="apptUpdateNotsi">appointments updated</string>
+    <string name="apptUpdateNotis">appointments updated</string>
 </resources>
