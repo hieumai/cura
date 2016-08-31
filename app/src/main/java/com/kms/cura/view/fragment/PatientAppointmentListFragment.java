@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.kms.cura.R;
 import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.view.activity.PatientViewActivity;
 import com.kms.cura.view.adapter.PatientAppointmentListTabAdapter;
 import com.kms.cura.view.service.NotificationListener;
 
@@ -51,7 +52,13 @@ public class PatientAppointmentListFragment extends Fragment {
     }
 
     private void setupDataOnView() {
-        updatedAppt = getActivity().getIntent().getBooleanExtra(NotificationListener.UPDATE, false);
+        boolean fromNoti = getArguments().getBoolean(PatientViewActivity.FROM_NOTI);
+        if (fromNoti) {
+            updatedAppt = getActivity().getIntent().getBooleanExtra(NotificationListener.UPDATE, false);
+        }
+        else{
+            updatedAppt = true;
+        }
         adapter = new PatientAppointmentListTabAdapter(getChildFragmentManager(), updatedAppt);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

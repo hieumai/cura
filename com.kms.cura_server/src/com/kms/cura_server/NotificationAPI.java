@@ -78,7 +78,7 @@ public final class NotificationAPI {
 			}
 			else{
 				entity = new NotificationEntity(jsonObject.getString(NotificationColumn.NOTI_ID.getColumnName()), new Gson().fromJson(jsonObject.getJSONObject(NotificationEntity.REF_ENTITY).toString(), AppointmentEntity.class), 
-						jsonObject.getBoolean(NotificationColumn.STATUS.getColumnName()), jsonObject.getString(NotificationColumn.APPT_NOTI_TYPE.getColumnName()));
+						jsonObject.getBoolean(NotificationColumn.STATUS.getColumnName()), null);
 			}
 			NotificationDAL.getInstance().updateNotification(entity);
 			return new NotificationAPIResponse().success();

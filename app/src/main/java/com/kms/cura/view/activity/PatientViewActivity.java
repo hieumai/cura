@@ -45,21 +45,25 @@ import com.kms.cura.view.fragment.PatientSettingsFragment;
 
 import java.util.List;
 
-public class PatientViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener, View.OnClickListener {
+public class PatientViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener, View.OnClickListener, EventHandler {
     private Toolbar patientToolbar;
     private Fragment patientHomeFragment, patientProfileFragment, patientSettingsFragment, patientAppointmentFragment, patientMessageFragment;
     private HealthTrackerFragment patientHealthTrachkerFragment;
     static final public String PATIENT = "500";
     public final static String NAVIGATION_KEY = "naviKey";
     public final static String PATIENT_APPT = "patientAppt";
+    public final static String FROM_NOTI = "FROM_NOTI";
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawer;
     private ProgressDialog pDialog;
+    private int countAppt;
+    private int countMsg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
         initToolBar();
         initDrawer();
         initNavigationView();
@@ -121,12 +125,13 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
                 if (exception != null) {
                     ErrorController.showDialog(PatientViewActivity.this, "Error : " + exception.getMessage());
                 } else {
+                    countMsg = msgNotifs.size();
                     if (msgNotifs.size() == 0 && apptNotifs.size() == 0){
                         return;
                     }
                     changeToggle();
-                    setMenuCounter(R.id.nav_messages, msgNotifs.size());
                     setUpApptNoti(apptNotifs);
+                    setMenuCounter(R.id.nav_messages, msgNotifs.size());
                 }
 
             }
@@ -141,6 +146,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
                 ++count;
             }
         }
+        countAppt = count;
         setMenuCounter(R.id.nav_appointment, count);
     }
 
@@ -204,6 +210,9 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         } else if (id == R.id.nav_profile) {
             changeFragment(patientProfileFragment);
         } else if (id == R.id.nav_appointment) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FROM_NOTI, false);
+            patientAppointmentFragment.setArguments(bundle);
             changeFragment(patientAppointmentFragment);
         } else if (id == R.id.nav_health) {
             changeFragment(patientHealthTrachkerFragment);
@@ -256,6 +265,9 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
                     changeFragment(patientProfileFragment);
                     break;
                 case PATIENT_APPT:
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(FROM_NOTI, true);
+                    patientAppointmentFragment.setArguments(bundle);
                     changeFragment(patientAppointmentFragment);
                     break;
             }
@@ -282,13 +294,20 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         });
     }
 
+
+
     private void setMenuCounter(@IdRes int itemId, int count) {
-        if (count == 0) {
-            return;
-        }
         View view = navigationView.getMenu().findItem(itemId).getActionView();
         TextView txtCounter = (TextView) view.findViewById(R.id.txtCounter);
         txtCounter.setVisibility(View.VISIBLE);
+        if (countAppt == 0 && countMsg == 0){
+            toggle.setDrawerIndicatorEnabled(true);
+            initDrawer();
+        }
+        if (count == 0){
+            txtCounter.setVisibility(View.INVISIBLE);
+            return;
+        }
         if (count > 99){
             txtCounter.setText(R.string.maxNoti);
             return;
@@ -307,5 +326,25 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         if (pDialog.isShowing()) {
             pDialog.dismiss();
         }
+    }
+
+    @Override
+    public void handleEvent(String event, Object data) {
+        switch (event){
+            case EventConstant.UPDATE_APPT_NOTI_NUMBER:
+                -- countAppt;
+                setMenuCounter(R.id.nav_appointment, countAppt);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
+        super.onResume();
     }
 }

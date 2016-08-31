@@ -37,9 +37,7 @@ public class PatientAppointmentListTabAdapter extends FragmentPagerAdapter{
     public Fragment createFragment(int state) {
         Fragment fragment = new PatientAppointmentListTabFragment();
         Bundle args = new Bundle();
-        if (!isUpdated){
-            args.putBoolean(NotificationListener.UPDATE, isUpdated);
-        }
+        args.putBoolean(NotificationListener.UPDATE, isUpdated);
         args.putInt(PatientAppointmentListFragment.KEY_STATE, state);
         fragment.setArguments(args);
         return fragment;

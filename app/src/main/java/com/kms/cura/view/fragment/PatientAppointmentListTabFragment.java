@@ -2,17 +2,14 @@ package com.kms.cura.view.fragment;
 
 import android.content.Intent;
 import android.app.ProgressDialog;
-import android.animation.ValueAnimator;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,8 +21,10 @@ import com.kms.cura.R;
 import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.AppointmentController;
 import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.NotificationController;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
@@ -52,6 +51,10 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private WeakHashMap<View, Integer> mOriginalViewHeightPool = new WeakHashMap<View, Integer>();
     private boolean isUpdated;
+    private ProgressDialog pDialog;
+    private List<String> notifs;
+    private List<NotificationEntity> apptNotifs;
+    private View myFragmentView;
     public PatientAppointmentListTabFragment() {
     }
 
@@ -59,7 +62,7 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View myFragmentView = inflater.inflate(R.layout.fragment_appts_list_tab, container, false);
+        myFragmentView = inflater.inflate(R.layout.fragment_appts_list_tab, container, false);
         mSwipeRefreshLayout = (SwipeRefreshLayout) myFragmentView.findViewById(R.id.swiperefresh);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -69,7 +72,7 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
         });
         EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_PATIENT_LIST);
         setupData();
-        setupListView(myFragmentView);
+        setApptNotification();
         if (!isUpdated){
             mSwipeRefreshLayout.setRefreshing(true);
             updateApptList();
@@ -100,10 +103,8 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
                     ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
                 } else {
                     apptsList.clear();
-                    setupData();
-                    adapter = new PatientAppointmentListAdapter(getActivity(), apptsList);
-                    lvAppts.setAdapter(adapter);
-                    lvAppts.setAnimExecutor(new AnimationExecutor(mOriginalViewHeightPool));
+                    setupData();;
+                    setApptNotification();
                 }
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -140,9 +141,49 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
         return appts;
     }
 
+    private void setApptNotification(){
+        if (notifs != null){
+            notifs.clear();
+        }
+        else {
+            notifs = new ArrayList<>();
+        }
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage(getString(R.string.loading));
+        pDialog.setCancelable(false);
+        showProgressDialog();
+        AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    apptNotifs = NotificationController.getApptNotification(CurrentUserProfile.getInstance().getEntity());
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                hideProgressDialog();
+                if (exception != null) {
+                    ErrorController.showDialog(getActivity(), "Error : " + exception.getMessage());
+                } else {
+                    for (NotificationEntity entity : apptNotifs){
+                        notifs.add(entity.getRefEntity().getId());
+                    }
+                    setupListView(myFragmentView);
+                }
+
+            }
+        };
+        task.execute();
+    }
+
     private void setupListView(View parent) {
         lvAppts = (ExpandableStickyListHeadersListView) parent.findViewById(R.id.lvApptsList);
-        adapter = new PatientAppointmentListAdapter(getActivity(), apptsList);
+        adapter = new PatientAppointmentListAdapter(getActivity(), apptsList, notifs);
         lvAppts.setAdapter(adapter);
         lvAppts.setAnimExecutor(new AnimationExecutor(mOriginalViewHeightPool));
         lvAppts.setOnHeaderClickListener(new StickyListHeadersListView.OnHeaderClickListener() {
@@ -158,23 +199,59 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
         lvAppts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent toDetails = new Intent(getActivity(), PatientAppointmentDetailsActivity.class);
                 AppointmentEntity entity = apptsList.get(position);
+                String entityID = entity.getId();
+                if (notifs.contains(entityID)){
+                    for (NotificationEntity notificationEntity : apptNotifs){
+                        if (entityID.equals(notificationEntity.getRefEntity().getId())){
+                            updateNotiWhenClick(notificationEntity, entityID, entity);
+                            break;
+                        }
+                    }
+                    return;
+                }
+                Intent toDetails = new Intent(getActivity(), PatientAppointmentDetailsActivity.class);
                 List<AppointmentEntity> appts = ((PatientUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
                 toDetails.putExtra(APPT_POSITION, appts.indexOf(entity));
                 startActivity(toDetails);
             }
         });
-        lvAppts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    }
+
+    private void updateNotiWhenClick(final NotificationEntity entity, final String id, final AppointmentEntity apptEntity){
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage(getString(R.string.loading));
+        pDialog.setCancelable(false);
+        showProgressDialog();
+        AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            protected Void doInBackground(Object[] params) {
+                try {
+                    NotificationController.updateApptNoti(entity);
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                hideProgressDialog();
+                if (exception != null) {
+                    //TODO : log file for app
+                } else {
+                    notifs.remove(id);
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_NOTI_NUMBER, null);
+                    adapter.notifyDataSetChanged();
+                }
                 Intent toDetails = new Intent(getActivity(), PatientAppointmentDetailsActivity.class);
-                AppointmentEntity entity = apptsList.get(position);
                 List<AppointmentEntity> appts = ((PatientUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
-                toDetails.putExtra(APPT_POSITION, appts.indexOf(entity));
+                toDetails.putExtra(APPT_POSITION, appts.indexOf(apptEntity));
                 startActivity(toDetails);
             }
-        });
+        };
+        task.execute();
     }
 
 
@@ -193,5 +270,17 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
     public void onDestroyView() {
         EventBroker.getInstance().unRegister(this, EventConstant.UPDATE_APPT_PATIENT_LIST);
         super.onDestroyView();
+    }
+
+    private void showProgressDialog() {
+        if (!pDialog.isShowing()) {
+            pDialog.show();
+        }
+    }
+
+    private void hideProgressDialog() {
+        if (pDialog.isShowing()) {
+            pDialog.dismiss();
+        }
     }
 }
