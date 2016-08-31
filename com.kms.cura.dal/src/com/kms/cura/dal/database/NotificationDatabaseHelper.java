@@ -159,9 +159,9 @@ public class NotificationDatabaseHelper extends DatabaseHelper {
 		builder.append(" WHERE ");
 		builder.append(NotificationColumn.USER_ID.getColumnName());
 		builder.append(" = ? ");
-		builder.append("AND ");
+		builder.append(" AND " );
 		builder.append(NotificationColumn.STATUS.getColumnName());
-		builder.append(" =?");
+		builder.append(" = ?");
 		try {
 			stmt = con.prepareStatement(builder.toString());
 			stmt.setInt(1, Integer.parseInt(userID));

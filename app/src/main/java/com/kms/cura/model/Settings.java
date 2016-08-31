@@ -41,6 +41,7 @@ public class Settings {
     public static final String CHECK_CODE = "/user/checkCode";
     public static final String RATE_APPT = "/appt/rateAppt";
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
+    public static final String UPDATE_NOTIFICATION = "/noti/updateNoti";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
     public static final String REGISTRATION_INCOMPLETE = "registrationIncomplete";
     public static final String REGISTER_GCM = "/noti/registerNoti";

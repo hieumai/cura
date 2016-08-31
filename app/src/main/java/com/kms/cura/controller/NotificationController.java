@@ -28,4 +28,7 @@ public class NotificationController {
     public static List<NotificationEntity> getMsgNotification (UserEntity entity) throws Exception {
         return NotificationModel.getInstace().getMsgNotification(entity);
     }
+    public static void updateApptNoti (NotificationEntity entity) throws Exception {
+        NotificationModel.getInstace().updateApptNoti(entity);
+    }
 }

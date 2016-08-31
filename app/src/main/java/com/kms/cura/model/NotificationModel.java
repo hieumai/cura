@@ -2,11 +2,14 @@ package com.kms.cura.model;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.kms.cura.constant.EventConstant;
 import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.model.request.NotificationModelResponse;
+import com.kms.cura.model.request.UpdateNotificationModelResponse;
 import com.kms.cura.utils.RequestUtils;
 
 import org.json.JSONException;
@@ -73,6 +76,29 @@ public class NotificationModel {
         while (!response.isGotResponse()) ;
         if (!response.isResponseError()) {
             return response.getNotificationEntities();
+        }
+        throw new Exception(response.getError());
+    }
+
+    public void updateApptNoti(NotificationEntity entity) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.UPDATE_NOTIFICATION);
+        UpdateNotificationModelResponse response = new UpdateNotificationModelResponse();
+        JSONObject jsonObject = null;
+        try {
+            String data = new Gson().toJson(entity, NotificationEntity.getNotificationType());
+            jsonObject = new JSONObject(data);
+            jsonObject.put(NotificationEntity.NOTI_TYPE, NotificationEntity.APPT_TYPE);
+        } catch (JSONException e) {
+            throw e;
+        }
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                jsonObject.toString(), response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
+            return;
         }
         throw new Exception(response.getError());
     }

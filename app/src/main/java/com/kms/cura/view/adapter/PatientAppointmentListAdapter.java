@@ -1,11 +1,14 @@
 package com.kms.cura.view.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
@@ -33,10 +36,12 @@ public class PatientAppointmentListAdapter extends BaseAdapter implements Sticky
     private int[] mSectionIndices;
     private String[] mSectionTitle;
     private LayoutInflater mInflater;
+    private List<String> notifs;
 
-    public PatientAppointmentListAdapter(Context mContext, List<AppointmentEntity> appointments) {
+    public PatientAppointmentListAdapter(Context mContext, List<AppointmentEntity> appointments, List<String> notifs) {
         this.mContext = mContext;
         this.appointments = appointments;
+        this.notifs = notifs;
         mInflater = LayoutInflater.from(mContext);
         mSectionIndices = getSectionIndices();
         mSectionTitle = getSectionTitle();
@@ -132,6 +137,8 @@ public class PatientAppointmentListAdapter extends BaseAdapter implements Sticky
     }
 
     private void loadData(ViewHolder holder, AppointmentEntity appointment){
+        int black = ContextCompat.getColor(mContext, R.color.black);
+        int defaultColor = holder.dummy.getTextColors().getDefaultColor();
         holder.doctorName.setText(appointment.getDoctorUserEntity().getName());
         holder.facilityName.setText(appointment.getFacilityEntity().getName());
         holder.apptTime.setText(getAppointmentTime(appointment));
@@ -150,6 +157,17 @@ public class PatientAppointmentListAdapter extends BaseAdapter implements Sticky
         } else {
             holder.tag.setBackgroundResource(tagId);
         }
+        if (!notifs.contains(appointment.getId())){
+            holder.layoutNoti.setVisibility(View.INVISIBLE);
+            holder.doctorName.setTypeface(Typeface.DEFAULT);
+            holder.facilityName.setTextColor(defaultColor);
+            holder.apptTime.setTextColor(defaultColor);
+            return;
+        }
+        holder.layoutNoti.setVisibility(View.VISIBLE);
+        holder.doctorName.setTypeface(Typeface.DEFAULT_BOLD);
+        holder.facilityName.setTextColor(black);
+        holder.apptTime.setTextColor(black);
     }
 
     private String getAppointmentTime(AppointmentEntity appointment){
@@ -215,13 +233,16 @@ public class PatientAppointmentListAdapter extends BaseAdapter implements Sticky
         private TextView apptTime;
         private Button tag;
         private View root;
-
+        private LinearLayout layoutNoti;
+        private TextView dummy;
         public ViewHolder(View root) {
             this.root = root;
             doctorName = (TextView) root.findViewById(R.id.txtDoctorName);
             facilityName = (TextView) root.findViewById(R.id.txtFacilityName);
             apptTime = (TextView) root.findViewById(R.id.txtApptTime);
             tag = (Button) root.findViewById(R.id.btnTag);
+            layoutNoti = (LinearLayout) root.findViewById(R.id.layoutNoti);
+            dummy = new TextView(mContext);
         }
     }
 }
