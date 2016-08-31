@@ -73,8 +73,8 @@ public class BookAppointmentActivity extends AppCompatActivity implements View.O
     private DoctorUserEntity doctorUserEntity;
     private boolean selectDate = false;
     private int dateofWeek = 0;
-    private String selectedStartTime;
-    private String selectedEndTime;
+    private String selectedStartTime = null;
+    private String selectedEndTime = null;
     private ProgressDialog pDialog;
 
     @Override
@@ -274,6 +274,10 @@ public class BookAppointmentActivity extends AppCompatActivity implements View.O
     }
 
     private void requestAppointment() {
+        if (selectedStartTime == null || selectedEndTime == null){
+            Toast.makeText(this, getString(R.string.msgMissingChooseTIme), Toast.LENGTH_SHORT).show();
+            return;
+        }
         String cmt = edtComment.getText().toString();
         if ("".equals(cmt)) {
             cmt = null;
