@@ -48,17 +48,17 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_appointment_request_deatail);
-        if (!checkFromNoti()){
+        if (!checkFromNoti()) {
             setUpView();
             return;
         }
         id = getIntent().getStringExtra(PatientRequestNotiActionListener.REQUEST_ID);
-        appointmentEntity = new AppointmentEntity(id, null, null, null, null, null,null,AppointmentEntity.ACCEPTED_STT,null,null);
+        appointmentEntity = new AppointmentEntity(id, null, null, null, null, null, null, AppointmentEntity.ACCEPTED_STT, null, null);
         btnReject = (Button) initView(R.id.btnReject);
         btnReject.performClick();
     }
 
-    private boolean checkFromNoti(){
+    private boolean checkFromNoti() {
         return getIntent().getBooleanExtra(PatientRequestNotiActionListener.FROM_NOTI, false);
 
     }
@@ -67,6 +67,7 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
         layoutComment = (LinearLayout) findViewById(R.id.layoutComment);
         btnViewSchedule = (LinearLayout) initView(R.id.btnViewSchedule);
         btnSendMessage = (Button) initView(R.id.btnSendMessage);
+        btnSendMessage.setOnClickListener(this);
         btnReject = (Button) initView(R.id.btnReject);
         btnAccept = (Button) initView(R.id.btnAccept);
         btnBack = (ImageButton) initView(R.id.btnBack);
@@ -114,17 +115,22 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
             createAcceptDialog();
         } else if (id == R.id.btnBack) {
             finish();
-        } else if (id == R.id.btnViewSchedule){
+        } else if (id == R.id.btnViewSchedule) {
             Intent toSchedule = new Intent(this, ViewScheduleActivity.class);
             Bundle bundle = new Bundle();
             bundle.putLong(DoctorApptDayVIewFragment.SELECTED_DAY, appointmentEntity.getApptDay().getTime());
             toSchedule.putExtras(bundle);
             startActivity(toSchedule);
-        }
-        else if (id == R.id.txtPatientName){
+        } else if (id == R.id.txtPatientName) {
             PatientUserEntity patientUserEntity = appointmentEntity.getPatientUserEntity();
             Intent intent = new Intent(AppointmentRequestDeatailActivity.this, ViewPatientProfileActivity.class);
             intent.putExtra(ViewPatientProfileActivity.PATIENT_KEY, EntityToJsonConverter.convertEntityToJson(patientUserEntity).toString());
+            startActivity(intent);
+        } else if (id == R.id.btnSendMessage) {
+            Intent intent = new Intent(this, NewMessageActivity.class);
+            intent.putExtra(NewMessageActivity.KEY_SENDER, NewMessageActivity.KEY_DOCTOR);
+            intent.putExtra(NewMessageActivity.KEY_RECEIVER_ID, appointmentEntity.getPatientUserEntity().getId());
+            intent.putExtra(NewMessageActivity.KEY_RECEIVER_NAME, appointmentEntity.getPatientUserEntity().getName());
             startActivity(intent);
         }
     }
@@ -141,13 +147,13 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
                 if (start.equals(apptStart) && end.equals(apptEnd)) {
                     return true;
                 }
-                if (apptStart.after(start) && apptStart.before(end)){
+                if (apptStart.after(start) && apptStart.before(end)) {
                     return true;
                 }
-                if (apptEnd.before(end) && apptEnd.after(start)){
+                if (apptEnd.before(end) && apptEnd.after(start)) {
                     return true;
                 }
-                if (apptStart.after(start) && apptEnd.before(end)){
+                if (apptStart.after(start) && apptEnd.before(end)) {
                     return true;
                 }
             }
@@ -214,7 +220,7 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
                 try {
                     DoctorUserEntity doctorUserEntity = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
                     appointmentEntity.setStatus(AppointmentEntity.ACCEPTED_STT);
-                    DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(),null,null,null,null,null,null,null,null,null);
+                    DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(), null, null, null, null, null, null, null, null, null);
                     appointmentEntity.setDoctorUserEntity(doctor);
                     doctorUserEntity.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, doctorUserEntity));
                 } catch (Exception e) {
@@ -229,7 +235,7 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
                 if (exception != null) {
                     ErrorController.showDialog(AppointmentRequestDeatailActivity.this, "Error : " + exception.getMessage());
                 } else {
-                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_PATIENT_REQUEST_LIST, appointmentEntity.getApptDay() );
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_PATIENT_REQUEST_LIST, appointmentEntity.getApptDay());
                 }
                 finish();
             }

@@ -74,7 +74,13 @@ public class RatingListAdapter extends BaseAdapter {
         final AppointmentEntity entity = appointmentEntities.get(position);
         final TextView tvComment = (TextView) convertView.findViewById(R.id.tvComment);
         final TextView tvSeeMore = (TextView) convertView.findViewById(R.id.btnSeeMore);
-        tvComment.setText(appointmentEntities.get(position).getRate_comment());
+        String comment = appointmentEntities.get(position).getRate_comment();
+        if (comment == null || comment.isEmpty()) {
+            tvComment.setVisibility(View.GONE);
+            tvSeeMore.setVisibility(View.GONE);
+            return;
+        }
+        tvComment.setText(comment);
         tvComment.post(new Runnable() {
             @Override
             public void run() {
@@ -110,6 +116,4 @@ public class RatingListAdapter extends BaseAdapter {
         builder.setPositiveButton(R.string.Ok, null);
         return builder.create();
     }
-
-
 }

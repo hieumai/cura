@@ -35,7 +35,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 
-public class DoctorAppointmentDetailActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener{
+public class DoctorAppointmentDetailActivity extends AppCompatActivity implements View.OnClickListener, DialogInterface.OnClickListener {
     private Button btnTag, btnSendMessage, btnCancel, btnComplete;
     private ImageView btnBack;
     private LinearLayout lbExtraComment;
@@ -51,7 +51,7 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_appointment_detail);
         appointmentEntity = loadData();
-        if (appointmentEntity == null){
+        if (appointmentEntity == null) {
             ErrorController.showDialog(this, getString(R.string.errorLoadingApptDetail));
             finish();
             return;
@@ -104,16 +104,16 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
         loadTagButton();
         btnBack = (ImageView) initButton(R.id.btnBack);
         btnSendMessage = (Button) initButton(R.id.btnSendMessage);
+        btnSendMessage.setOnClickListener(this);
         btnCancel = (Button) initButton(R.id.btnCancel);
         int status = appointmentEntity.getStatus();
         if (status == AppointmentEntity.INCOMPLETED_STT) {
             btnComplete = (Button) initButton(R.id.btnCompleteAppt);
             btnComplete.setVisibility(View.VISIBLE);
             btnCancel.setText(getResources().getString(R.string.CancelAppt));
-        } else if (status == AppointmentEntity.ACCEPTED_STT){
+        } else if (status == AppointmentEntity.ACCEPTED_STT) {
             btnCancel.setText(getResources().getString(R.string.CancelAppt));
-        }
-        else {
+        } else {
             btnCancel.setVisibility(View.GONE);
         }
     }
@@ -129,7 +129,7 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
         String tag = appointmentEntity.getStatusName();
         btnTag.setText(tag);
         Integer color = getTagId(appointmentEntity.getStatus());
-        if (color == null){
+        if (color == null) {
             btnTag.setVisibility(View.GONE);
             return;
         }
@@ -175,19 +175,23 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
             showDialogCancel();
         } else if (id == R.id.btnBack) {
             finish();
-        }
-        else if (id == R.id.btnCompleteAppt){
+        } else if (id == R.id.btnCompleteAppt) {
             showDialogComplete();
-        }
-        else if (id == R.id.txtPatientName){
+        } else if (id == R.id.txtPatientName) {
             PatientUserEntity patientUserEntity = appointmentEntity.getPatientUserEntity();
-            Intent intent = new Intent(DoctorAppointmentDetailActivity.this, ViewPatientProfileActivity.class);
+            Intent intent = new Intent(this, ViewPatientProfileActivity.class);
             intent.putExtra(ViewPatientProfileActivity.PATIENT_KEY, EntityToJsonConverter.convertEntityToJson(patientUserEntity).toString());
+            startActivity(intent);
+        } else if (id == R.id.btnSendMessage) {
+            Intent intent = new Intent(this, NewMessageActivity.class);
+            intent.putExtra(NewMessageActivity.KEY_SENDER, NewMessageActivity.KEY_DOCTOR);
+            intent.putExtra(NewMessageActivity.KEY_RECEIVER_ID, appointmentEntity.getPatientUserEntity().getId());
+            intent.putExtra(NewMessageActivity.KEY_RECEIVER_NAME, appointmentEntity.getPatientUserEntity().getName());
             startActivity(intent);
         }
     }
 
-    private void completeAppt(DialogInterface dialog){
+    private void completeAppt(DialogInterface dialog) {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage(getString(R.string.loading));
         pDialog.setCancelable(false);
@@ -201,7 +205,7 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
                 try {
                     DoctorUserEntity doctorUserEntity = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
                     appointmentEntity.setStatus(AppointmentEntity.COMPLETED_STT);
-                    DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(),null,null,null,null,null,null,null,null,null);
+                    DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(), null, null, null, null, null, null, null, null, null);
                     appointmentEntity.setDoctorUserEntity(doctor);
                     doctorUserEntity.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, doctorUserEntity));
                 } catch (Exception e) {
@@ -216,7 +220,7 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
                 if (exception != null) {
                     ErrorController.showDialog(DoctorAppointmentDetailActivity.this, "Error : " + exception.getMessage());
                 } else {
-                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_DOCTOR_LIST, appointmentEntity.getApptDay() );
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_DOCTOR_LIST, appointmentEntity.getApptDay());
                 }
                 finish();
             }
@@ -224,7 +228,7 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
         task.execute();
     }
 
-    private void cancelAppt(DialogInterface dialog){
+    private void cancelAppt(DialogInterface dialog) {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage(getString(R.string.loading));
         pDialog.setCancelable(false);
@@ -238,7 +242,7 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
                 try {
                     DoctorUserEntity doctorUserEntity = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
                     appointmentEntity.setStatus(AppointmentEntity.DOCTOR_CANCEL_STT);
-                    DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(),null,null,null,null,null,null,null,null,null);
+                    DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(), null, null, null, null, null, null, null, null, null);
                     appointmentEntity.setDoctorUserEntity(doctor);
                     doctorUserEntity.setAppointmentList(AppointmentController.updateAppointment(appointmentEntity, doctorUserEntity));
                 } catch (Exception e) {

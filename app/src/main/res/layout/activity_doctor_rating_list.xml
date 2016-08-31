@@ -45,13 +45,13 @@
         android:numStars="5"
         android:rating="0"
         android:stepSize="0.5"
-        android:theme="@style/Widget.AppCompat.RatingBar.Indicator"/>
+        android:theme="@style/RatingBarRed" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/grey"
-        android:layout_marginTop="@dimen/padding_16"/>
+        android:layout_marginTop="@dimen/padding_16"
+        android:background="@color/grey" />
 
     <ListView
         android:id="@+id/lvRating"

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.kms.cura.R;
 import com.kms.cura.controller.AppointmentController;
 import com.kms.cura.controller.ErrorController;
+import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.OpeningHour;
@@ -253,17 +254,13 @@ public class DoctorProfileFragment extends Fragment implements View.OnTouchListe
         for (int i = 0; i < listAdapter.getGroupCount(); i++) {
             View groupItem = listAdapter.getGroupView(i, false, null, listView);
             groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-
             totalHeight += groupItem.getMeasuredHeight();
-
             if (((listView.isGroupExpanded(i)) && (i != group))
                     || ((!listView.isGroupExpanded(i)) && (i == group))) {
                 for (int j = 0; j < listAdapter.getChildrenCount(i); j++) {
                     View listItem = listAdapter.getChildView(i, j, false, null, listView);
                     listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
-
                     totalHeight += listItem.getMeasuredHeight();
-
                 }
             }
         }
@@ -294,7 +291,9 @@ public class DoctorProfileFragment extends Fragment implements View.OnTouchListe
             @Override
             protected Void doInBackground(Object[] params) {
                 try {
-                    appointmentEntities = AppointmentController.getAppointment(AppointmentEntity.searchEntityForDoctor(doctorUserEntity));
+                    DoctorUserEntity doctor = new DoctorUserEntity(doctorUserEntity.getId(), null);
+                    AppointmentEntity entity = new AppointmentEntity(null, null, doctor, null, null, null, null, -1, null, null);
+                    appointmentEntities = AppointmentController.getAppointment(new AppointSearchEntity(entity));
                 } catch (Exception e) {
                     exception = e;
                 }

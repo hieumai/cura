@@ -41,9 +41,17 @@
     </style>
 
     <style name="CalendarView.DayOfTheMonth">
-    <item name="android:textSize">14sp</item>
-    <item name="android:minHeight">@dimen/minDayCellHeight</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:minHeight">@dimen/minDayCellHeight</item>
     </style>
 
+    <style name="RatingBarRed" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/red</item>
+        <item name="colorControlActivated">@color/red</item>
+    </style>
 
+    <style name="RatingBarBlue" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/selected_day_background</item>
+        <item name="colorControlActivated">@color/selected_day_background</item>
+    </style>
 </resources>
