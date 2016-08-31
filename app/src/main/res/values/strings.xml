@@ -375,4 +375,6 @@
     <string name="apptUpdateNoti">appointment updated</string>
     <string name="apptUpdateNotis">appointments updated</string>
     <string name="msgMissingChooseTIme">Please choose time for the appointment</string>
+    <string name="incompleteApptNoti">incomplete appointment</string>
+    <string name="incompleteApptNotis">incomplete appointments</string>
 </resources>

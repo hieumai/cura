@@ -23,13 +23,16 @@ import javax.servlet.http.HttpServlet;
 
 import com.kms.cura.dal.AppointmentDAL;
 import com.kms.cura.dal.database.AutoRejectHelper;
+import com.kms.cura.dal.database.AutoIncompleteHelper;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
+
 
 public class MainServer extends HttpServlet {
 	public void init() throws ServletException {
 		disableSSL();
 		scheduleExistingRequest();
+		scheduleAutoIncompleteAppt();
 	}
 
 	private void scheduleExistingRequest() {
@@ -104,6 +107,22 @@ public class MainServer extends HttpServlet {
 			}
 		} catch (NoSuchAlgorithmException | KeyManagementException | IOException e) {
 		}
+	}
+	
+	private void scheduleAutoIncompleteAppt() {
+		AppointmentEntity criteria = new AppointmentEntity(null, null, null, null, null, null, null,
+				AppointmentEntity.ACCEPTED_STT, null, null);
+		try {
+			AutoIncompleteHelper helper = new AutoIncompleteHelper();
+			List<AppointmentEntity> list = AppointmentDAL.getInstance()
+					.getAppointment(new AppointSearchEntity(criteria), null, null);
+			for (AppointmentEntity entity : list) {
+				helper.createSchedule(entity.getId(), entity.getApptDay());
+			}
+		} catch (ClassNotFoundException | SQLException | IOException e) {
+			// TODO : log for server
+		}
+
 	}
 
 }

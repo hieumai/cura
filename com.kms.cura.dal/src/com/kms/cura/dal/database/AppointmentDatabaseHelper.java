@@ -233,7 +233,15 @@ public class AppointmentDatabaseHelper extends DatabaseHelper {
 				createUpdateAppointmentNotification(entity.getId(), patientUserEntity.getId());
 				notificationHelper = new NotificationHelper();
 				notificationHelper.sendAppointmentUpdateNoti(entity.getPatientID());
+				if (status == AppointmentEntity.ACCEPTED_STT){
+					AutoIncompleteHelper helper = new AutoIncompleteHelper();
+					helper.createSchedule(entity.getId(), entity.getApptDay());
+				}
 				
+			}
+			if (!patient && status == AppointmentEntity.INCOMPLETED_STT){
+				notificationHelper = new NotificationHelper();
+				notificationHelper.sendIncompleteAppointmentNoti(entity.getDoctorID());
 			}
 			return listAppts;
 		} catch (SQLException e) {
