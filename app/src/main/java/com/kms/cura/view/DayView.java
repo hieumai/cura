@@ -148,4 +148,5 @@ public class DayView extends TextView {
     public boolean isOnDraw() {
         return onDraw;
     }
+
 }

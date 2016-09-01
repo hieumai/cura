@@ -140,6 +140,7 @@ public class DoctorAppointmentMonthViewFragment extends Fragment implements View
             vpCalendar.setCurrentItem(dateInPage.indexOf(currentCalendar.get(Calendar.MONTH) + timeDiff));
             currentPos = vpCalendar.getCurrentItem();
             adapter.colorTheSelectedDayFromDayView(selectedDay, currentPos);
+            adapter.setClickable(currentPos);
             return;
         }
         Calendar calendar = Calendar.getInstance();

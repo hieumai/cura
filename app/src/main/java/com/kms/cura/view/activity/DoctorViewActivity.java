@@ -49,7 +49,7 @@ import com.kms.cura.view.fragment.MessageListFragment;
 
 import java.util.List;
 
-public class DoctorViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener, View.OnClickListener {
+public class DoctorViewActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnClickListener, View.OnClickListener, EventHandler {
     public static final String NAVIGATION_KEY = "navi_key";
     private Toolbar doctorToolbar;
     private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorMessageFragment, doctorRequestListFragment, doctorApptDayViewFragment, doctorApptView2;
@@ -59,10 +59,14 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
+    private int countAppt;
+    private int countMsg;
+    private int countRequest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
         initToolBar();
         initDrawer();
         initNavigationView();
@@ -126,7 +130,8 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
                 if (exception != null) {
                     ErrorController.showDialog(DoctorViewActivity.this, "Error : " + exception.getMessage());
                 } else {
-                    if (msgNotifs.size() == 0){
+                    countMsg = msgNotifs.size();
+                    if (countMsg == 0){
                         return;
                     }
                     changeToggle();
@@ -291,29 +296,36 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
 
     private void setApptNotiForDoctor(){
         List<AppointmentEntity> appts = ((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
-        int incompleteAppt = 0;
-        int request = 0;
         for (AppointmentEntity entity : appts){
             int status = entity.getStatus();
             if (status == AppointmentEntity.INCOMPLETED_STT){
-                ++incompleteAppt;
+                ++countAppt;
             }
             if (status == AppointmentEntity.PENDING_STT){
-                ++request;
+                ++countRequest;
             }
         }
-        setMenuCounter(R.id.nav_request, request);
-        setMenuCounter(R.id.nav_appointment, incompleteAppt);
+        setMenuCounter(R.id.nav_request, countRequest);
+        setMenuCounter(R.id.nav_appointment, countAppt);
     }
 
     private void setMenuCounter(@IdRes int itemId, int count) {
-        if (count == 0){
-            return;
-        }
         View view = navigationView.getMenu().findItem(itemId).getActionView();
         TextView txtCounter = (TextView) view.findViewById(R.id.txtCounter);
-        txtCounter.setText(String.valueOf(count));
         txtCounter.setVisibility(View.VISIBLE);
+        if (countAppt == 0 && countMsg == 0 && countRequest == 0){
+            toggle.setDrawerIndicatorEnabled(true);
+            initDrawer();
+        }
+        if (count == 0){
+            txtCounter.setVisibility(View.INVISIBLE);
+            return;
+        }
+        if (count > 99){
+            txtCounter.setText(R.string.maxNoti);
+            return;
+        }
+        txtCounter.setText(String.valueOf(count));
     }
 
     private void showProgressDialog() {
@@ -326,5 +338,27 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         if (pDialog.isShowing()) {
             pDialog.dismiss();
         }
+    }
+
+    @Override
+    public void handleEvent(String event, Object data) {
+        switch (event){
+            case EventConstant.UPDATE_APPT_NOTI_NUMBER:
+                -- countAppt;
+                setMenuCounter(R.id.nav_appointment, countAppt);
+                break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBroker.getInstance().unRegister(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
+        super.onResume();
     }
 }

@@ -220,7 +220,10 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
                 if (exception != null) {
                     ErrorController.showDialog(DoctorAppointmentDetailActivity.this, "Error : " + exception.getMessage());
                 } else {
-                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_DOCTOR_LIST, appointmentEntity.getApptDay());
+                    EventBroker broker = EventBroker.getInstance();
+                    List<AppointmentEntity> list = ((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
+                    broker.pusblish(EventConstant.UPDATE_APPT_DOCTOR_LIST, list.indexOf(appointmentEntity));
+                    broker.pusblish(EventConstant.UPDATE_APPT_NOTI_NUMBER, null);
                 }
                 finish();
             }
@@ -257,7 +260,8 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
                 if (exception != null) {
                     ErrorController.showDialog(DoctorAppointmentDetailActivity.this, "Error : " + exception.getMessage());
                 } else {
-                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_DOCTOR_LIST, appointmentEntity.getApptDay());
+                    List<AppointmentEntity> list = ((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_DOCTOR_LIST, list.indexOf(appointmentEntity));
                 }
                 finish();
             }
