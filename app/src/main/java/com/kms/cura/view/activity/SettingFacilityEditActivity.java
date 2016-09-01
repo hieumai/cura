@@ -3,6 +3,7 @@ package com.kms.cura.view.activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -35,6 +36,7 @@ public class SettingFacilityEditActivity extends AppCompatActivity implements Vi
     private FloatingActionButton fbAddFacility;
     private Dialog dialog;
     private boolean editted = false;
+    public static final String FACILITY_LIST = "facility_list";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +160,7 @@ public class SettingFacilityEditActivity extends AppCompatActivity implements Vi
     }
 
     private void setUpData() {
-        facilityEntitiesListAll = FacilityController.getAllFacilities();
+        facilityEntitiesListAll = new ArrayList<>(FacilityController.getAllFacilities());
         facilityEntitiesNameList = getIntent().getStringArrayListExtra(SettingWorkingHourActivity.FACILITIES_KEY);
         facilityEntitiesList = getFacilitiesByName();
         facilityEntitiesAddList = getFacilityEntitiesAddList();
@@ -169,7 +171,7 @@ public class SettingFacilityEditActivity extends AppCompatActivity implements Vi
 
     private void setUpDialog() {
         dialog = new Dialog(this);
-        dialog.setTitle(R.string.add_speciality);
+        dialog.setTitle(R.string.add_facility);
         FrameLayout layout = new FrameLayout(this);
         ListView listView = new ListView(this);
         FacilitySettingAdapter adapter = new FacilitySettingAdapter(facilityEntitiesAddList, R.layout.speciality_setting_item, this, null);
@@ -222,9 +224,10 @@ public class SettingFacilityEditActivity extends AppCompatActivity implements Vi
         @Override
         public void onClick(DialogInterface dialog, int which) {
             if (which == DialogInterface.BUTTON_POSITIVE) {
-                // update
-                // * remove ? -> remove working hour of this facility
-                // * add
+                Intent intent = getIntent();
+                intent.putStringArrayListExtra(FACILITY_LIST, new ArrayList<>(getFacilityEntitiesNameList()));
+                intent.putExtra(DoctorWorkingHourSettingsActivity.EDITTED_REQUEST_KEY, true);
+                setResult(RESULT_OK, intent);
                 finish();
             } else if (which == DialogInterface.BUTTON_NEGATIVE) {
                 dialog.dismiss();

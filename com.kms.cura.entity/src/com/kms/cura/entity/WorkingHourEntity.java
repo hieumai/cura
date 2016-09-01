@@ -1,6 +1,10 @@
 package com.kms.cura.entity;
 
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class WorkingHourEntity {
@@ -22,8 +26,6 @@ public class WorkingHourEntity {
 		this.facilityEntity = facilityEntity;
 	}
 
-
-
 	public void setWorkingTime(List<OpeningHour> workingTime) {
 		this.workingTime = workingTime;
 	}
@@ -34,6 +36,10 @@ public class WorkingHourEntity {
 
 	public void setFacilityEntity(FacilityEntity facilityEntity) {
 		this.facilityEntity = facilityEntity;
+	}
+
+	public void addOpenningHour(OpeningHour openingHour) {
+		workingTime.add(openingHour);
 	}
 
 	@Override
@@ -50,4 +56,8 @@ public class WorkingHourEntity {
 		return false;
 	}
 
+	public static Type getWorkingHourEntityListType() {
+		return new TypeToken<Collection<WorkingHourEntity>>() {
+		}.getType();
+	}
 }

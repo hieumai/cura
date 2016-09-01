@@ -7,16 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.kms.cura.R;
 import com.kms.cura.controller.DegreeController;
 import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.UserController;
 import com.kms.cura.entity.user.DoctorUserEntity;
-import com.kms.cura.model.DegreeModel;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.adapter.StringListAdapter;
@@ -51,7 +51,9 @@ public class OtherSettingsActivity extends AppCompatActivity implements AdapterV
             @Override
             protected Void doInBackground(Object[] params) {
                 try {
-                    DegreeController.initData();
+                    if (!DegreeController.isDataLoaded()) {
+                        DegreeController.initData();
+                    }
                 } catch (Exception e) {
                     exception = e;
                 }
@@ -62,7 +64,7 @@ public class OtherSettingsActivity extends AppCompatActivity implements AdapterV
             protected void onPostExecute(Void aVoid) {
                 hideProgressDialog();
                 if (exception == null) {
-                    degree = (ArrayList<String>) DataUtils.getListName(DegreeModel.getInstance().getDegrees());
+                    degree = (ArrayList<String>) DataUtils.getListName(DegreeController.getAllDegree());
                     checkedDegree = Integer.parseInt(entity.getDegree().getId()) - 1;
                     initAdapter();
                     initSpinner();
@@ -139,7 +141,49 @@ public class OtherSettingsActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.button_settings_save) {
-            //
+            new AsyncTask<Object, Void, Void>() {
+                private Exception exception = null;
+                private ProgressDialog pDialog;
+
+                @Override
+                protected void onPreExecute() {
+                    pDialog = new ProgressDialog(OtherSettingsActivity.this);
+                    pDialog.setMessage(getResources().getString(R.string.UpdatingMessage));
+                    pDialog.setCancelable(false);
+                    pDialog.show();
+                }
+
+                @Override
+                protected Void doInBackground(Object[] params) {
+                    try {
+                        DoctorUserEntity entityUpdated = getDoctorUserEntity();
+                        CurrentUserProfile.getInstance().setData(UserController.updateDoctorBasic(entityUpdated));
+                    } catch (Exception e) {
+                        exception = e;
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    pDialog.dismiss();
+                    if (exception == null) {
+                        onBackPressed();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.saved), Toast.LENGTH_SHORT).show();
+                    } else {
+                        ErrorController.showDialog(getApplicationContext(), "Error : " + exception.getMessage());
+                    }
+                }
+            }.execute();
         }
+    }
+
+    public DoctorUserEntity getDoctorUserEntity() {
+        DoctorUserEntity doctorUserEntity = ((DoctorUserEntity) CurrentUserProfile.getInstance().getEntity()).cloneDoctorBasic();
+        doctorUserEntity.setDegree(DegreeController.getAllDegree().get(spnDegree.getSelectedItemPosition()));
+        doctorUserEntity.setExperience(Calendar.getInstance().get(Calendar.YEAR) - Integer.parseInt(experienceStart.getText().toString()));
+        doctorUserEntity.setMinPrice(Double.parseDouble(minPrice.getText().toString()));
+        doctorUserEntity.setMaxPrice(Double.parseDouble(maxPrice.getText().toString()));
+        return doctorUserEntity;
     }
 }

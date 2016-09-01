@@ -40,6 +40,8 @@ public class Settings {
     public static final String SEND_CODE = "/user/sendCode";
     public static final String CHECK_CODE = "/user/checkCode";
     public static final String RATE_APPT = "/appt/rateAppt";
+    public static final String UPDATE_DOCTOR_BASIC = "/user/updateDoctorBasic";
+    public static final String UPDATE_DOCTOR_PROFESSIONAL = "/user/updateDoctorProfessional";
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
     public static final String UPDATE_NOTIFICATION = "/noti/updateNoti";
     public static final String REGISTRATION_COMPLETE = "registrationComplete";

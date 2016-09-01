@@ -13,10 +13,12 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.kms.cura.R;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.controller.SpecialityController;
+import com.kms.cura.controller.UserController;
 import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.SpecialityEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
@@ -24,14 +26,13 @@ import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.ListViewRemoveItemListener;
 import com.kms.cura.view.adapter.SpecialitySettingAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SettingSpecialityActivity extends AppCompatActivity implements View.OnClickListener, ListViewRemoveItemListener, AdapterView.OnItemClickListener {
 
     private ImageButton btnCancel, btnDone;
     private ListView lvSpeciality;
-    private DoctorUserEntity doctorUserEntity;
+    private DoctorUserEntity doctorUserEntityEditted;
     private SpecialitySettingAdapter adapter;
     private List<SpecialityEntity> specialityEntitiesList, specialityEntitiesAddList;
     private FloatingActionButton fbAddSpeciality;
@@ -42,8 +43,8 @@ public class SettingSpecialityActivity extends AppCompatActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_speciality);
-        doctorUserEntity = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
-        specialityEntitiesList = new ArrayList<>(doctorUserEntity.getSpeciality());
+        doctorUserEntityEditted = ((DoctorUserEntity) CurrentUserProfile.getInstance().getEntity()).cloneDoctorProfessional();
+        specialityEntitiesList = doctorUserEntityEditted.getSpeciality();
         specialityEntitiesAddList = getSpecialityEntitiesAddList();
         initButtton();
         initListView();
@@ -201,7 +202,7 @@ public class SettingSpecialityActivity extends AppCompatActivity implements View
         @Override
         public void onClick(DialogInterface dialog, int which) {
             if (which == DialogInterface.BUTTON_POSITIVE) {
-                // request
+                updateSpecialityList().execute();
                 finish();
             } else if (which == DialogInterface.BUTTON_NEGATIVE) {
                 dialog.dismiss();
@@ -216,6 +217,42 @@ public class SettingSpecialityActivity extends AppCompatActivity implements View
         } else {
             finish();
         }
+    }
+
+    private AsyncTask<Object, Void, Void> updateSpecialityList() {
+        return new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            ProgressDialog pDialog;
+
+            @Override
+            protected void onPreExecute() {
+                pDialog = new ProgressDialog(SettingSpecialityActivity.this);
+                pDialog.setMessage(getString(R.string.saving));
+                pDialog.setCancelable(false);
+                pDialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    doctorUserEntityEditted.setSpeciality(specialityEntitiesList);
+                    CurrentUserProfile.getInstance().setData(UserController.updateDoctorProfessional(doctorUserEntityEditted));
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                if (exception != null) {
+                    ErrorController.showDialog(SettingSpecialityActivity.this, "Error : " + exception.getMessage());
+                } else {
+                    Toast.makeText(SettingSpecialityActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
     }
 }
 

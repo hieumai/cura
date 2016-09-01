@@ -1,5 +1,6 @@
 package com.kms.cura.view.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +18,7 @@ import com.kms.cura.R;
 import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.view.ListViewRemoveItemListener;
+import com.kms.cura.view.activity.DoctorWorkingHourSettingsActivity;
 import com.kms.cura.view.activity.SettingEditWorkingHourActivity;
 import com.kms.cura.view.activity.SettingWorkingHourActivity;
 
@@ -30,7 +32,7 @@ import java.util.Set;
  */
 public class SettingWorkingHourAdapter extends BaseAdapter implements DialogInterface.OnClickListener {
 
-    private Context context;
+    private Activity context;
     private int resource;
     private HashMap<String, List<OpeningHour>> listWeekDay;
     private List<OpeningHour> openingHourList;
@@ -38,7 +40,7 @@ public class SettingWorkingHourAdapter extends BaseAdapter implements DialogInte
     private ListViewRemoveItemListener removeItemListener;
     private int removePosition;
 
-    public SettingWorkingHourAdapter(Context context, int resource, HashMap<String, List<OpeningHour>> listWeekDay, ListViewRemoveItemListener removeItemListener) {
+    public SettingWorkingHourAdapter(Activity context, int resource, HashMap<String, List<OpeningHour>> listWeekDay, ListViewRemoveItemListener removeItemListener) {
         this.context = context;
         this.resource = resource;
         this.listWeekDay = listWeekDay;
@@ -79,7 +81,7 @@ public class SettingWorkingHourAdapter extends BaseAdapter implements DialogInte
         return convertView;
     }
 
-    private void setUpView(View convertView, final int position) {
+    private void setUpView(final View convertView, final int position) {
         TextView tvName = (TextView) convertView.findViewById(R.id.tvFacilityName);
         tvName.setText(facilityNames.get(position));
         TextView tvHour = (TextView) convertView.findViewById(R.id.tvHours);
@@ -105,7 +107,8 @@ public class SettingWorkingHourAdapter extends BaseAdapter implements DialogInte
                 intent.putExtra(SettingWorkingHourActivity.DAYOFWEEK_KEY, openingHourList.get(position).getDayOfTheWeek().getCode());
                 intent.putExtra(SettingWorkingHourActivity.START_KEY, openingHourList.get(position).getOpenTime().toString());
                 intent.putExtra(SettingWorkingHourActivity.END_KEY, openingHourList.get(position).getCloseTime().toString());
-                context.startActivity(intent);
+                intent.putExtra(SettingWorkingHourActivity.POSITION_KEY, position);
+                context.startActivityForResult(intent, DoctorWorkingHourSettingsActivity.EDITTED_REQUEST_CODE);
             }
         });
     }
@@ -113,7 +116,7 @@ public class SettingWorkingHourAdapter extends BaseAdapter implements DialogInte
     private void showRemoveDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.warning);
-        builder.setMessage(R.string.remove_speciality);
+        builder.setMessage(R.string.woking_remove);
         builder.setPositiveButton(R.string.yes, this);
         builder.setNegativeButton(R.string.no, this);
         builder.create().show();
@@ -146,5 +149,9 @@ public class SettingWorkingHourAdapter extends BaseAdapter implements DialogInte
             arrayList.add(name);
         }
         return arrayList;
+    }
+
+    public void removePosition(int position) {
+        removeItemListener.removeItem(facilityNames.get(position), openingHourList.get(position));
     }
 }

@@ -1,15 +1,21 @@
 package com.kms.cura.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.kms.cura.R;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.UserController;
 import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.WorkingHourEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
@@ -23,22 +29,25 @@ import java.util.List;
 public class DoctorWorkingHourSettingsActivity extends AppCompatActivity implements ExpandableListView.OnChildClickListener, View.OnClickListener {
 
     private static String ACTIVITY_NAME = "Working Hours";
+    private DoctorUserEntity doctorUserEntityEditted;
     private ExpandableListView listWorkingHour;
     private List<WorkingHourEntity> listWH;
     private List<HashMap<String, List<OpeningHour>>> listWeekDay;
     public static final String WEEKDAY_KEY = "weekday";
     private ImageButton btnCancel, btnDone;
     private boolean editted = false;
-    public static String EDITTED = "editted";
-
+    public final static int EDITTED_REQUEST_CODE = 1;
+    public final static String EDITTED_REQUEST_KEY = "editted";
+    public final static String UPDATE_REQUEST_KEY = "update";
+    public final static String DOCTOR_CLONE_KEY = "update";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doctor_working_hour_settings);
-        DoctorUserEntity doctorUserEntity = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
+        doctorUserEntityEditted = ((DoctorUserEntity) CurrentUserProfile.getInstance().getEntity()).cloneDoctorProfessional();
         initButton();
-        listWH = doctorUserEntity.cloneWorkingHourEntities();
+        listWH = doctorUserEntityEditted.cloneWorkingHourEntities();
         listWeekDay = convertWorkingHour();
         setUpListWorkingHour();
     }
@@ -80,7 +89,8 @@ public class DoctorWorkingHourSettingsActivity extends AppCompatActivity impleme
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
         Intent intent = new Intent(this, SettingWorkingHourActivity.class);
         intent.putExtra(WEEKDAY_KEY, childPosition);
-        startActivity(intent);
+        intent.putExtra(DOCTOR_CLONE_KEY, (new Gson().toJsonTree(doctorUserEntityEditted, DoctorUserEntity.getDoctorEntityType())).toString());
+        startActivityForResult(intent, EDITTED_REQUEST_CODE);
         return true;
     }
 
@@ -121,8 +131,7 @@ public class DoctorWorkingHourSettingsActivity extends AppCompatActivity impleme
         @Override
         public void onClick(DialogInterface dialog, int which) {
             if (which == DialogInterface.BUTTON_POSITIVE) {
-                // request
-                finish();
+                updateWorkingHourList().execute();
             } else if (which == DialogInterface.BUTTON_NEGATIVE) {
                 dialog.dismiss();
             }
@@ -136,5 +145,55 @@ public class DoctorWorkingHourSettingsActivity extends AppCompatActivity impleme
         } else {
             finish();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EDITTED_REQUEST_CODE && data != null) {
+            editted = data.getBooleanExtra(EDITTED_REQUEST_KEY, false);
+            if (editted) {
+                listWH = new Gson().fromJson(data.getStringExtra(UPDATE_REQUEST_KEY), WorkingHourEntity.getWorkingHourEntityListType());
+                listWeekDay = convertWorkingHour();
+                doctorUserEntityEditted.setWorkingTime(listWH);
+                setUpListWorkingHour();
+            }
+        }
+    }
+
+    private AsyncTask<Object, Void, Void> updateWorkingHourList() {
+        return new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            ProgressDialog pDialog;
+
+            @Override
+            protected void onPreExecute() {
+                pDialog = new ProgressDialog(DoctorWorkingHourSettingsActivity.this);
+                pDialog.setMessage(getString(R.string.saving));
+                pDialog.setCancelable(false);
+                pDialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    doctorUserEntityEditted.setWorkingTime(listWH);
+                    CurrentUserProfile.getInstance().setData(UserController.updateDoctorProfessional(doctorUserEntityEditted));
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                if (exception != null) {
+                    ErrorController.showDialog(DoctorWorkingHourSettingsActivity.this, "Error : " + exception.getMessage());
+                } else {
+                    Toast.makeText(DoctorWorkingHourSettingsActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        };
     }
 }

@@ -216,4 +216,12 @@ public class UserController {
     public static String checkCode(String userID, String code) throws Exception {
         return UserModel.getInstance().checkCode(userID, code);
     }
+
+    public static DoctorUserEntity updateDoctorBasic(DoctorUserEntity entity) throws Exception {
+        return UserModel.getInstance().updateDoctorBasic(entity);
+    }
+
+    public static DoctorUserEntity updateDoctorProfessional(DoctorUserEntity entity) throws Exception {
+        return UserModel.getInstance().updateDoctorProfessional(entity);
+    }
 }
