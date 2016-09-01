@@ -8,6 +8,8 @@ import java.net.URLConnection;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.sql.SQLException;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -19,11 +21,33 @@ import javax.security.cert.X509Certificate;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-public class MainServer extends HttpServlet {
+import com.kms.cura.dal.AppointmentDAL;
+import com.kms.cura.dal.database.AutoRejectHelper;
+import com.kms.cura.entity.AppointSearchEntity;
+import com.kms.cura.entity.AppointmentEntity;
 
+public class MainServer extends HttpServlet {
 	public void init() throws ServletException {
 		disableSSL();
+		scheduleExistingRequest();
 	}
+
+	private void scheduleExistingRequest() {
+		AppointmentEntity criteria = new AppointmentEntity(null, null, null, null, null, null, null,
+				AppointmentEntity.PENDING_STT, null, null);
+		try {
+			AutoRejectHelper helper = new AutoRejectHelper();
+			List<AppointmentEntity> list = AppointmentDAL.getInstance()
+					.getAppointment(new AppointSearchEntity(criteria), null, null);
+			for (AppointmentEntity entity : list) {
+				helper.createSchedule(entity.getId(), entity.getApptDay());
+			}
+		} catch (ClassNotFoundException | SQLException | IOException e) {
+			// TODO : log for server
+		}
+
+	}
+
 
 	private void disableSSL() {
 		// Create a trust manager that does not validate certificate chains
@@ -41,12 +65,14 @@ public class MainServer extends HttpServlet {
 			@Override
 			public void checkClientTrusted(java.security.cert.X509Certificate[] arg0, String arg1)
 					throws CertificateException {
+				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
 					throws CertificateException {
+				// TODO Auto-generated method stub
 
 			}
 		} };
