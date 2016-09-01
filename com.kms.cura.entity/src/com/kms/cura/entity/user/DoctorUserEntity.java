@@ -32,8 +32,9 @@ public class DoctorUserEntity extends UserEntity {
     private String insurance;
     private List<AppointmentEntity> appointmentList = new ArrayList<>();
     public static String MALE = "M";
+	private String location;
 
-    public DoctorUserEntity(String id, String name) {
+	public DoctorUserEntity(String id, String name) {
         super(id, name, null, null);
     }
 
@@ -94,6 +95,32 @@ public class DoctorUserEntity extends UserEntity {
         this.gender = gender;
         this.birth = birth;
     }
+
+	public DoctorUserEntity cloneDoctorBasic() {
+		DoctorUserEntity entity = new DoctorUserEntity(getId(), getName());
+		entity.setDegree(getDegree());
+		entity.setExperience(getExperience());
+		entity.setMaxPrice(getMaxPrice());
+		entity.setMinPrice(getMinPrice());
+		entity.setGender(getGender());
+		entity.setBirth(getBirth());
+		return entity;
+	}
+
+	public DoctorUserEntity cloneDoctorProfessional() {
+		DoctorUserEntity entity = new DoctorUserEntity(getId(), getName());
+		entity.setSpeciality(cloneSpecialityEntities());
+		entity.setWorkingTime(cloneWorkingHourEntities());
+		return entity;
+	}
+
+	private List<SpecialityEntity> cloneSpecialityEntities() {
+		List<SpecialityEntity> specialityEntities = new ArrayList<>();
+		for (SpecialityEntity entity : speciality) {
+			specialityEntities.add(new SpecialityEntity(entity));
+		}
+		return specialityEntities;
+	}
 
     public String getPhone() {
         return phone;
@@ -259,5 +286,9 @@ public class DoctorUserEntity extends UserEntity {
 			workingHourEntities.add(new WorkingHourEntity(openingHours, facilityEntity));
 		}
 		return workingHourEntities;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 }

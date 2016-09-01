@@ -13,6 +13,10 @@ public class SpecialityEntity extends Entity {
 		super(id, name);
 	}
 
+	public SpecialityEntity(SpecialityEntity entity) {
+		super(entity.getId(), entity.getName());
+	}
+
 	public static Type getSpecialityType() {
 		Type type = new TypeToken<SpecialityEntity>() {
 		}.getType();

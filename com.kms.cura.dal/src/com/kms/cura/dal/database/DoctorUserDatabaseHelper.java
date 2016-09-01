@@ -228,7 +228,8 @@ public class DoctorUserDatabaseHelper extends UserDatabaseHelper {
 			}
 			DoctorUserEntity doctor = new DoctorUserEntity(resultSet.getString(DoctorColumn.USER_ID.getColumnName()),
 					resultSet.getString(DoctorColumn.NAME.getColumnName()),
-					resultSet.getString(UserColumn.EMAIL.getColumnName()), UserColumn.PASSWORD.getColumnName(),
+					resultSet.getString(UserColumn.EMAIL.getColumnName()), 
+					resultSet.getString(UserColumn.PASSWORD.getColumnName()),
 					resultSet.getString(DoctorColumn.PHONE.getColumnName()), degree, specialties,
 					resultSet.getDouble(DoctorColumn.RATING.getColumnName()),
 					resultSet.getInt(DoctorColumn.EXPERIENCE.getColumnName()),

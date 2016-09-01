@@ -78,7 +78,7 @@ public class FacilitySettingAdapter extends BaseAdapter implements DialogInterfa
     private void showRemoveDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(R.string.warning);
-        builder.setMessage(R.string.remove_speciality);
+        builder.setMessage(R.string.facility_remove);
         builder.setPositiveButton(R.string.yes, this);
         builder.setNegativeButton(R.string.no, this);
         builder.create().show();

@@ -1,25 +1,27 @@
 package com.kms.cura.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.kms.cura.R;
+import com.kms.cura.controller.ErrorController;
+import com.kms.cura.controller.FacilityController;
 import com.kms.cura.entity.DayOfTheWeek;
+import com.kms.cura.entity.FacilityEntity;
 import com.kms.cura.entity.OpeningHour;
 import com.kms.cura.entity.WorkingHourEntity;
-import com.kms.cura.entity.json.EntityToJsonConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
-import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.ListViewRemoveItemListener;
 import com.kms.cura.view.adapter.SettingWorkingHourAdapter;
 
@@ -45,6 +47,9 @@ public class SettingWorkingHourActivity extends AppCompatActivity implements Vie
     public static final String DAYOFWEEK_KEY = "weekday";
     public static final String START_KEY = "start";
     public static final String END_KEY = "end";
+    public static final String POSITION_KEY = "position";
+    private FacilityEntity facilityEntity;
+    ArrayList<WorkingHourEntity> newWorkingHourEntities = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +57,7 @@ public class SettingWorkingHourActivity extends AppCompatActivity implements Vie
         setContentView(R.layout.activity_setting_working_hour);
         weekDay = getIntent().getIntExtra(DoctorWorkingHourSettingsActivity.WEEKDAY_KEY, 0);
         modifyToolbar();
-        DoctorUserEntity doctorUserEntity = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
+        DoctorUserEntity doctorUserEntity = new Gson().fromJson(getIntent().getStringExtra(DoctorWorkingHourSettingsActivity.DOCTOR_CLONE_KEY), DoctorUserEntity.getDoctorEntityType());
         listWH = doctorUserEntity.cloneWorkingHourEntities();
         listWeekDay = convertWorkingHour();
         setUpListView();
@@ -109,9 +114,10 @@ public class SettingWorkingHourActivity extends AppCompatActivity implements Vie
             onBackPressed();
         } else if (v.getId() == R.id.fbAddWorkingHour) {
             Intent intent = new Intent(this, SettingEditWorkingHourActivity.class);
+            intent.putExtra(DAYOFWEEK_KEY, weekDay);
             intent.putExtra(MODE_KEY, ADD_KEY);
             intent.putStringArrayListExtra(FACILITIES_KEY, getWorkingFacility());
-            startActivity(intent);
+            startActivityForResult(intent, DoctorWorkingHourSettingsActivity.EDITTED_REQUEST_CODE);
         }
     }
 
@@ -139,7 +145,10 @@ public class SettingWorkingHourActivity extends AppCompatActivity implements Vie
         @Override
         public void onClick(DialogInterface dialog, int which) {
             if (which == DialogInterface.BUTTON_POSITIVE) {
-                // request
+                Intent intent = getIntent();
+                intent.putExtra(DoctorWorkingHourSettingsActivity.EDITTED_REQUEST_KEY, editted);
+                intent.putExtra(DoctorWorkingHourSettingsActivity.UPDATE_REQUEST_KEY, new Gson().toJsonTree(listWH, WorkingHourEntity.getWorkingHourEntityListType()).toString());
+                setResult(RESULT_OK, intent);
                 finish();
             } else if (which == DialogInterface.BUTTON_NEGATIVE) {
                 dialog.dismiss();
@@ -175,8 +184,7 @@ public class SettingWorkingHourActivity extends AppCompatActivity implements Vie
         listWeekDay = convertWorkingHour();
         adapter.setData(listWeekDay.get(weekDay));
         adapter.notifyDataSetChanged();
-        // update on big list
-
+        editted = true;
     }
 
     private ArrayList<String> getWorkingFacility() {
@@ -185,5 +193,121 @@ public class SettingWorkingHourActivity extends AppCompatActivity implements Vie
             arrayList.add(name);
         }
         return arrayList;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == DoctorWorkingHourSettingsActivity.EDITTED_REQUEST_CODE && data != null) {
+            editted = data.getBooleanExtra(DoctorWorkingHourSettingsActivity.EDITTED_REQUEST_KEY, false);
+            if (editted) {
+                if (resultCode == SettingEditWorkingHourActivity.UPDATE_FACILITY_CODE) {
+                    updateFacilities(data);
+                    data.putExtra(DoctorWorkingHourSettingsActivity.EDITTED_REQUEST_KEY, true);
+                    data.putExtra(DoctorWorkingHourSettingsActivity.UPDATE_REQUEST_KEY, new Gson().toJsonTree(listWH, WorkingHourEntity.getWorkingHourEntityListType()).toString());
+                    setResult(RESULT_OK, data);
+                } else {
+                    updateFacilities(data);
+                    String facilityName = data.getStringExtra(FACILITY_KEY);
+                    OpeningHour openingHour;
+                    switch (data.getStringExtra(MODE_KEY)) {
+                        case EDIT_KEY:
+                            int position = data.getIntExtra(SettingEditWorkingHourActivity.EDIT_WORKING_HOUR_POSITION, 0);
+                            openingHour = new Gson().fromJson(data.getStringExtra(SettingEditWorkingHourActivity.EDIT_WORKING_HOUR_ENTITY), OpeningHour.getOpeningHourType());
+                            adapter.removePosition(position);
+                            addNewWorkingHour(facilityName, openingHour);
+                            break;
+                        case ADD_KEY:
+                            openingHour = new Gson().fromJson(data.getStringExtra(SettingEditWorkingHourActivity.ADD_NEW_WORKING_HOUR), OpeningHour.getOpeningHourType());
+                            addNewWorkingHour(facilityName, openingHour);
+                            break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void addNewWorkingHour(final String name, final OpeningHour openingHour) {
+        new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            private ProgressDialog pDialog;
+            private FacilityEntity entity;
+
+            @Override
+            protected void onPreExecute() {
+                pDialog = new ProgressDialog(SettingWorkingHourActivity.this);
+                pDialog.setMessage(getString(R.string.loading));
+                pDialog.setCancelable(false);
+                pDialog.show();
+            }
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    if (!FacilityController.isDataLoaded()) {
+                        FacilityController.initData();
+                    }
+                    entity = FacilityController.getFacilityByName(name);
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                pDialog.dismiss();
+                if (exception != null) {
+                    ErrorController.showDialog(SettingWorkingHourActivity.this, "Error : " + exception.getMessage());
+                    return;
+                }
+                for (WorkingHourEntity workingHourEntity : listWH) {
+                    if (workingHourEntity.getFacilityEntity().getName().equals(name)) {
+                        workingHourEntity.addOpenningHour(openingHour);
+                        break;
+                    }
+                }
+                listWeekDay = convertWorkingHour();
+                adapter.setData(listWeekDay.get(weekDay));
+                adapter.notifyDataSetChanged();
+            }
+        }.execute();
+    }
+
+    private boolean checkExist(ArrayList<String> stringArrayList, String s) {
+        for (String elem : stringArrayList) {
+            if (elem.equals(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updateFacilities(Intent data) {
+        ArrayList<String> facilities = data.getStringArrayListExtra(SettingFacilityEditActivity.FACILITY_LIST);
+        // remove all working hour of the removed facilities
+        for (WorkingHourEntity entity : listWH) {
+            if (!checkExist(facilities, entity.getFacilityEntity().getName())) {
+                listWH.remove(entity);
+            }
+        }
+        // add new working hour entity for new facility
+        newWorkingHourEntities.clear();
+        for (String facilityName : facilities) {
+            boolean exist = false;
+            for (WorkingHourEntity workingHourEntity : listWH) {
+                if (workingHourEntity.getFacilityEntity().getName().equals(facilityName)) {
+                    exist = true;
+                    break;
+                }
+            }
+            if (!exist) {
+                WorkingHourEntity newWH = new WorkingHourEntity(FacilityController.getFacilityByName(facilityName));
+                newWorkingHourEntities.add(newWH);
+            }
+        }
+        listWH.addAll(newWorkingHourEntities);
+        listWeekDay = convertWorkingHour();
+        adapter.setData(listWeekDay.get(weekDay));
+        adapter.notifyDataSetChanged();
     }
 }

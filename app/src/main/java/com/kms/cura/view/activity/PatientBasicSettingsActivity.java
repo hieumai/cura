@@ -28,7 +28,6 @@ import com.kms.cura.R;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.controller.UserController;
 import com.kms.cura.entity.user.PatientUserEntity;
-import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.model.Settings;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
@@ -46,6 +45,7 @@ import java.util.Arrays;
 
 
 public class PatientBasicSettingsActivity extends AppCompatActivity implements View.OnClickListener {
+
     private static String ACTIVITY_NAME = "Basic";
     private static final int PICK_IMAGE = 505;
     private static final int MAX_IMAGE_SIZE = 25000000; //2.5 MB
@@ -61,13 +61,12 @@ public class PatientBasicSettingsActivity extends AppCompatActivity implements V
     private Bitmap bitmap;
     private boolean setNewProfile;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         entity = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
         setContentView(R.layout.activity_patient_settings_basic);
-        insurances = new ArrayList<String>(Arrays.asList(this.getResources().getStringArray(R.array.Insurance)));
+        insurances = new ArrayList<>(Arrays.asList(this.getResources().getStringArray(R.array.Insurance)));
         initToolbar();
         initBirthTextView();
         DataUtils.loadProfile(entity, (ImageView) findViewById(R.id.photo_profile), this);
@@ -79,7 +78,7 @@ public class PatientBasicSettingsActivity extends AppCompatActivity implements V
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.basic_settings_toolbar);
-        toolbar.setNavigationIcon(R.drawable.back);
+        toolbar.setNavigationIcon(R.drawable.toolbar_back2);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(ACTIVITY_NAME);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -115,12 +114,10 @@ public class PatientBasicSettingsActivity extends AppCompatActivity implements V
 
     private void initSpinner() {
         initSexSpinner();
-
         initInsuranceSpinner();
     }
 
     private void initInsuranceSpinner() {
-
         String currentInsurance = entity.getInsurance();
         int position = 0;
         for (int i = 0; i < insurances.size(); i++) {
@@ -154,7 +151,6 @@ public class PatientBasicSettingsActivity extends AppCompatActivity implements V
     private void initEditText() {
         name = (EditText) findViewById(R.id.editText_settings_name);
         name.setText(entity.getName());
-
         city = (EditText) findViewById(R.id.editText_settings_city);
         if (entity.getLocation() != null) {
             String formatedCity = getFormatedCityString();
@@ -182,6 +178,7 @@ public class PatientBasicSettingsActivity extends AppCompatActivity implements V
             dateDialog.show();
         } else if (v.getId() == R.id.button_settings_save) {
             AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+
                 private Exception exception = null;
 
                 @Override
@@ -195,7 +192,6 @@ public class PatientBasicSettingsActivity extends AppCompatActivity implements V
                 @Override
                 protected Void doInBackground(Object[] params) {
                     try {
-
                         if (setNewProfile) {
                             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -225,8 +221,6 @@ public class PatientBasicSettingsActivity extends AppCompatActivity implements V
                 }
             };
             task.execute();
-
-
         } else if (v.getId() == R.id.button_upload_image) {
             Intent chooseImageIntent = ImagePicker.getPickImageIntent(this);
             startActivityForResult(chooseImageIntent, PICK_IMAGE);
@@ -283,16 +277,6 @@ public class PatientBasicSettingsActivity extends AppCompatActivity implements V
         tvBirth.setText(builder.toString());
     }
 
-    private void showProgressDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hideProgressDialog() {
-        if (pDialog.isShowing())
-            pDialog.hide();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -302,7 +286,6 @@ public class PatientBasicSettingsActivity extends AppCompatActivity implements V
                     requestPermission();
                 }
                 bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-
                 if (bitmap != null && bitmap.getByteCount() > MAX_IMAGE_SIZE) {
                     Toast.makeText(this, R.string.ImageSizeError + " " + bitmap.getByteCount(), Toast.LENGTH_SHORT).show();
                 } else if (bitmap != null && bitmap.getByteCount() != 0) {

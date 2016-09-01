@@ -18,12 +18,12 @@ public class FacilityController {
         FacilityModel.getInstace().init();
     }
 
-    public static List<FacilityEntity> getFacilitySelected(Bundle bundle){
+    public static List<FacilityEntity> getFacilitySelected(Bundle bundle) {
         boolean[] facilities = bundle.getBooleanArray(RegisterDoctorActivity.FACILITY);
         List<FacilityEntity> facilitySelected = new ArrayList<>();
         List<FacilityEntity> allFacility = FacilityModel.getInstace().getFacilities();
-        for (int i = 0 ; i< allFacility.size();++i){
-            if(facilities[i]){
+        for (int i = 0; i < allFacility.size(); ++i) {
+            if (facilities[i]) {
                 facilitySelected.add(allFacility.get(i));
             }
         }
@@ -36,5 +36,14 @@ public class FacilityController {
 
     public static List<FacilityEntity> getAllFacilities() {
         return FacilityModel.getInstace().getFacilities();
+    }
+
+    public static FacilityEntity getFacilityByName(String facilityName) {
+        for (FacilityEntity entity : getAllFacilities()) {
+            if (entity.getName().equals(facilityName)) {
+                return entity;
+            }
+        }
+        return null;
     }
 }

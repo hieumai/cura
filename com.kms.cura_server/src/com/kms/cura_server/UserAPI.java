@@ -115,7 +115,7 @@ public final class UserAPI {
 	@Path("/userLogin")
 	public String userLogin(String jsonData) {
 		UserEntity entity = JsonToEntityConverter.convertJsonStringToEntity(jsonData,
-				PatientUserEntity.getPatientUserType());
+				UserEntity.getUserEntityType());
 		try {
 			PatientUserEntity patientUserEntity = PatientUserDAL.getInstance().searchPatient(entity);
 			if (patientUserEntity != null) {

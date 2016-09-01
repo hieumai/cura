@@ -17,6 +17,7 @@ import com.kms.cura.model.request.LoginUserModelResponse;
 import com.kms.cura.model.request.PasswordCodeModelResponse;
 import com.kms.cura.model.request.PatientModelResponse;
 import com.kms.cura.model.request.RegisterModelResponse;
+import com.kms.cura.model.request.UpdateDoctorResponse;
 import com.kms.cura.utils.RequestUtils;
 
 import java.util.List;
@@ -203,6 +204,36 @@ public class UserModel extends EntityModel {
         while (!response.isGotResponse()) ;
         if (!response.isResponseError()) {
             return response.getResponseString();
+        }
+        throw new Exception(response.getError());
+    }
+
+    public DoctorUserEntity updateDoctorBasic(DoctorUserEntity doctorUserEntity) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.UPDATE_DOCTOR_BASIC);
+        UpdateDoctorResponse response = new UpdateDoctorResponse();
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                EntityToJsonConverter.convertEntityToJson(doctorUserEntity).toString(), response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
+            return response.getUpdatedDoctor();
+        }
+        throw new Exception(response.getError());
+    }
+
+    public DoctorUserEntity updateDoctorProfessional(DoctorUserEntity doctorUserEntity) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.UPDATE_DOCTOR_PROFESSIONAL);
+        UpdateDoctorResponse response = new UpdateDoctorResponse();
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                EntityToJsonConverter.convertEntityToJson(doctorUserEntity).toString(), response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
+            return response.getUpdatedDoctor();
         }
         throw new Exception(response.getError());
     }

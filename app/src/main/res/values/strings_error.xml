@@ -39,4 +39,6 @@
     <string name="email_not_exist">Email does not exist</string>
     <string name="code_invalid">The code doesn\'t exist</string>
     <string name="code_expired">The code has expired, please request another</string>
+    <string name="time_start_error">Start time can\'t be after end time</string>
+    <string name="input_required">Please input the time</string>
 </resources>
