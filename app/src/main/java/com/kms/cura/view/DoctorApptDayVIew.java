@@ -21,6 +21,7 @@ import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.CurrentUserProfile;
+import com.kms.cura.utils.DataUtils;
 import com.kms.cura.view.activity.DoctorAppointmentDetailActivity;
 import com.kms.cura.view.fragment.CalendarView;
 
@@ -76,7 +77,7 @@ public class DoctorApptDayVIew implements View.OnClickListener, EventHandler{
 
     public void getData() {
         title = getSelectedDate();
-        List<AppointmentEntity> apptByDate = getApptByDate(((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList(),date );
+        List<AppointmentEntity> apptByDate = DataUtils.getApptByDate(((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList(),date );
         apptList = new ArrayList<>();
         for (AppointmentEntity entity : apptByDate){
             int status = entity.getStatus();
@@ -142,7 +143,7 @@ public class DoctorApptDayVIew implements View.OnClickListener, EventHandler{
         TextView patientName = (TextView) viewList.get(startPos);
         if (gap == 1) {
             builder.append(pName);
-            builder.append("\n");
+            builder.append(" - ");
             builder.append(time);
             patientName.setText(builder.toString());
         }
@@ -233,15 +234,6 @@ public class DoctorApptDayVIew implements View.OnClickListener, EventHandler{
         mContext.startActivity(toApptDetail);
     }
 
-    private List<AppointmentEntity> getApptByDate(List<AppointmentEntity> appts, Date date){
-        List<AppointmentEntity> newList = new ArrayList<>();
-        for (AppointmentEntity entity: appts){
-            if (Math.abs(date.getTime()-entity.getApptDay().getTime()) < MILISECOND_OF_DAY && entity.getStatus() != AppointmentEntity.PENDING_STT){
-                newList.add(entity);
-            }
-        }
-        return newList;
-    }
 
     public String getTitle() {
         return title;

@@ -374,4 +374,5 @@
     <string name="select_time">Select Time</string>
     <string name="apptUpdateNoti">appointment updated</string>
     <string name="apptUpdateNotis">appointments updated</string>
+    <string name="msgMissingChooseTIme">Please choose time for the appointment</string>
 </resources>
