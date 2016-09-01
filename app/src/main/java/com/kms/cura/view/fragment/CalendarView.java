@@ -45,6 +45,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
     private int currentIndex;
     private List<AppointmentEntity> appts;
     private List<Date> listApptDay;
+    private List<Date> listIncompleteApptDay;
     private ListView lvApptList;
     private Date previousDateSelected;
     private String calendarTitle;
@@ -96,11 +97,19 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
     private void setData() {
         appts = ((DoctorUserEntity) CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
         listApptDay = new ArrayList<>();
+        listIncompleteApptDay = new ArrayList<>();
         for (AppointmentEntity entity : appts) {
             int status = entity.getStatus();
             if (status != AppointmentEntity.PENDING_STT && status != AppointmentEntity.PATIENT_CANCEL_STT
                     && status != AppointmentEntity.REJECT_STT && !listApptDay.contains(entity.getApptDay())) {
                 listApptDay.add(entity.getApptDay());
+            }
+        }
+        for (AppointmentEntity entity : appts){
+            int status = entity.getStatus();
+            Date date = entity.getApptDay();
+            if (listApptDay.contains(date) && status == AppointmentEntity.INCOMPLETED_STT){
+                listIncompleteApptDay.add(date);
             }
         }
         calendarView.decorateApptDay(new ColorDecorator(), listApptDay);
@@ -177,6 +186,7 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
 
         @Override
         public void decorate(DayView cell) {
+            Date dayViewCell = new Date(cell.getDate().getTime());
             int color = ContextCompat.getColor(mContext, R.color.grey);
             RelativeLayout parent = (RelativeLayout) ((ViewGroup) cell.getParent());
             ImageView circle = new ImageView(mContext);
@@ -185,7 +195,18 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
             int dimen = (int) (mContext.getResources().getDimension(R.dimen.docText_14) / mContext.getResources().getDisplayMetrics().scaledDensity);
             circle.getLayoutParams().width = dimen;
             circle.getLayoutParams().height = dimen;
-            circle.setBackgroundResource(R.drawable.circle_mark_appt_day);
+            Calendar calendar = Calendar.getInstance();
+            boolean incomplete = false;
+            for (Date date : listIncompleteApptDay) {
+                if (isSameDay(dayViewCell, date)){
+                    circle.setBackgroundResource(R.drawable.circle_mark_incomplete_appt_day);
+                    incomplete = true;
+                    break;
+                }
+            }
+            if (!incomplete) {
+                circle.setBackgroundResource(R.drawable.circle_mark_appt_day);
+            }
             RelativeLayout.LayoutParams rLParams =
                     new RelativeLayout.LayoutParams(
                             dimen, dimen);
@@ -195,6 +216,17 @@ public class CalendarView implements CalendarListener, AdapterView.OnItemClickLi
             parent.addView(circle, rLParams);
         }
     }
+
+    private boolean isSameDay(Date d1, Date d2) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = (Calendar) cal1.clone();
+        cal1.setTime(d1);
+        cal2.setTime(d2);
+        return (cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR));
+    }
+
 
     public void clearAlltheContent() {
         adapter = null;
