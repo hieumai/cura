@@ -189,6 +189,7 @@ public class BookAppointmentActivity extends AppCompatActivity implements View.O
         }
         String[] timeResource = getResources().getStringArray(R.array.Time48);
         int[] available = getAvailable();
+        checkGapBetweenWorkingHour(available, list);
         int start = getpositionTime(list.get(0).getOpenTime());
         int end = getpositionTime(list.get(list.size() - 1).getCloseTime());
         String[] timeFrame = getResources().getStringArray(R.array.TimeFrame48);
@@ -200,6 +201,20 @@ public class BookAppointmentActivity extends AppCompatActivity implements View.O
             time.add(timeResource[i]);
         }
         return selectedTimeFrame;
+    }
+
+    private void checkGapBetweenWorkingHour(int [] available, List<OpeningHour> workingHours){
+        for (int i=0; i< workingHours.size()-1; ++i){
+            OpeningHour hour1 = workingHours.get(i);
+            OpeningHour hour2 = workingHours.get(i+1);
+            int start = getpositionTime(hour1.getCloseTime());
+            int end = getpositionTime(hour2.getOpenTime());
+            if (end > start){
+                for (int k=start; k<end; ++k){
+                    available [k] = 0;
+                }
+            }
+        }
     }
 
     private int getpositionTime(Time src) {
