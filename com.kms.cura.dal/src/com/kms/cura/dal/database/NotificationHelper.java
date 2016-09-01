@@ -32,7 +32,10 @@ public class NotificationHelper {
 	public void registerID(String userName, String regID) throws IOException {
 		Map<String, String> regIdMap = readFromFile();
 		if (regIdMap.containsKey(userName)) {
-			return;
+			if (regIdMap.get(userName).equals(regID)) {
+				return;
+			}
+
 		}
 		writeToFile(userName, regID);
 	}
@@ -69,7 +72,7 @@ public class NotificationHelper {
 			try {
 				dbh.closeConnection();
 			} catch (SQLException e) {
-				//TODO : log for server
+				// TODO : log for server
 				return;
 			}
 		}
@@ -86,12 +89,11 @@ public class NotificationHelper {
 		}
 		Result result = sender.send(message, toId, 1);
 	}
-	
-	public void sendAppointmentUpdateNoti(String toPatient) throws IOException{
+
+	public void sendAppointmentUpdateNoti(String toPatient) throws IOException {
 		Sender sender = new Sender(GOOGLE_SERVER_KEY);
 		Message message = new Message.Builder().timeToLive(30).delayWhileIdle(true)
-				.addData(NotificationEntity.NOTI_TYPE, NotificationEntity.UPDATE_APPT_TYPE)
-				.build();
+				.addData(NotificationEntity.NOTI_TYPE, NotificationEntity.UPDATE_APPT_TYPE).build();
 		Map<String, String> regIdMap = readFromFile();
 		String toId = regIdMap.get(toPatient);
 		if (toId == null) {
@@ -99,7 +101,7 @@ public class NotificationHelper {
 		}
 		Result result = sender.send(message, toId, 1);
 	}
-	
+
 	private void writeToFile(String name, String regId) throws IOException {
 		StringBuilder builder = new StringBuilder();
 		builder.append(PATH + File.separator);
