@@ -102,6 +102,19 @@ public class NotificationHelper {
 		Result result = sender.send(message, toId, 1);
 	}
 
+	public void sendIncompleteAppointmentNoti(String toDoctor) throws IOException {
+		Sender sender = new Sender(GOOGLE_SERVER_KEY);
+		Message message = new Message.Builder().timeToLive(30).delayWhileIdle(true)
+				.addData(NotificationEntity.NOTI_TYPE, NotificationEntity.INCOMPLETE_APPT_TYPE)
+				.build();
+		Map<String, String> regIdMap = readFromFile();
+		String toId = regIdMap.get(toDoctor);
+		if (toId == null) {
+			return;
+		}
+		Result result = sender.send(message, toId, 1);
+	}
+	
 	private void writeToFile(String name, String regId) throws IOException {
 		StringBuilder builder = new StringBuilder();
 		builder.append(PATH + File.separator);

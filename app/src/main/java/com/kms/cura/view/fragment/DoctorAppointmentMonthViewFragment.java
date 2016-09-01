@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.kms.cura.R;
 import com.kms.cura.view.DepthPageTransformer;
+import com.kms.cura.view.service.NotificationListener;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -298,4 +299,6 @@ public class DoctorAppointmentMonthViewFragment extends Fragment implements View
         appointmenttoolbar.removeView(toolbarView);
         super.onDestroyView();
     }
+
+
 }

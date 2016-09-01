@@ -55,6 +55,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
     private Fragment doctorHomeFragment, doctorProfileFragment, doctorSettingsFragment, doctorMessageFragment, doctorRequestListFragment, doctorApptDayViewFragment, doctorApptView2;
     public static final String NAVIGATE_TO = "navigate_to";
     public static final String PATIENT_REQUEST = "patient_request";
+    public static final String DOCTOR_APPT = "doctor_appt";
     private ProgressDialog pDialog;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
@@ -85,8 +86,14 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
             changeFragment(doctorProfileFragment);
             return;
         }
-        if (navigateTo.equals(PATIENT_REQUEST)){
-            changeFragment(doctorRequestListFragment);
+        switch (navigateTo){
+            case PATIENT_REQUEST:
+                changeFragment(doctorRequestListFragment);
+                break;
+            case DOCTOR_APPT:
+                doctorApptView2 = new DoctorAppointmentMonthViewFragment();
+                changeFragment(doctorApptView2);
+                break;
         }
     }
 

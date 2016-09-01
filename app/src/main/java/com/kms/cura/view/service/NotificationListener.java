@@ -24,6 +24,7 @@ import com.kms.cura.entity.AppointmentEntity;
 import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
+import com.kms.cura.entity.user.UserEntity;
 import com.kms.cura.event.EventBroker;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.utils.DataUtils;
@@ -43,12 +44,15 @@ public class NotificationListener extends GcmListenerService {
     public static final int PATIENT_REQUEST_ACCEPT_ID = 1;
     public static final int PATIENT_REQUEST_REJECT_ID = 2;
     public static final int UPDATE_PATIENT_APPT_ID = 3;
+    public static final int INCOMPLETE_APPT_ID = 5;
     public static final int UPDATE_PATIENT_APPT_DELETE_NOTI_ID = 4;
+    public static final int INCOMPLETE_APPT_DELETE_NOTI_ID = 6;
     private boolean updatedDoctorRequest = false;
-    private boolean updatedPatientAppt = false;
+    private boolean updatedApptList = false;
     private final static String CANCEL_NOTI = "cancel_noti";
     private Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     public static final String NUM_APPT_NOTI = "NUM_APPT_NOTI";
+    public static final String NUM_APPT_INCOMPLETE_NOTI = "NUM_APPT_INCOMPLETE_NOTI";
     @Override
     public void onMessageReceived(String s, Bundle bundle) {
         if (CurrentUserProfile.getInstance().getEntity() == null){
@@ -58,8 +62,8 @@ public class NotificationListener extends GcmListenerService {
         if (type.equals(NotificationEntity.PATIENT_REQUEST_TYPE)) {
             updateDoctorRequestList(bundle.getString(NotificationEntity.PATIENT_REQUEST_TYPE));
         }
-        else if (type.equals(NotificationEntity.UPDATE_APPT_TYPE)) {
-            updatePatientApptList();
+        else if (type.equals(NotificationEntity.UPDATE_APPT_TYPE) || type.equals(NotificationEntity.INCOMPLETE_APPT_TYPE)) {
+            updateApptList();
         }
     }
 
@@ -146,34 +150,6 @@ public class NotificationListener extends GcmListenerService {
         task.execute();
     }
 
-    private void updatePatientApptList() {
-        AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
-            private Exception exception = null;
-
-            @Override
-            protected Void doInBackground(Object[] params) {
-                try {
-                    PatientUserEntity patient = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
-                    PatientUserEntity patientUserEntity = new PatientUserEntity(patient.getId(),null,null,null,null,null,null,null,null,null);
-                    AppointmentEntity entity = new AppointmentEntity(null,patientUserEntity, null, null, null, null, null, -1, null, null);
-                    patient.setAppointmentList(AppointmentController.getAppointment(new AppointSearchEntity(entity)));
-                } catch (Exception e) {
-                    exception = e;
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                updatedPatientAppt = (exception == null);
-                if (updatedPatientAppt){
-                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_PATIENT_LIST, null);
-                }
-                sendUpdateAppt();
-            }
-        };
-        task.execute();
-    }
 
     private void sendUpdateAppt() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -190,7 +166,7 @@ public class NotificationListener extends GcmListenerService {
         String content = getContentForUpdateApptNoti(notiNum);
         Intent intent = new Intent(this, PatientViewActivity.class);
         intent.putExtra(PatientViewActivity.NAVIGATION_KEY, PatientViewActivity.PATIENT_APPT);
-        intent.putExtra(UPDATE, updatedPatientAppt);
+        intent.putExtra(UPDATE, updatedApptList);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, UPDATE_PATIENT_APPT_ID, intent,
                 PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
@@ -200,7 +176,7 @@ public class NotificationListener extends GcmListenerService {
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent)
-                .setDeleteIntent(getDeleteIntent())
+                .setDeleteIntent(getDeleteIntent(UPDATE_PATIENT_APPT_DELETE_NOTI_ID))
                 .setDefaults(Notification.DEFAULT_VIBRATE);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -222,10 +198,103 @@ public class NotificationListener extends GcmListenerService {
     }
 
 
-    protected PendingIntent getDeleteIntent()
+    protected PendingIntent getDeleteIntent(int id)
     {
         Intent intent = new Intent(this, NotificationDeleteListener.class);
         intent.setAction(CANCEL_NOTI);
-        return PendingIntent.getBroadcast(this, UPDATE_PATIENT_APPT_DELETE_NOTI_ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        intent.putExtra(NotificationEntity.NOTI_TYPE, id);
+        return PendingIntent.getBroadcast(this, id, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+    }
+
+    private void updateApptList() {
+        final boolean patient = CurrentUserProfile.getInstance().isPatient();
+        AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    if (patient){
+                        PatientUserEntity currentUser = (PatientUserEntity) CurrentUserProfile.getInstance().getEntity();
+                        PatientUserEntity patientUserEntity = new PatientUserEntity(currentUser.getId(), null);
+                        AppointmentEntity entity = new AppointmentEntity(null,patientUserEntity, null, null, null, null, null, -1, null, null);
+                        currentUser.setAppointmentList(AppointmentController.getAppointment(new AppointSearchEntity(entity)));
+                        return null;
+                    }
+                    DoctorUserEntity currentUser = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
+                    DoctorUserEntity doctorUserEntity = new DoctorUserEntity(currentUser.getId(), null);
+                    AppointmentEntity entity = new AppointmentEntity(null,null, doctorUserEntity, null, null, null, null, -1, null, null);
+                    currentUser.setAppointmentList(AppointmentController.getAppointment(new AppointSearchEntity(entity)));
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                updatedApptList = (exception == null);
+                if (updatedApptList && patient){
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_PATIENT_LIST, null);
+                }
+                if (updatedApptList && !patient){
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_DOCTOR_LIST, null);
+                }
+                sendNoti(patient);
+            }
+        };
+        task.execute();
+    }
+
+    private void sendNoti(boolean patient){
+        if (patient){
+            sendUpdateAppt();
+            return;
+        }
+        sendInCompleteAppt();
+    }
+
+    private void sendInCompleteAppt() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int notiNum = sharedPreferences.getInt(NUM_APPT_INCOMPLETE_NOTI, -1);
+        if (notiNum == -1){
+            notiNum = 1;
+        }
+        else{
+            ++notiNum;
+        }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(NUM_APPT_INCOMPLETE_NOTI, notiNum);
+        editor.commit();
+        String content = getContentForInCompleteApptNoti(notiNum);
+        Intent intent = new Intent(this, DoctorViewActivity.class);
+        intent.putExtra(DoctorViewActivity.NAVIGATE_TO, DoctorViewActivity.DOCTOR_APPT);
+        intent.putExtra(UPDATE, updatedApptList);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, INCOMPLETE_APPT_ID, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.appt)
+                .setContentTitle(getString(R.string.appName))
+                .setContentText(content)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+                .setDeleteIntent(getDeleteIntent(INCOMPLETE_APPT_DELETE_NOTI_ID))
+                .setDefaults(Notification.DEFAULT_VIBRATE);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(INCOMPLETE_APPT_ID, notificationBuilder.build());
+    }
+
+    private String getContentForInCompleteApptNoti(int notiNum) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(notiNum);
+        builder.append(" ");
+        if (notiNum == 1){
+            builder.append(getString(R.string.incompleteApptNoti));
+        }
+        else{
+            builder.append(getString(R.string.incompleteApptNotis));
+        }
+        return  builder.toString();
     }
 }
