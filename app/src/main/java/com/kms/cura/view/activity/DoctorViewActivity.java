@@ -66,17 +66,17 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
     private int countAppt;
     private int countMsg;
     private int countRequest;
-
+    private EventBroker broker;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_drawer);
-        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
+        broker = EventBroker.getInstance();
+        registerEvent();
         initToolBar();
         initDrawer();
         initNavigationView();
         initFragments();
-        EventBroker.getInstance().register(this, EventConstant.UPDATE_MSG_NOTI_NUMBER);
     }
 
     private String getNavigationTo() {
@@ -324,6 +324,9 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
                 ++countRequest;
             }
         }
+        if (countRequest !=0 || countAppt !=0){
+            changeToggle();
+        }
         setMenuCounter(R.id.nav_request, countRequest);
         setMenuCounter(R.id.nav_appointment, countAppt);
     }
@@ -370,21 +373,53 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
                 }
                 break;
             case EventConstant.UPDATE_APPT_NOTI_NUMBER:
-                --countAppt;
+                countAppt +=calculateIncreasement(data);
                 setMenuCounter(R.id.nav_appointment, countAppt);
+                break;
+            case EventConstant.UPDATE_REQUEST_NOTI_NUMBER:
+                countRequest +=calculateIncreasement(data);
+                setMenuCounter(R.id.nav_request, countRequest);
                 break;
         }
     }
 
+
+    private int calculateIncreasement(Object data){
+        boolean increasement = (boolean) data;
+        if (increasement){
+            return 1;
+        }
+        return -1;
+    }
+
     @Override
     protected void onDestroy() {
-        EventBroker.getInstance().unRegister(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
+        unregisterEvent();
         super.onDestroy();
     }
 
     @Override
     protected void onResume() {
-        EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
+        registerEvent();
         super.onResume();
     }
+
+    private void registerEvent() {
+        if (broker == null){
+            broker = EventBroker.getInstance();
+        }
+        broker.register(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
+        broker.register(this, EventConstant.UPDATE_REQUEST_NOTI_NUMBER);
+        broker.register(this, EventConstant.UPDATE_MSG_NOTI_NUMBER);
+    }
+
+    private void unregisterEvent() {
+        if (broker == null){
+            broker = EventBroker.getInstance();
+        }
+        broker.unRegister(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
+        broker.unRegister(this, EventConstant.UPDATE_REQUEST_NOTI_NUMBER);
+        broker.unRegister(this, EventConstant.UPDATE_MSG_NOTI_NUMBER);
+    }
+
 }

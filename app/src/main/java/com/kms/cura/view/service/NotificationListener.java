@@ -110,6 +110,7 @@ public class NotificationListener extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(PATIENT_REQUEST_ID, notificationBuilder.build());
+        EventBroker.getInstance().pusblish(EventConstant.UPDATE_REQUEST_NOTI_NUMBER,true);
     }
 
     private NotificationCompat.BigTextStyle createExpandStyleForRequestNoti(AppointmentEntity appointmentEntity) {
@@ -290,6 +291,7 @@ public class NotificationListener extends GcmListenerService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(INCOMPLETE_APPT_ID, notificationBuilder.build());
+        EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_NOTI_NUMBER, true);
     }
 
     private String getContentForInCompleteApptNoti(int notiNum) {

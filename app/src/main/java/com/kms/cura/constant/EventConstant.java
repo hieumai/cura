@@ -26,6 +26,7 @@ public interface EventConstant {
     public static final String APPOINTMENT_RATED = "APPOINTMENT_RATED";
     public static final String UPDATE_APPT_NOTI_NUMBER = "UPDATE_APPT_NOTI_NUMBER";
     public static final String UPDATE_MESSAGE_LIST = "UPDATE_MESSAGE_LIST";
+    public static final String UPDATE_REQUEST_NOTI_NUMBER = "UPDATE_REQUEST_NOTI_NUMBER";
     public static final String UPDATE_MSG_NOTI_NUMBER = "UPDATE_MSG_NOTI_NUMBER";
 
 }
