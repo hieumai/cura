@@ -159,13 +159,13 @@ public class MessageAdapter extends BaseAdapter {
         calendar.setTime(date);
         StringBuilder builder = new StringBuilder();
         addZero(builder, calendar.get(Calendar.HOUR_OF_DAY));
-        builder.append(calendar.get(Calendar.HOUR_OF_DAY) + ":");
+        builder.append((calendar.get(Calendar.HOUR_OF_DAY) - 1) + ":");
         addZero(builder, calendar.get(Calendar.MINUTE));
         builder.append(calendar.get(Calendar.MINUTE) + " - ");
         addZero(builder, calendar.get(Calendar.DAY_OF_MONTH));
         builder.append(calendar.get(Calendar.DAY_OF_MONTH) + "/");
         addZero(builder, calendar.get(Calendar.MONTH));
-        builder.append(calendar.get(Calendar.MONTH) + "/");
+        builder.append((calendar.get(Calendar.MONTH) + 1) + "/");
         builder.append(calendar.get(Calendar.YEAR));
         return builder.toString();
     }
