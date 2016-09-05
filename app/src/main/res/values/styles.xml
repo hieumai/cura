@@ -26,6 +26,28 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="message_unread_name">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/docText_20</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="message_unread_line">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/docText_16</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="message_read_name">
+        <item name="android:textSize">@dimen/docText_20</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="message_read_line">
+        <item name="android:textSize">@dimen/docText_16</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="CalendarView" />
 
     <style name="CalendarView.MonthTitle">

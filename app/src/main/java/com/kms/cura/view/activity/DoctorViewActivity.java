@@ -66,6 +66,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
     private int countAppt;
     private int countMsg;
     private int countRequest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,9 +76,10 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         initDrawer();
         initNavigationView();
         initFragments();
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_MSG_NOTI_NUMBER);
     }
 
-    private String getNavigationTo(){
+    private String getNavigationTo() {
         String navigate = getIntent().getStringExtra(NAVIGATE_TO);
         return navigate;
     }
@@ -89,11 +91,11 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         doctorMessageFragment = new MessageListFragment();
         doctorApptDayViewFragment = new DoctorApptDayVIewFragment();
         String navigateTo = getNavigationTo();
-        if (navigateTo == null){
+        if (navigateTo == null) {
             changeFragment(doctorProfileFragment);
             return;
         }
-        switch (navigateTo){
+        switch (navigateTo) {
             case PATIENT_REQUEST:
                 changeFragment(doctorRequestListFragment);
                 break;
@@ -131,6 +133,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         AsyncTask<Object, Void, Void> task = new AsyncTask<Object, Void, Void>() {
             private Exception exception = null;
             private List<NotificationEntity> msgNotifs;
+
             @Override
             protected Void doInBackground(Object[] params) {
                 try {
@@ -148,7 +151,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
                     ErrorController.showDialog(DoctorViewActivity.this, "Error : " + exception.getMessage());
                 } else {
                     countMsg = msgNotifs.size();
-                    if (countMsg == 0){
+                    if (countMsg == 0) {
                         return;
                     }
                     changeToggle();
@@ -159,7 +162,6 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         };
         task.execute();
     }
-
 
 
     private void initDrawer() {
@@ -242,7 +244,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         unregisterServer();
     }
 
-    private void unregisterServer(){
+    private void unregisterServer() {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage(getString(R.string.loading));
         pDialog.setCancelable(false);
@@ -294,7 +296,7 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         }
     }
 
-    private void changeToggle(){
+    private void changeToggle() {
         toggle.setDrawerIndicatorEnabled(false);
         doctorToolbar.setNavigationIcon(R.drawable.noti_drawer);
         doctorToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -311,14 +313,14 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         drawer.openDrawer(GravityCompat.START);
     }
 
-    private void setApptNotiForDoctor(){
-        List<AppointmentEntity> appts = ((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
-        for (AppointmentEntity entity : appts){
+    private void setApptNotiForDoctor() {
+        List<AppointmentEntity> appts = ((DoctorUserEntity) CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
+        for (AppointmentEntity entity : appts) {
             int status = entity.getStatus();
-            if (status == AppointmentEntity.INCOMPLETED_STT){
+            if (status == AppointmentEntity.INCOMPLETED_STT) {
                 ++countAppt;
             }
-            if (status == AppointmentEntity.PENDING_STT){
+            if (status == AppointmentEntity.PENDING_STT) {
                 ++countRequest;
             }
         }
@@ -330,15 +332,15 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         View view = navigationView.getMenu().findItem(itemId).getActionView();
         TextView txtCounter = (TextView) view.findViewById(R.id.txtCounter);
         txtCounter.setVisibility(View.VISIBLE);
-        if (countAppt == 0 && countMsg == 0 && countRequest == 0){
+        if (countAppt == 0 && countMsg == 0 && countRequest == 0) {
             toggle.setDrawerIndicatorEnabled(true);
             initDrawer();
         }
-        if (count == 0){
+        if (count == 0) {
             txtCounter.setVisibility(View.INVISIBLE);
             return;
         }
-        if (count > 99){
+        if (count > 99) {
             txtCounter.setText(R.string.maxNoti);
             return;
         }
@@ -359,9 +361,16 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
 
     @Override
     public void handleEvent(String event, Object data) {
-        switch (event){
+        switch (event) {
+            case EventConstant.UPDATE_MSG_NOTI_NUMBER:
+                View view = navigationView.getMenu().findItem(R.id.nav_messages).getActionView();
+                countMsg -= (int) data;
+                if (countMsg >= 0) {
+                    setMenuCounter(R.id.nav_messages, countMsg);
+                }
+                break;
             case EventConstant.UPDATE_APPT_NOTI_NUMBER:
-                -- countAppt;
+                --countAppt;
                 setMenuCounter(R.id.nav_appointment, countAppt);
                 break;
         }
