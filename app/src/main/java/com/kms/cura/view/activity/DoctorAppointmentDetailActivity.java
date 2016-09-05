@@ -223,7 +223,7 @@ public class DoctorAppointmentDetailActivity extends AppCompatActivity implement
                     EventBroker broker = EventBroker.getInstance();
                     List<AppointmentEntity> list = ((DoctorUserEntity)CurrentUserProfile.getInstance().getEntity()).getAppointmentList();
                     broker.pusblish(EventConstant.UPDATE_APPT_DOCTOR_LIST, list.indexOf(appointmentEntity));
-                    broker.pusblish(EventConstant.UPDATE_APPT_NOTI_NUMBER, null);
+                    broker.pusblish(EventConstant.UPDATE_APPT_NOTI_NUMBER, false);
                 }
                 finish();
             }
