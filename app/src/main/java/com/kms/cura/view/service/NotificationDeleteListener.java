@@ -28,6 +28,9 @@ public class NotificationDeleteListener extends BroadcastReceiver {
             case NotificationListener.UPDATE_PATIENT_APPT_DELETE_NOTI_ID:
                 editor.remove(NotificationListener.NUM_APPT_NOTI);
                 break;
+            case NotificationListener.NEW_MSG:
+                editor.remove(NotificationListener.NUM_MSG_NOTI);
+                break;
         }
         editor.commit();
     }

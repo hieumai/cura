@@ -1,7 +1,9 @@
 package com.kms.cura.entity;
 
+import java.lang.reflect.Type;
 import java.sql.Timestamp;
 
+import com.google.gson.reflect.TypeToken;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.UserEntity;
 
@@ -72,6 +74,15 @@ public class MessageEntity extends Entity {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	
+	public static Type getMessageType() {
+		return new TypeToken<MessageEntity>() {
+		}.getType();
+	}
+	
+	public String getReceiverID() {
+		return UserEntity.USER + receiver.getId();
 	}
 
 }

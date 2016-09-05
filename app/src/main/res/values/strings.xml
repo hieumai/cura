@@ -381,4 +381,6 @@
     <string name="msgMissingChooseTIme">Please choose time for the appointment</string>
     <string name="incompleteApptNoti">incomplete appointment</string>
     <string name="incompleteApptNotis">incomplete appointments</string>
+    <string name="new_msg_noti">" new message"</string>
+    <string name="new_msg_notis">" new messages"</string>
 </resources>

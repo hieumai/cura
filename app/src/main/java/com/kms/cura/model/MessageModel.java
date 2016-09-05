@@ -3,6 +3,7 @@ package com.kms.cura.model;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.kms.cura.entity.MessageEntity;
@@ -48,7 +49,7 @@ public class MessageModel {
         }
         MessageModelResponse response = new MessageModelResponse(messageEntities);
         StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
-                EntityToJsonConverter.convertEntityToJson(entity).toString(), response);
+                new Gson().toJsonTree(entity, UserEntity.getUserEntityType()).toString(), response);
         VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
         while (!response.isGotResponse()) ;
         if (!response.isResponseError()) {

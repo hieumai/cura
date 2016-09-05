@@ -19,9 +19,12 @@ import com.kms.cura.R;
 import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.AppointmentController;
 
+import com.kms.cura.controller.MessageController;
 import com.kms.cura.entity.AppointSearchEntity;
 import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.entity.MessageEntity;
 import com.kms.cura.entity.NotificationEntity;
+import com.kms.cura.entity.json.JsonToEntityConverter;
 import com.kms.cura.entity.user.DoctorUserEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 import com.kms.cura.entity.user.UserEntity;
@@ -31,6 +34,7 @@ import com.kms.cura.utils.DataUtils;
 
 import com.kms.cura.view.activity.DoctorViewActivity;
 import com.kms.cura.view.activity.PatientViewActivity;
+import com.kms.cura.view.fragment.MessageListFragment;
 
 
 /**
@@ -43,26 +47,30 @@ public class NotificationListener extends GcmListenerService {
     public static final int PATIENT_REQUEST_ID = 0;
     public static final int PATIENT_REQUEST_ACCEPT_ID = 1;
     public static final int PATIENT_REQUEST_REJECT_ID = 2;
-    public static final int UPDATE_PATIENT_APPT_ID = 3;
+    public static final int NEW_MSG = 3;
+    public static final int UPDATE_PATIENT_APPT_ID = 4;
     public static final int INCOMPLETE_APPT_ID = 5;
-    public static final int UPDATE_PATIENT_APPT_DELETE_NOTI_ID = 4;
-    public static final int INCOMPLETE_APPT_DELETE_NOTI_ID = 6;
+    public static final int UPDATE_PATIENT_APPT_DELETE_NOTI_ID = 6;
+    public static final int INCOMPLETE_APPT_DELETE_NOTI_ID = 7;
     private boolean updatedDoctorRequest = false;
     private boolean updatedApptList = false;
     private final static String CANCEL_NOTI = "cancel_noti";
     private Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
     public static final String NUM_APPT_NOTI = "NUM_APPT_NOTI";
+    public static final String NUM_MSG_NOTI = "NUM_MSG_NOTI";
     public static final String NUM_APPT_INCOMPLETE_NOTI = "NUM_APPT_INCOMPLETE_NOTI";
+
     @Override
     public void onMessageReceived(String s, Bundle bundle) {
-        if (CurrentUserProfile.getInstance().getEntity() == null){
+        if (CurrentUserProfile.getInstance().getEntity() == null) {
             return;
         }
         String type = bundle.getString(NotificationEntity.NOTI_TYPE);
         if (type.equals(NotificationEntity.PATIENT_REQUEST_TYPE)) {
             updateDoctorRequestList(bundle.getString(NotificationEntity.PATIENT_REQUEST_TYPE));
-        }
-        else if (type.equals(NotificationEntity.UPDATE_APPT_TYPE) || type.equals(NotificationEntity.INCOMPLETE_APPT_TYPE)) {
+        } else if (type.equals(NotificationEntity.MSG_TYPE)) {
+            updateMessageList(bundle.getString(NotificationEntity.MSG_TYPE));
+        } else if (type.equals(NotificationEntity.UPDATE_APPT_TYPE) || type.equals(NotificationEntity.INCOMPLETE_APPT_TYPE)) {
             updateApptList();
         }
     }
@@ -97,7 +105,7 @@ public class NotificationListener extends GcmListenerService {
                 .setDefaults(Notification.DEFAULT_VIBRATE);
         notificationBuilder.setStyle(createExpandStyleForRequestNoti(appointmentEntity));
         notificationBuilder.addAction(R.drawable.accept, getString(R.string.Accept), pAcceptRequest)
-                        .addAction(R.drawable.reject_icon, getString(R.string.Reject), pRejectRequest);
+                .addAction(R.drawable.reject_icon, getString(R.string.Reject), pRejectRequest);
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -107,11 +115,11 @@ public class NotificationListener extends GcmListenerService {
     private NotificationCompat.BigTextStyle createExpandStyleForRequestNoti(AppointmentEntity appointmentEntity) {
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
         bigTextStyle.bigText(getRequestInfo(appointmentEntity))
-                    .setBigContentTitle(appointmentEntity.getPatientUserEntity().getName());
+                .setBigContentTitle(appointmentEntity.getPatientUserEntity().getName());
         return bigTextStyle;
     }
 
-    private String getRequestInfo(AppointmentEntity entity){
+    private String getRequestInfo(AppointmentEntity entity) {
         StringBuilder builder = new StringBuilder();
         builder.append(DataUtils.getApptTime(entity.getStartTime(), entity.getEndTime()));
         builder.append("\n");
@@ -130,7 +138,7 @@ public class NotificationListener extends GcmListenerService {
                 try {
                     DoctorUserEntity doctor = (DoctorUserEntity) CurrentUserProfile.getInstance().getEntity();
                     DoctorUserEntity doctorUserEntity = new DoctorUserEntity(doctor.getId(), null);
-                    AppointmentEntity entity = new AppointmentEntity(null,null, doctorUserEntity, null, null, null, null, -1, null, null);
+                    AppointmentEntity entity = new AppointmentEntity(null, null, doctorUserEntity, null, null, null, null, -1, null, null);
                     doctor.setAppointmentList(AppointmentController.getAppointment(new AppointSearchEntity(entity)));
                 } catch (Exception e) {
                     exception = e;
@@ -141,7 +149,7 @@ public class NotificationListener extends GcmListenerService {
             @Override
             protected void onPostExecute(Void aVoid) {
                 updatedDoctorRequest = (exception == null);
-                if (updatedDoctorRequest){
+                if (updatedDoctorRequest) {
                     EventBroker.getInstance().pusblish(EventConstant.UPDATE_PATIENT_REQUEST_LIST, null);
                 }
                 sendNotificationPatientRequest(content);
@@ -256,10 +264,9 @@ public class NotificationListener extends GcmListenerService {
     private void sendInCompleteAppt() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int notiNum = sharedPreferences.getInt(NUM_APPT_INCOMPLETE_NOTI, -1);
-        if (notiNum == -1){
+        if (notiNum == -1) {
             notiNum = 1;
-        }
-        else{
+        } else {
             ++notiNum;
         }
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -289,12 +296,78 @@ public class NotificationListener extends GcmListenerService {
         StringBuilder builder = new StringBuilder();
         builder.append(notiNum);
         builder.append(" ");
-        if (notiNum == 1){
+        if (notiNum == 1) {
             builder.append(getString(R.string.incompleteApptNoti));
-        }
-        else{
+        } else {
             builder.append(getString(R.string.incompleteApptNotis));
         }
-        return  builder.toString();
+        return builder.toString();
+    }
+
+    private void updateMessageList(final String message) {
+        new AsyncTask<Object, Void, Void>() {
+            private Exception exception = null;
+
+            @Override
+            protected Void doInBackground(Object[] params) {
+                try {
+                    UserEntity userEntity = CurrentUserProfile.getInstance().getEntity();
+                    MessageController.loadMessage(userEntity);
+                } catch (Exception e) {
+                    exception = e;
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                if (exception == null) {
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_MESSAGE_LIST, null);
+                    createMessageNoti(message);
+                }
+            }
+        }.execute();
+    }
+
+    private void createMessageNoti(String message) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int notiNum = sharedPreferences.getInt(NUM_MSG_NOTI, -1);
+        if (notiNum < 0) {
+            notiNum = 1;
+        } else {
+            ++notiNum;
+        }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(NUM_MSG_NOTI, notiNum);
+        editor.commit();
+        String content = getContentForMessageNoti(notiNum, message);
+        Intent intentMsg;
+        if (CurrentUserProfile.getInstance().isDoctor()) {
+            intentMsg = new Intent(this, DoctorViewActivity.class);
+            intentMsg.putExtra(DoctorViewActivity.NAVIGATE_TO, MessageListFragment.TO_MESSAGE);
+        } else {
+            intentMsg = new Intent(this, PatientViewActivity.class);
+            intentMsg.putExtra(PatientViewActivity.NAVIGATION_KEY, MessageListFragment.TO_MESSAGE);
+        }
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, NEW_MSG, intentMsg, PendingIntent.FLAG_ONE_SHOT);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.message_noti)
+                .setContentTitle(getString(R.string.appName))
+                .setContentText(content)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+                .setDeleteIntent(getDeleteIntent(NEW_MSG))
+                .setDefaults(Notification.DEFAULT_VIBRATE);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(NEW_MSG, notificationBuilder.build());
+    }
+
+    private String getContentForMessageNoti(int notiNum, String mes) {
+        if (notiNum == 1)
+            return notiNum + getString(R.string.new_msg_noti);
+        return notiNum + getString(R.string.new_msg_notis);
     }
 }

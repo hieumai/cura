@@ -16,6 +16,7 @@ import com.google.android.gcm.server.Result;
 import com.google.android.gcm.server.Sender;
 import com.google.gson.Gson;
 import com.kms.cura.entity.AppointmentEntity;
+import com.kms.cura.entity.MessageEntity;
 import com.kms.cura.entity.NotificationEntity;
 import com.kms.cura.entity.user.PatientUserEntity;
 
@@ -84,6 +85,20 @@ public class NotificationHelper {
 				.build();
 		Map<String, String> regIdMap = readFromFile();
 		String toId = regIdMap.get(toDoctor);
+		if (toId == null) {
+			return;
+		}
+		Result result = sender.send(message, toId, 1);
+	}
+	
+	public void sendMessageRequest(MessageEntity msg) throws IOException {
+		Sender sender = new Sender(GOOGLE_SERVER_KEY);
+		Message message = new Message.Builder().timeToLive(30).delayWhileIdle(true)
+				.addData(NotificationEntity.NOTI_TYPE, NotificationEntity.MSG_TYPE)
+				.addData(NotificationEntity.MSG_TYPE, msg.getSender().getName() + " : " + msg.getMessage())
+				.build();
+		Map<String, String> regIdMap = readFromFile();
+		String toId = regIdMap.get(msg.getReceiverID());
 		if (toId == null) {
 			return;
 		}

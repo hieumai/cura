@@ -3,7 +3,9 @@ package com.kms.cura.view.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -46,6 +48,7 @@ import com.kms.cura.view.fragment.DoctorSettingsFragment;
 import com.kms.cura.view.fragment.DoctorProfileFragment;
 import com.kms.cura.view.fragment.DoctorRequestListFragment;
 import com.kms.cura.view.fragment.MessageListFragment;
+import com.kms.cura.view.service.NotificationListener;
 
 import java.util.List;
 
@@ -93,6 +96,13 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
         switch (navigateTo){
             case PATIENT_REQUEST:
                 changeFragment(doctorRequestListFragment);
+                break;
+            case MessageListFragment.TO_MESSAGE:
+                changeFragment(doctorMessageFragment);
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.remove(NotificationListener.NUM_MSG_NOTI);
+                editor.commit();
                 break;
             case DOCTOR_APPT:
                 doctorApptView2 = new DoctorAppointmentMonthViewFragment();

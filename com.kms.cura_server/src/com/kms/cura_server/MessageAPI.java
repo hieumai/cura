@@ -7,6 +7,7 @@ import java.util.List;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import com.kms.cura.dal.MessageDAL;
 import com.kms.cura.entity.MessageEntity;
@@ -104,7 +105,7 @@ public class MessageAPI {
 		try {
 			MessageDAL.getInstance().insertMessage(entity, jsonObject.getBoolean(MessageEntity.SENT_BY_DOCTOR));
 			return new MessageAPIResponse().successUpdateMessageResponse();
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (ClassNotFoundException | SQLException | JSONException | IOException e) {
 			return APIResponse.unsuccessResponse(e.getMessage());
 		}
 	}
