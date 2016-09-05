@@ -236,6 +236,7 @@ public class AppointmentRequestDeatailActivity extends AppCompatActivity impleme
                     ErrorController.showDialog(AppointmentRequestDeatailActivity.this, "Error : " + exception.getMessage());
                 } else {
                     EventBroker.getInstance().pusblish(EventConstant.UPDATE_PATIENT_REQUEST_LIST, appointmentEntity.getApptDay());
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_REQUEST_NOTI_NUMBER, false);
                 }
                 finish();
             }

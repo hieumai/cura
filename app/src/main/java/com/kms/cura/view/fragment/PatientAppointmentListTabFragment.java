@@ -242,7 +242,7 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
                     //TODO : log file for app
                 } else {
                     notifs.remove(id);
-                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_NOTI_NUMBER, null);
+                    EventBroker.getInstance().pusblish(EventConstant.UPDATE_APPT_NOTI_NUMBER, false);
                     adapter.notifyDataSetChanged();
                 }
                 Intent toDetails = new Intent(getActivity(), PatientAppointmentDetailsActivity.class);
@@ -261,7 +261,7 @@ public class PatientAppointmentListTabFragment extends Fragment implements Event
             case EventConstant.UPDATE_APPT_PATIENT_LIST:
                 apptsList.clear();
                 apptsList.addAll(getData());
-                adapter.notifyDataSetChanged();
+                setApptNotification();
                 break;
         }
     }
