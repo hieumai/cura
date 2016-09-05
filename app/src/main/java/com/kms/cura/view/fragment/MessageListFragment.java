@@ -45,6 +45,7 @@ public class MessageListFragment extends Fragment implements AdapterView.OnItemC
     private Drawable naviIcon;
     private SwipeRefreshLayout refreshLayout;
     private static final int REQUEST_CODE = 1;
+    public static final String TO_MESSAGE = "toMessage";
 
     public MessageListFragment() {
     }

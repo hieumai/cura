@@ -235,9 +235,10 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		}
 	}
 
-	public void insertMessage(MessageEntity entity, boolean sentByDoctor) throws SQLException {
+	public void insertMessage(MessageEntity entity, boolean sentByDoctor) throws SQLException, IOException {
 		PreparedStatement stmt = null;
 		StringBuilder builder = new StringBuilder();
+		NotificationHelper notificationHelper = new NotificationHelper();
 		builder.append("insert into ");
 		builder.append(MessageColumn.TABLE_NAME);
 		builder.append("(");
@@ -276,10 +277,8 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 			int newID = rs.getInt(1);
 			String newInsertedID = String.valueOf(newID);
 			con.commit();
-			if (sentByDoctor) {
-				createNewMessageNotification(newInsertedID, entity);
-			}
 			createNewMessageNotification(newInsertedID, entity);
+			notificationHelper.sendMessageRequest(entity);
 		} catch (SQLException e) {
 			if (con != null) {
 				System.err.print("Transaction is being rolled back");
@@ -299,7 +298,7 @@ public class MessageDatabaseHelper extends DatabaseHelper {
 		try {
 			databaseHelper = new NotificationDatabaseHelper();
 			databaseHelper.createNotification(newID, entity.getReceiver().getId(),
-					NotificationType.APPT_TYPE.getNotiType(), null);
+					NotificationType.MSG_TYPE.getNotiType(), null);
 		} catch (ClassNotFoundException | SQLException e) {
 			//TODO log file for server later
 		} finally {

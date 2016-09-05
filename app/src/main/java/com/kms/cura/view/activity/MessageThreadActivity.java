@@ -21,18 +21,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kms.cura.R;
+import com.kms.cura.constant.EventConstant;
 import com.kms.cura.controller.ErrorController;
 import com.kms.cura.controller.MessageController;
 import com.kms.cura.entity.MessageEntity;
 import com.kms.cura.entity.MessageThreadEntity;
 import com.kms.cura.entity.user.UserEntity;
+import com.kms.cura.event.EventBroker;
+import com.kms.cura.event.EventHandler;
 import com.kms.cura.utils.CurrentUserProfile;
 import com.kms.cura.view.adapter.MessageAdapter;
 
 import java.util.ArrayList;
 
 public class MessageThreadActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, Toolbar.OnMenuItemClickListener,
-        View.OnClickListener, DialogInterface.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+        View.OnClickListener, DialogInterface.OnClickListener, SwipeRefreshLayout.OnRefreshListener, EventHandler {
 
     private ListView lvMessage;
     private MessageAdapter adapter;
@@ -45,6 +48,7 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
     private TextView tvTitle;
     private static final int REQUEST_CODE = 1;
     private String receiverID, receiverName;
+    private EventBroker broker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,7 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
             receiverID = message.getReceiver().getId();
             receiverName = message.getReceiver().getName();
         }
+        broker = EventBroker.getInstance();
     }
 
     private void setUpButton() {
@@ -323,5 +328,32 @@ public class MessageThreadActivity extends AppCompatActivity implements AdapterV
         Intent intent = new Intent();
         intent.putExtra(NewMessageActivity.REFRESH_REQUEST, true);
         setResult(RESULT_OK, intent);
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterEvent();
+        super.onPause();
+    }
+
+    private void unregisterEvent() {
+        broker.unRegister(this, EventConstant.UPDATE_MESSAGE_LIST);
+    }
+
+    @Override
+    protected void onResume() {
+        registerEvent();
+        super.onResume();
+    }
+
+    private void registerEvent() {
+        broker.register(this, EventConstant.UPDATE_MESSAGE_LIST);
+    }
+
+    @Override
+    public void handleEvent(String event, Object data) {
+        if (event.equals(EventConstant.UPDATE_MESSAGE_LIST)) {
+            refreshMessage();
+        }
     }
 }

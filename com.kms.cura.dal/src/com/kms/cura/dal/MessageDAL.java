@@ -57,7 +57,7 @@ public class MessageDAL extends EntityDAL {
 		}
 	}
 
-	public void insertMessage(MessageEntity entity, boolean sentByDoctor) throws ClassNotFoundException, SQLException {
+	public void insertMessage(MessageEntity entity, boolean sentByDoctor) throws ClassNotFoundException, SQLException, IOException {
 		MessageDatabaseHelper dbh = new MessageDatabaseHelper();
 		try {
 			dbh.insertMessage(entity, sentByDoctor);

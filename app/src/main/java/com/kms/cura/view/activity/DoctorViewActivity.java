@@ -94,6 +94,9 @@ public class DoctorViewActivity extends AppCompatActivity implements NavigationV
             case PATIENT_REQUEST:
                 changeFragment(doctorRequestListFragment);
                 break;
+            case MessageListFragment.TO_MESSAGE:
+                changeFragment(doctorMessageFragment);
+                break;
             case DOCTOR_APPT:
                 doctorApptView2 = new DoctorAppointmentMonthViewFragment();
                 changeFragment(doctorApptView2);

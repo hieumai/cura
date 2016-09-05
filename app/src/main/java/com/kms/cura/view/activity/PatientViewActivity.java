@@ -264,6 +264,9 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
                 case PatientSignUpActivity.FROM_PATIENT_REGISTER:
                     changeFragment(patientProfileFragment);
                     break;
+                case MessageListFragment.TO_MESSAGE:
+                    changeFragment(patientMessageFragment);
+                    break;
                 case PATIENT_APPT:
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(FROM_NOTI, true);
