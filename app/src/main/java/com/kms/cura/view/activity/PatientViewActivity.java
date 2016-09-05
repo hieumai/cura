@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -42,6 +44,7 @@ import com.kms.cura.view.fragment.PatientAppointmentListFragment;
 import com.kms.cura.view.fragment.PatientHomeFragment;
 import com.kms.cura.view.fragment.PatientProfileFragment;
 import com.kms.cura.view.fragment.PatientSettingsFragment;
+import com.kms.cura.view.service.NotificationListener;
 
 import java.util.List;
 
@@ -266,6 +269,10 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
                     break;
                 case MessageListFragment.TO_MESSAGE:
                     changeFragment(patientMessageFragment);
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove(NotificationListener.NUM_MSG_NOTI);
+                    editor.commit();
                     break;
                 case PATIENT_APPT:
                     Bundle bundle = new Bundle();
