@@ -51,6 +51,6 @@ public class AutoRejectHelper {
 					timer.purge();
 				}
 			}
-		}, timeToRun);
+		}, timeToRun.getTime());
 	}
 }
