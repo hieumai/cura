@@ -215,6 +215,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
         } else if (id == R.id.nav_appointment) {
             Bundle bundle = new Bundle();
             bundle.putBoolean(FROM_NOTI, false);
+            patientAppointmentFragment = new PatientAppointmentListFragment();
             patientAppointmentFragment.setArguments(bundle);
             changeFragment(patientAppointmentFragment);
         } else if (id == R.id.nav_health) {
@@ -344,6 +345,13 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
             case EventConstant.UPDATE_APPT_NOTI_NUMBER:
                 -- countAppt;
                 setMenuCounter(R.id.nav_appointment, countAppt);
+                break;
+            case EventConstant.UPDATE_MSG_NOTI_NUMBER:
+                countMsg -= (int) data;
+                if (countMsg >= 0) {
+                    setMenuCounter(R.id.nav_messages, countMsg);
+                }
+                break;
         }
     }
 
@@ -355,6 +363,7 @@ public class PatientViewActivity extends AppCompatActivity implements Navigation
     @Override
     protected void onResume() {
         EventBroker.getInstance().register(this, EventConstant.UPDATE_APPT_NOTI_NUMBER);
+        EventBroker.getInstance().register(this, EventConstant.UPDATE_MSG_NOTI_NUMBER);
         super.onResume();
     }
 }

@@ -102,4 +102,27 @@ public class NotificationModel {
         }
         throw new Exception(response.getError());
     }
+
+    public void updateMsgNoti(NotificationEntity entity) throws Exception {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Settings.SERVER_URL);
+        builder.append(Settings.UPDATE_NOTIFICATION);
+        UpdateNotificationModelResponse response = new UpdateNotificationModelResponse();
+        JSONObject jsonObject = null;
+        try {
+            String data = new Gson().toJson(entity, NotificationEntity.getNotificationType());
+            jsonObject = new JSONObject(data);
+            jsonObject.put(NotificationEntity.NOTI_TYPE, NotificationEntity.MSG_TYPE);
+        } catch (JSONException e) {
+            throw e;
+        }
+        StringRequest stringRequest = RequestUtils.createRequest(builder.toString(), Request.Method.POST,
+                jsonObject.toString(), response);
+        VolleyHelper.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+        while (!response.isGotResponse()) ;
+        if (!response.isResponseError()) {
+            return;
+        }
+        throw new Exception(response.getError());
+    }
 }

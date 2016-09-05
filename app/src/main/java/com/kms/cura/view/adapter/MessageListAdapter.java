@@ -24,8 +24,9 @@ public class MessageListAdapter extends BaseAdapter {
     private Context context;
     private int resource;
     private ArrayList<Boolean> selected;
+    private ArrayList<Boolean> read;
 
-    public MessageListAdapter(Context context, int resource, ArrayList objects) {
+    public MessageListAdapter(Context context, int resource, ArrayList objects, ArrayList read) {
         this.context = context;
         this.resource = resource;
         messageThreadEntities = objects;
@@ -33,6 +34,7 @@ public class MessageListAdapter extends BaseAdapter {
         for (int i = 0; i < messageThreadEntities.size(); ++i) {
             selected.add(false);
         }
+        this.read = read;
     }
     @Override
     public int getCount() {
@@ -64,6 +66,13 @@ public class MessageListAdapter extends BaseAdapter {
         tvName.setText(messageThreadEntities.get(position).getConversationName(CurrentUserProfile.getInstance().getEntity()));
         tvLine.setText(messageThreadEntities.get(position).getFirstLine());
         setColor(convertView, position);
+        if (!read.get(position)) {
+            tvName.setTextAppearance(context, R.style.message_unread_name);
+            tvLine.setTextAppearance(context, R.style.message_unread_line);
+        } else {
+            tvName.setTextAppearance(context, R.style.message_read_name);
+            tvLine.setTextAppearance(context, R.style.message_read_line);
+        }
     }
 
     private void setColor(View convertView, int position) {
@@ -99,12 +108,16 @@ public class MessageListAdapter extends BaseAdapter {
         return selected.get(position);
     }
 
-    public void setData(ArrayList<MessageThreadEntity> messageThreadEntities) {
+    public void setData(ArrayList<MessageThreadEntity> messageThreadEntities, ArrayList<Boolean> read) {
         this.messageThreadEntities = messageThreadEntities;
         selected.clear();
         for (int i = 0; i < messageThreadEntities.size(); ++i) {
             selected.add(false);
         }
+        this.read = read;
     }
 
+    public void setRead(int position) {
+        read.set(position, true);
+    }
 }
