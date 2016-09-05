@@ -39,6 +39,7 @@ public class UserDatabaseHelper extends DatabaseHelper {
 		if (!(entity instanceof UserEntity)) {
 			return null;
 		}
+		UserDatabaseHelper helper = null;
 		try {
 			con.setAutoCommit(false);
 
@@ -77,7 +78,8 @@ public class UserDatabaseHelper extends DatabaseHelper {
 			rs = stmt.executeQuery();
 			con.commit();
 			rs.next();
-			return getEntityFromResultSet(rs);
+			helper = new UserDatabaseHelper();
+			return helper.getEntityFromResultSet(rs);
 		} catch (SQLException e) {
 			if (con != null) {
 				System.err.print("Transaction is being rolled back");
@@ -92,6 +94,7 @@ public class UserDatabaseHelper extends DatabaseHelper {
 			if (stmt2 != null) {
 				stmt2.close();
 			}
+			helper.closeConnection();
 		}
 	}
 
